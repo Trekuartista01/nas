@@ -1,0 +1,201 @@
+@import "tailwindcss";
+
+/* ───────────────── Design tokens (CLAUDE.md → Design tokens) ───────────────── */
+@theme {
+  --color-ink: #0a0a0a;
+  --color-surface: #111111;
+  --color-surface-2: #121212;
+  --color-panel: #0e0e0e;
+  --color-line: #1e1e1e;
+  --color-line-2: #262626;
+  --color-muted: #9a9a9a;
+  --color-muted-2: #a8a8a8;
+  --color-faint: #8a8a8a;
+  --color-red: #e10600;
+  --color-highlight: #ffb21a;
+  --color-bone: #ece8e1;
+
+  --font-sans: var(--font-archivo), system-ui, sans-serif;
+
+  --ease-moto: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  --animate-marquee: marquee 28s linear infinite;
+  --animate-pulse-dot: pulse-dot 1.6s ease-in-out infinite;
+  --animate-glow: glow 1.6s ease-in-out infinite;
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes pulse-dot {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.35;
+      transform: scale(0.7);
+    }
+  }
+  @keyframes glow {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgba(225, 6, 0, 0);
+    }
+    50% {
+      box-shadow: 0 0 0 10px rgba(225, 6, 0, 0.2);
+    }
+  }
+}
+
+@keyframes stripes {
+  to {
+    background-position: 160px 0;
+  }
+}
+@keyframes sheen {
+  from {
+    transform: translateX(-120%) skewX(-20deg);
+  }
+  to {
+    transform: translateX(220%) skewX(-20deg);
+  }
+}
+@keyframes bar-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ───────────────── Utilities ───────────────── */
+@utility headline {
+  font-weight: 900;
+  font-stretch: 125%;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+@utility wide {
+  font-stretch: 125%;
+}
+@utility slant {
+  clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+}
+@utility slant-sm {
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+}
+@utility hatch {
+  background: repeating-linear-gradient(115deg, #141414 0 38px, #171717 38px 39px);
+}
+@utility stripes {
+  background: repeating-linear-gradient(115deg, var(--color-red) 0 46px, transparent 46px 80px);
+  animation: stripes 3s linear infinite;
+}
+/* Same gutters as the Wilson site: mx-auto w-full max-w-[120rem] px-4 sm:px-6 lg:px-14 */
+@utility container-moto {
+  width: 100%;
+  max-width: 120rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (width >= 40rem) {
+    padding-inline: 1.5rem;
+  }
+  @media (width >= 64rem) {
+    padding-inline: 3.5rem;
+  }
+}
+
+/* ───────────────── Components ───────────────── */
+@layer components {
+  /* Light sweep on hover for primary buttons */
+  .btn-sheen {
+    position: relative;
+    overflow: hidden;
+    transition:
+      transform 0.3s,
+      background-color 0.3s,
+      color 0.3s;
+  }
+  .btn-sheen::after {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    width: 40%;
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateX(-120%) skewX(-20deg);
+    pointer-events: none;
+  }
+  .btn-sheen:hover::after {
+    animation: sheen 0.7s ease;
+  }
+  .btn-sheen:hover {
+    transform: translateY(-2px);
+  }
+
+
+  /* Hero progress bar fill (duration set inline per shot) */
+  .bar-fill {
+    animation: bar-fill linear both;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-ink);
+  color: #fff;
+}
+
+input[type="range"]:not(.price-range) {
+  width: 100%;
+  height: 28px;
+  accent-color: var(--color-red);
+}
+
+/* Catalog price filter: the visible track, fill and handle are drawn by <PriceRange>.
+   The native input is invisible on top; its thumb is kept at 18px wide so the browser
+   maps pointer position to value with the same maths the drawn handle uses. */
+input[type="range"].price-range {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+}
+input[type="range"].price-range::-webkit-slider-runnable-track {
+  height: 100%;
+  background: transparent;
+}
+input[type="range"].price-range::-moz-range-track {
+  background: transparent;
+}
+input[type="range"].price-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 24px;
+  border: 0;
+}
+input[type="range"].price-range::-moz-range-thumb {
+  width: 18px;
+  height: 24px;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

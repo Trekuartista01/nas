@@ -1,0 +1,883 @@
+<!doctype html>
+<html lang="sq">
+<head>
+<meta charset="utf-8">
+<title>Moto Shpati — Homepage v2</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,300..900;1,62..125,300..900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0A0A0A}
+*{box-sizing:border-box}
+a{color:#fff;text-decoration:none}a:hover{color:#FF2A1F}
+button{font-family:inherit;cursor:pointer}
+@keyframes rise{from{opacity:0;transform:translateY(105%)}to{opacity:1;transform:none}}
+@keyframes up{from{opacity:0;transform:translateY(48px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes marq{to{transform:translateX(-50%)}}
+@keyframes speed{0%{transform:translateX(120vw)}100%{transform:translateX(-60vw)}}
+@keyframes fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+@keyframes slide{to{background-position:160px 0}}
+@keyframes drift{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+@keyframes sheen{from{transform:translateX(-120%) skewX(-20deg)}to{transform:translateX(220%) skewX(-20deg)}}
+.ln{display:block;overflow:hidden;padding-bottom:.04em}
+.ln>span{display:inline-block;animation:rise 1s cubic-bezier(.2,.8,.2,1) both}
+.d1{animation-delay:.15s!important}.d2{animation-delay:.3s!important}.d3{animation-delay:.5s!important}.d4{animation-delay:.7s!important}.d5{animation-delay:.9s!important}
+.in{animation:up .9s cubic-bezier(.2,.8,.2,1) both}
+.speedline{position:absolute;left:0;height:2px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);animation:speed 2.6s linear infinite}
+.speedline.r{background:linear-gradient(90deg,transparent,#E10600,transparent)}
+.marq{display:flex;width:max-content;animation:marq 28s linear infinite}
+.marq.slow{animation-duration:46s}
+.marq.rev{animation-direction:reverse}
+.marq:hover{animation-play-state:paused}
+.drift{animation:drift 60s linear infinite}
+.bar>i{display:block;height:100%;background:#fff;transform-origin:left;animation:fill 6s linear infinite}
+.dot{animation:pulse 1.6s ease-in-out infinite}
+.bob{animation:bob 1.8s ease-in-out infinite}
+.btn{position:relative;overflow:hidden;transition:transform .3s,background .3s,color .3s}
+.btn::after{content:"";position:absolute;top:0;bottom:0;left:0;width:40%;background:rgba(255,255,255,.25);transform:translateX(-120%) skewX(-20deg)}
+.btn:hover::after{animation:sheen .7s ease}
+.btn:hover{transform:translateY(-2px)}
+.ghost:hover{background:#fff!important;color:#0A0A0A!important}
+.cat{flex:1 1 0;transition:flex-grow .7s cubic-bezier(.2,.8,.2,1)}
+.cat:hover{flex-grow:2}
+.cat .bg{transition:transform 1s cubic-bezier(.2,.8,.2,1)}
+.cat:hover .bg{transform:scale(1.08)}
+.cat .arrow{transition:transform .4s,background .4s}
+.cat:hover .arrow{transform:translateX(8px);background:#E10600}
+.cat .more{opacity:0;transform:translateY(12px);transition:opacity .5s .1s,transform .5s .1s}
+.cat:hover .more{opacity:1;transform:none}
+.cat:hover .uline{transform:scaleX(1)}
+.uline{transform:scaleX(.25);transform-origin:left;transition:transform .6s}
+.card{transition:transform .45s cubic-bezier(.2,.8,.2,1),border-color .45s}
+.card:hover{transform:translateY(-10px);border-color:#E10600!important}
+.card .ph{transition:transform .8s}
+.card:hover .ph{transform:scale(1.06)}
+.card .cta{transition:letter-spacing .4s}
+.card:hover .cta{letter-spacing:.14em}
+.opt{transition:background .25s,color .25s,border-color .25s,transform .25s}
+.opt:hover{transform:translateY(-2px)}
+.res{animation:up .6s cubic-bezier(.2,.8,.2,1) both}
+.tile{transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.tile:hover{transform:scale(.985)}
+.tile .zoom{transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
+.tile:hover .zoom{transform:scale(1.07)}
+.stripes{background:repeating-linear-gradient(115deg,#E10600 0 46px,transparent 46px 80px);animation:slide 3s linear infinite}
+.hatch{background:repeating-linear-gradient(115deg,#141414 0 38px,#171717 38px 39px)}
+input[type=range]{width:100%;accent-color:#E10600;height:28px}
+.still *{animation:none!important;transition:none!important}
+.needle{transition:transform 1s cubic-bezier(.3,1.5,.5,1)}
+.arc{transition:stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1)}
+.tile2{transition:transform .3s,border-color .3s,background .3s;cursor:pointer;font-family:inherit}
+.tile2:hover{transform:translateY(-4px);border-color:#E10600!important}
+.rider{transition:left .8s cubic-bezier(.3,1.4,.5,1)}
+.seg{transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.cell{transition:background .25s,transform .25s;cursor:pointer}
+.cell:hover{transform:scaleY(1.06)}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(225,6,0,0)}50%{box-shadow:0 0 0 10px rgba(225,6,0,.2)}}
+.ignite{animation:glow 1.6s ease-in-out infinite}
+@keyframes flick{0%,90%,100%{opacity:1}93%{opacity:.45}96%{opacity:1}}
+.lcd{animation:flick 4s infinite}
+.qswap{animation:up .55s cubic-bezier(.2,.8,.2,1) both}
+.herovid{transition:filter .6s}
+.hbar{position:relative;width:56px;height:3px;background:rgba(255,255,255,.35);border:none;padding:0;cursor:pointer;transition:background .3s}
+.hbar::before{content:"";position:absolute;left:-3px;right:-3px;top:-20px;bottom:-20px}
+.hbar:hover{background:rgba(255,255,255,.7)}
+.hbar>i{position:absolute;inset:0;display:block;background:#E10600;transform-origin:left;transform:scaleX(0)}
+.hbar.on{background:rgba(225,6,0,.35)}
+.hbar.on>i{animation:fill linear both}
+@supports (animation-timeline: view()){
+.rv{animation:up linear both;animation-timeline:view();animation-range:entry 0% cover 22%}
+.xs{animation:xs linear both;animation-timeline:view();animation-range:cover 0% cover 100%}
+.xs2{animation:xs2 linear both;animation-timeline:view();animation-range:cover 0% cover 100%}
+.wipe{animation:wipe linear both;animation-timeline:view();animation-range:entry 10% cover 40%}
+}
+@keyframes xs{from{transform:translateX(8%)}to{transform:translateX(-22%)}}
+@keyframes xs2{from{transform:translateX(-22%)}to{transform:translateX(6%)}}
+@keyframes wipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:820px){.cats{flex-direction:column}.cat{min-height:240px!important}.hide-sm{display:none!important}}
+</style>
+</helmet>
+<div class="{{motionClass}}" style="font-family: 'Archivo', system-ui, sans-serif; color: #fff; background: #0A0A0A; overflow: hidden">
+
+<!-- NAV -->
+<header style="position: sticky; top: 0; z-index: 50; background: rgba(10,10,10,.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(255,255,255,.06)">
+<nav style="max-width: 1440px; margin: 0 auto; padding: 16px clamp(20px,4vw,56px); display: flex; align-items: center; gap: 32px; flex-wrap: wrap">
+<a href="#top" style="display: flex; flex-direction: column; line-height: .9; font-stretch: 125%">
+<span style="font-size: 11px; font-weight: 800; letter-spacing: .12em">MOTO</span>
+<span style="font-size: 24px; font-weight: 900; font-style: italic; color: #E10600; letter-spacing: -.02em">SHPATI</span>
+</a>
+<div style="display: flex; gap: 28px; flex-wrap: wrap; font-size: 12px; font-weight: 600; letter-spacing: .1em; flex: 1; justify-content: center">
+<a href="#lineup">MODELET</a><a href="#accessories">AKSESORËT</a><a href="#brands">BRENDET</a><a href="#world">MOTO SHPATI WORLD</a><a href="#service">SERVISI</a><a href="#contact">KONTAKTI</a>
+</div>
+<div style="display: flex; align-items: center; gap: 16px">
+<button aria-label="Kërko" style="width: 44px; height: 44px; border-radius: 22px; border: 1px solid #2a2a2a; background: transparent; color: #fff; display: flex; align-items: center; justify-content: center">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+</button>
+<a href="#finance" class="btn" style="background: #E10600; color: #fff; font-size: 12px; font-weight: 800; font-style: italic; letter-spacing: .08em; padding: 14px 22px; clip-path: polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%)">KËRKO OFERTË</a>
+</div>
+</nav>
+</header>
+
+<!-- HERO -->
+<section id="top" style="position: relative; min-height: 820px; overflow: hidden; display: flex; align-items: flex-end">
+<video ref="{{videoRef}}" src="/videos/hero.mp4" poster="/videos/hero-poster.jpg" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" aria-hidden="true" class="herovid" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; {{heroFilter}}"></video>
+<div aria-hidden="true" style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(10,10,10,.85) 0%, rgba(10,10,10,.35) 55%, rgba(10,10,10,.15) 100%), linear-gradient(0deg, rgba(10,10,10,.9) 0%, transparent 45%)"></div>
+<div aria-hidden="true" style="position: absolute; inset: 0">
+<i class="speedline" style="top: 22%; width: 38%"></i>
+<i class="speedline r" style="top: 31%; width: 22%; animation-delay: .9s"></i>
+<i class="speedline" style="top: 47%; width: 30%; animation-delay: 1.6s; animation-duration: 2.1s"></i>
+<i class="speedline" style="top: 58%; width: 44%; animation-delay: .4s; animation-duration: 3.2s"></i>
+<i class="speedline r" style="top: 66%; width: 18%; animation-delay: 2.1s; animation-duration: 1.8s"></i>
+</div>
+
+<div style="position: relative; width: 100%; max-width: 1440px; margin: 0 auto; padding: 0 clamp(20px,4vw,56px) 64px; display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; flex-wrap: wrap">
+<div>
+<h1 style="margin: 0; font-size: clamp(40px,4.6vw,68px); font-weight: 900; font-stretch: 125%; line-height: 1; letter-spacing: -.01em">
+<span class="ln"><span class="d1">BORN TO ROAR<span style="color: #E10600">.</span></span></span>
+<span class="ln"><span class="d2">BUILT FOR THE ROAD<span style="color: #E10600">.</span></span></span>
+</h1>
+<p class="in d3" style="margin: 14px 0 0; font-size: clamp(14px,1.25vw,18px); line-height: 1.35; color: #a8a8a8">From city streets to untamed terrain.<br>Find your next ride at Moto Shpati.</p>
+<div class="in d4" style="display: flex; align-items: center; gap: 6px; margin-top: 44px">
+<a href="#lineup" class="btn" style="background: #E10600; color: #fff; padding: 16px 30px; font-size: 12px; font-weight: 800; font-style: italic; letter-spacing: .04em; clip-path: polygon(12px 0,100% 0,calc(100% - 12px) 100%,0 100%)">EKSPLORO MODELET</a>
+<span aria-hidden="true" style="display: flex; gap: 6px; margin-left: 4px"><i style="display: block; width: 9px; height: 46px; background: #E10600; transform: skewX(-24deg)"></i><i style="display: block; width: 9px; height: 46px; background: #E10600; transform: skewX(-24deg)"></i><i style="display: block; width: 9px; height: 46px; background: #E10600; transform: skewX(-24deg)"></i></span>
+</div>
+</div>
+<div class="in d5" role="group" aria-label="Slajdet" style="display: flex; gap: 10px; margin-bottom: 12px">
+<sc-for list="{{heroBars}}" as="h" hint-placeholder-count="4">
+<button class="{{h.cls}}" onClick="{{h.go}}" aria-label="{{h.aria}}" aria-current="{{h.current}}"><i style="{{h.dur}}"></i></button>
+</sc-for>
+</div>
+</div>
+</section>
+
+<!-- TICKER (replaces the empty red band) -->
+<div style="background: #E10600; overflow: hidden; padding: 20px 0; transform: skewY(-1.2deg); margin: -8px 0 0">
+<div class="marq" style="font-size: clamp(22px,2.4vw,34px); font-weight: 900; font-style: italic; font-stretch: 125%; white-space: nowrap; letter-spacing: -.01em">
+<span style="padding-right: 48px">TEST RIDE FALAS <span style="opacity: .5">//</span> FINANCIM ME KËSTE <span style="opacity: .5">//</span> SERVIS I AUTORIZUAR <span style="opacity: .5">//</span> PJESË ORIGJINALE <span style="opacity: .5">//</span> PEJË, KOSOVË <span style="opacity: .5">//</span></span>
+<span style="padding-right: 48px">TEST RIDE FALAS <span style="opacity: .5">//</span> FINANCIM ME KËSTE <span style="opacity: .5">//</span> SERVIS I AUTORIZUAR <span style="opacity: .5">//</span> PJESË ORIGJINALE <span style="opacity: .5">//</span> PEJË, KOSOVË <span style="opacity: .5">//</span></span>
+</div>
+</div>
+
+<!-- FIND YOUR VEHICLE -->
+<section style="max-width: 1440px; margin: 0 auto; padding: 140px clamp(20px,4vw,56px) 120px">
+<div class="rv" style="display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 56px">
+<h2 style="margin: 0; font-size: clamp(44px,5vw,80px); font-weight: 900; font-stretch: 125%; line-height: .95; letter-spacing: -.03em">FIND YOUR<br>VEHICLE<span style="color: #E10600">.</span></h2>
+<p style="margin: 0; color: #9a9a9a; font-size: 15px; max-width: 320px; line-height: 1.5">Tri kategori, një showroom. Kalo mbi një kartë për ta hapur.</p>
+</div>
+<div class="cats rv" style="display: flex; gap: 16px; height: 560px">
+<a href="#lineup" class="cat" style="position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; padding: 32px; color: #fff; border: 1px solid #1e1e1e; min-height: 560px">
+<div class="bg hatch" style="position: absolute; inset: 0"></div>
+<div style="position: relative; display: flex; justify-content: space-between; font-size: 12px; letter-spacing: .14em; color: #8a8a8a"><span>01</span><span>[XX] MODELE</span></div>
+<div style="position: relative; font-size: 11px; color: #6f6f6f; letter-spacing: .14em; align-self: center">[FOTO MOTOR]</div>
+<div style="position: relative">
+<div class="more" style="font-size: 14px; color: #bdbdbd; margin-bottom: 14px; max-width: 280px">Naked, sport dhe touring — nga 125cc deri në [XXX]cc.</div>
+<div style="display: flex; justify-content: space-between; align-items: center">
+<div><div style="font-size: 30px; font-weight: 900; font-stretch: 125%">MOTORCYCLES</div><div class="uline" style="height: 3px; width: 100%; background: #E10600; margin-top: 10px"></div></div>
+<span class="arrow" style="width: 52px; height: 52px; border-radius: 26px; border: 1px solid #333; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+</div>
+</div>
+</a>
+<a href="#lineup" class="cat" style="position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; padding: 32px; color: #fff; border: 1px solid #1e1e1e; min-height: 560px">
+<div class="bg hatch" style="position: absolute; inset: 0"></div>
+<div style="position: relative; display: flex; justify-content: space-between; font-size: 12px; letter-spacing: .14em; color: #8a8a8a"><span>02</span><span>[XX] MODELE</span></div>
+<div style="position: relative; font-size: 11px; color: #6f6f6f; letter-spacing: .14em; align-self: center">[FOTO SKUTER]</div>
+<div style="position: relative">
+<div class="more" style="font-size: 14px; color: #bdbdbd; margin-bottom: 14px; max-width: 280px">Për qytetin: 50cc pa patentë A, maxi-skuterë deri në 350cc.</div>
+<div style="display: flex; justify-content: space-between; align-items: center">
+<div><div style="font-size: 30px; font-weight: 900; font-stretch: 125%">SCOOTERS</div><div class="uline" style="height: 3px; width: 100%; background: #E10600; margin-top: 10px"></div></div>
+<span class="arrow" style="width: 52px; height: 52px; border-radius: 26px; border: 1px solid #333; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+</div>
+</div>
+</a>
+<a href="#lineup" class="cat" style="position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; padding: 32px; color: #fff; border: 1px solid #1e1e1e; min-height: 560px">
+<div class="bg hatch" style="position: absolute; inset: 0"></div>
+<div style="position: relative; display: flex; justify-content: space-between; font-size: 12px; letter-spacing: .14em; color: #8a8a8a"><span>03</span><span>[XX] MODELE</span></div>
+<div style="position: relative; font-size: 11px; color: #6f6f6f; letter-spacing: .14em; align-self: center">[FOTO ATV]</div>
+<div style="position: relative">
+<div class="more" style="font-size: 14px; color: #bdbdbd; margin-bottom: 14px; max-width: 280px">Për mal, fermë dhe aventurë — 4x4 dhe utility.</div>
+<div style="display: flex; justify-content: space-between; align-items: center">
+<div><div style="font-size: 30px; font-weight: 900; font-stretch: 125%">ATVS</div><div class="uline" style="height: 3px; width: 100%; background: #E10600; margin-top: 10px"></div></div>
+<span class="arrow" style="width: 52px; height: 52px; border-radius: 26px; border: 1px solid #333; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+</div>
+</div>
+</a>
+</div>
+</section>
+
+<!-- LINEUP -->
+<section id="lineup" style="background: #111111; border-top: 1px solid #1c1c1c">
+<div style="max-width: 1440px; margin: 0 auto; padding: 120px clamp(20px,4vw,56px)">
+<div class="rv" style="display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 48px">
+<h2 style="margin: 0; font-size: clamp(44px,5vw,80px); font-weight: 900; font-stretch: 125%; line-height: .95; letter-spacing: -.03em">THE<br>LINEUP<span style="color: #E10600">.</span></h2>
+<div role="group" aria-label="Filtro modelet" style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center">
+<sc-for list="{{tabs}}" as="t" hint-placeholder-count="4">
+<button class="opt" onClick="{{t.pick}}" aria-pressed="{{t.pressed}}" style="min-height: 44px; padding: 0 20px; font-size: 13px; font-weight: 700; letter-spacing: .06em; border: 1px solid; {{t.style}}">{{t.label}} <span style="opacity: .55; font-weight: 500">{{t.count}}</span></button>
+</sc-for>
+<a href="#lineup" style="font-size: 13px; color: #cfcfcf; margin-left: 12px">Shiko të gjitha →</a>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px">
+<sc-for list="{{bikes}}" as="b" hint-placeholder-count="4">
+<article class="card res" style="background: #0B0B0B; border: 1px solid #222; display: flex; flex-direction: column; {{b.delay}}">
+<div style="position: relative; aspect-ratio: 4/3; overflow: hidden">
+<div class="ph hatch" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #6f6f6f; letter-spacing: .14em">[FOTO · {{b.name}}]</div>
+<sc-if value="{{b.isNew}}" hint-placeholder-val="{{ true }}">
+<span style="position: absolute; top: 14px; left: 14px; background: {{hl}}; color: #0A0A0A; font-size: 11px; font-weight: 900; letter-spacing: .12em; padding: 6px 10px">E RE</span>
+</sc-if>
+<button aria-label="Ruaj në të preferuarat" style="position: absolute; top: 10px; right: 10px; width: 44px; height: 44px; border-radius: 22px; border: none; background: rgba(0,0,0,.55); color: #fff; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"></path></svg></button>
+</div>
+<div style="padding: 20px; display: flex; flex-direction: column; gap: 12px; flex: 1">
+<div style="font-size: 11px; letter-spacing: .14em; color: #8a8a8a">{{b.brand}} · {{b.typeLabel}}</div>
+<div style="font-size: 22px; font-weight: 900; font-stretch: 125%; line-height: 1.05">{{b.name}}</div>
+<div style="display: flex; gap: 6px; flex-wrap: wrap">
+<span style="font-size: 11px; font-weight: 700; padding: 5px 9px; border: 1px solid #2c2c2c; color: #cfcfcf">{{b.ccTxt}}</span>
+<span style="font-size: 11px; font-weight: 700; padding: 5px 9px; border: 1px solid #2c2c2c; color: #cfcfcf">PATENTA {{b.lic}}</span>
+</div>
+<div style="display: flex; align-items: baseline; justify-content: space-between; margin-top: auto; padding-top: 8px">
+<div style="font-size: 26px; font-weight: 800">{{b.priceTxt}}</div>
+<div style="font-size: 12px; color: #9a9a9a">ose {{b.monthlyTxt}}/muaj</div>
+</div>
+<a href="#finance" class="cta btn" style="background: #E10600; color: #fff; text-align: center; padding: 14px; font-size: 12px; font-weight: 800; letter-spacing: .1em">SHIKO DETAJET</a>
+</div>
+</article>
+</sc-for>
+</div>
+<p style="margin: 20px 0 0; font-size: 12px; color: #777">Çmimet janë demo — zëvendësohen me çmimet reale nga stoku.</p>
+</div>
+</section>
+
+<!-- ACCESSORIES -->
+<section id="accessories" style="max-width: 1440px; margin: 0 auto; padding: 140px clamp(20px,4vw,56px) 40px">
+<div class="rv" style="display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 56px">
+<h2 style="margin: 0; font-size: clamp(44px,5vw,80px); font-weight: 900; font-stretch: 125%; line-height: .95; letter-spacing: -.03em">GEAR<br>UP<span style="color: #E10600">.</span></h2>
+<div style="display: flex; gap: 24px; align-items: flex-end; flex-wrap: wrap"><p style="margin: 0; color: #9a9a9a; font-size: 15px; max-width: 320px; line-height: 1.5">Kaska, veshje dhe aksesorë origjinalë — gjithçka që të duhet para se të ndezësh motorin.</p><a href="#accessories" style="font-size: 13px; color: #cfcfcf; white-space: nowrap">Shiko të gjitha aksesorët →</a></div>
+</div>
+<div class="cats rv" style="display: flex; gap: 16px; height: 480px">
+<a href="#accessories" class="cat" style="position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; padding: 28px; color: #fff; border: 1px solid #1e1e1e; min-height: 480px">
+<div class="bg hatch" style="position: absolute; inset: 0"></div>
+<div style="position: relative; display: flex; justify-content: space-between; font-size: 12px; letter-spacing: .14em; color: #8a8a8a"><span>01</span><span>[XX] PRODUKTE</span></div>
+<div style="position: relative; font-size: 11px; color: #6f6f6f; letter-spacing: .14em; align-self: center">[FOTO KASKË]</div>
+<div style="position: relative">
+<div class="more" style="font-size: 14px; color: #bdbdbd; margin-bottom: 14px; max-width: 260px">Full-face, modulare dhe open-face — të certifikuara.</div>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+<div><div style="font-size: 26px; font-weight: 900; font-stretch: 125%">HELMETS</div><div class="uline" style="height: 3px; width: 100%; background: #E10600; margin-top: 10px"></div></div>
+<span class="arrow" style="width: 48px; height: 48px; flex: none; border-radius: 24px; border: 1px solid #333; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+</div>
+</div>
+</a>
+<a href="#accessories" class="cat" style="position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; padding: 28px; color: #fff; border: 1px solid #1e1e1e; min-height: 480px">
+<div class="bg hatch" style="position: absolute; inset: 0"></div>
+<div style="position: relative; display: flex; justify-content: space-between; font-size: 12px; letter-spacing: .14em; color: #8a8a8a"><span>02</span><span>[XX] PRODUKTE</span></div>
+<div style="position: relative; font-size: 11px; color: #6f6f6f; letter-spacing: .14em; align-self: center">[FOTO XHAKETË]</div>
+<div style="position: relative">
+<div class="more" style="font-size: 14px; color: #bdbdbd; margin-bottom: 14px; max-width: 260px">Xhaketa, pantallona dhe kombinezone me mbrojtëse.</div>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+<div><div style="font-size: 26px; font-weight: 900; font-stretch: 125%">APPAREL</div><div class="uline" style="height: 3px; width: 100%; background: #E10600; margin-top: 10px"></div></div>
+<span class="arrow" style="width: 48px; height: 48px; flex: none; border-radius: 24px; border: 1px solid #333; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+</div>
+</div>
+</a>
+<a href="#accessories" class="cat" style="position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; padding: 28px; color: #fff; border: 1px solid #1e1e1e; min-height: 480px">
+<div class="bg hatch" style="position: absolute; inset: 0"></div>
+<div style="position: relative; display: flex; justify-content: space-between; font-size: 12px; letter-spacing: .14em; color: #8a8a8a"><span>03</span><span>[XX] PRODUKTE</span></div>
+<div style="position: relative; font-size: 11px; color: #6f6f6f; letter-spacing: .14em; align-self: center">[FOTO DORËZA]</div>
+<div style="position: relative">
+<div class="more" style="font-size: 14px; color: #bdbdbd; margin-bottom: 14px; max-width: 260px">Dorëza dhe çizme për verë, dimër dhe terren.</div>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+<div><div style="font-size: 26px; font-weight: 900; font-stretch: 125%">GLOVES &amp; BOOTS</div><div class="uline" style="height: 3px; width: 100%; background: #E10600; margin-top: 10px"></div></div>
+<span class="arrow" style="width: 48px; height: 48px; flex: none; border-radius: 24px; border: 1px solid #333; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+</div>
+</div>
+</a>
+<a href="#accessories" class="cat" style="position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; padding: 28px; color: #fff; border: 1px solid #1e1e1e; min-height: 480px">
+<div class="bg hatch" style="position: absolute; inset: 0"></div>
+<div style="position: relative; display: flex; justify-content: space-between; font-size: 12px; letter-spacing: .14em; color: #8a8a8a"><span>04</span><span>[XX] PRODUKTE</span></div>
+<div style="position: relative; font-size: 11px; color: #6f6f6f; letter-spacing: .14em; align-self: center">[FOTO AKSESORË]</div>
+<div style="position: relative">
+<div class="more" style="font-size: 14px; color: #bdbdbd; margin-bottom: 14px; max-width: 260px">Top-case, çanta, kyçe, mbulesa dhe pjesë origjinale.</div>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+<div><div style="font-size: 26px; font-weight: 900; font-stretch: 125%">BIKE PARTS</div><div class="uline" style="height: 3px; width: 100%; background: #E10600; margin-top: 10px"></div></div>
+<span class="arrow" style="width: 48px; height: 48px; flex: none; border-radius: 24px; border: 1px solid #333; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+</div>
+</div>
+</a>
+</div>
+</section>
+
+<!-- WHICH BIKE CAN I RIDE — ignition flow -->
+<section style="max-width: 1440px; margin: 0 auto; padding: 140px clamp(20px,4vw,56px)">
+<div class="rv" style="display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 56px">
+<h2 style="margin: 0; font-size: clamp(44px,5vw,80px); font-weight: 900; font-stretch: 125%; line-height: .95; letter-spacing: -.03em">WHICH BIKE<br>CAN I RIDE<span style="color: #E10600">?</span></h2>
+<p style="margin: 0; color: #a8a8a8; font-size: 16px; line-height: 1.55; max-width: 380px">Tri pyetje, një përgjigje. Shiko gjilpërën — çdo zgjedhje ndryshon sa modele të përshtaten.</p>
+</div>
+
+<div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: stretch">
+
+<!-- Instrument cluster -->
+<div class="rv" style="flex: 1 1 380px; min-width: 0; background: #0E0E0E; border: 1px solid #222; padding: 32px; display: flex; flex-direction: column; gap: 24px; position: relative; overflow: hidden">
+<div style="display: flex; justify-content: space-between; font-size: 11px; letter-spacing: .16em; color: #8a8a8a"><span>MOTO SHPATI · FINDER</span><span>{{stepLabel}}</span></div>
+<div style="position: relative; width: 100%; max-width: 380px; align-self: center">
+<svg viewBox="0 0 300 190" style="width: 100%; display: block" role="img" aria-label="{{gaugeAria}}">
+<path d="M30 160 A120 120 0 0 1 270 160" fill="none" stroke="#1F1F1F" stroke-width="16" stroke-linecap="butt"></path>
+<path d="M234.85 75.15 A120 120 0 0 1 270 160" fill="none" stroke="#E10600" stroke-opacity=".35" stroke-width="16"></path>
+<path class="arc" d="M30 160 A120 120 0 0 1 270 160" fill="none" stroke="{{hl}}" stroke-width="16" stroke-dasharray="377" stroke-dashoffset="{{arcOffset}}"></path>
+<line x1="50.0" y1="160.0" x2="58.0" y2="160.0" stroke="#6f6f6f" stroke-width="2"></line><text x="72.0" y="164.0" fill="#6f6f6f" font-size="11" font-weight="700" text-anchor="middle">0</text>
+<line x1="57.6" y1="121.7" x2="65.0" y2="124.8" stroke="#6f6f6f" stroke-width="2"></line><text x="77.9" y="134.2" fill="#6f6f6f" font-size="11" font-weight="700" text-anchor="middle">1</text>
+<line x1="79.3" y1="89.3" x2="84.9" y2="94.9" stroke="#6f6f6f" stroke-width="2"></line><text x="94.8" y="108.8" fill="#6f6f6f" font-size="11" font-weight="700" text-anchor="middle">2</text>
+<line x1="111.7" y1="67.6" x2="114.8" y2="75.0" stroke="#6f6f6f" stroke-width="2"></line><text x="120.2" y="91.9" fill="#6f6f6f" font-size="11" font-weight="700" text-anchor="middle">3</text>
+<line x1="150.0" y1="60.0" x2="150.0" y2="68.0" stroke="#6f6f6f" stroke-width="2"></line><text x="150.0" y="86.0" fill="#6f6f6f" font-size="11" font-weight="700" text-anchor="middle">4</text>
+<line x1="188.3" y1="67.6" x2="185.2" y2="75.0" stroke="#6f6f6f" stroke-width="2"></line><text x="179.8" y="91.9" fill="#6f6f6f" font-size="11" font-weight="700" text-anchor="middle">5</text>
+<line x1="220.7" y1="89.3" x2="215.1" y2="94.9" stroke="#6f6f6f" stroke-width="2"></line><text x="205.2" y="108.8" fill="#6f6f6f" font-size="11" font-weight="700" text-anchor="middle">6</text>
+<line x1="242.4" y1="121.7" x2="235.0" y2="124.8" stroke="#6f6f6f" stroke-width="2"></line><text x="222.1" y="134.2" fill="#6f6f6f" font-size="11" font-weight="700" text-anchor="middle">7</text>
+<line x1="250.0" y1="160.0" x2="242.0" y2="160.0" stroke="#6f6f6f" stroke-width="2"></line><text x="228.0" y="164.0" fill="#6f6f6f" font-size="11" font-weight="700" text-anchor="middle">8</text>
+<g class="needle" style="transform-origin: 150px 160px; transform: rotate({{needleDeg}}deg)">
+<line x1="150" y1="160" x2="42" y2="160" stroke="#fff" stroke-width="3" stroke-linecap="round"></line>
+</g>
+<circle cx="150" cy="160" r="11" fill="#E10600"></circle>
+<circle cx="150" cy="160" r="4" fill="#0A0A0A"></circle>
+</svg>
+<div style="position: absolute; left: 0; right: 0; bottom: -6px; text-align: center">
+<div class="lcd" style="font-size: 54px; font-weight: 900; font-stretch: 115%; line-height: 1; color: {{hl}}; font-variant-numeric: tabular-nums">{{matchCount}}<span style="font-size: 18px; color: #6f6f6f">/{{total}}</span></div>
+<div style="font-size: 11px; letter-spacing: .2em; color: #8a8a8a; margin-top: 4px">MODELE PËR TY</div>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 18px">
+<sc-for list="{{steps}}" as="st" hint-placeholder-count="3">
+<button class="opt" onClick="{{st.go}}" aria-current="{{st.current}}" style="min-height: 64px; text-align: left; padding: 10px 12px; border: 1px solid; background: transparent; {{st.style}}">
+<div style="font-size: 10px; letter-spacing: .16em; opacity: .7">{{st.num}} · {{st.title}}</div>
+<div style="font-size: 14px; font-weight: 800; margin-top: 4px; color: #fff">{{st.value}}</div>
+</button>
+</sc-for>
+</div>
+<div style="height: 4px; background: #1F1F1F"><div class="seg" style="height: 100%; background: #E10600; width: {{progressPct}}%"></div></div>
+</div>
+
+<!-- Question / results stage -->
+<div style="flex: 1.4 1 520px; min-width: 0; background: #121212; border: 1px solid #222; padding: clamp(24px,3vw,44px); min-height: 560px; display: flex; flex-direction: column">
+
+<sc-if value="{{isStep0}}" hint-placeholder-val="{{ true }}">
+<div class="qswap" style="display: flex; flex-direction: column; gap: 24px; flex: 1">
+<div><div style="font-size: 12px; letter-spacing: .16em; color: #E10600; font-weight: 800">01 / 03</div><div style="font-size: clamp(28px,2.6vw,40px); font-weight: 900; font-stretch: 125%; margin-top: 8px; line-height: 1">ÇFARË PATENTE KE?</div></div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px">
+<sc-for list="{{licOpts}}" as="o" hint-placeholder-count="4">
+<button class="tile2" onClick="{{o.pick}}" aria-pressed="{{o.pressed}}" style="min-height: 150px; padding: 18px; border: 2px solid; text-align: left; display: flex; flex-direction: column; justify-content: space-between; color: #fff; {{o.style}}">
+<span style="display: inline-flex; align-items: center; gap: 8px; border: 2px solid currentColor; padding: 4px 10px 4px 4px; font-size: 11px; font-weight: 800; letter-spacing: .1em"><span style="background: #1d4ed8; color: #fff; padding: 2px 5px; font-size: 9px">RKS</span>PATENTA</span>
+<span style="font-size: 52px; font-weight: 900; font-stretch: 125%; line-height: 1">{{o.big}}</span>
+<span style="font-size: 13px; color: #bdbdbd">{{o.sub}}</span>
+</button>
+</sc-for>
+</div>
+<div style="font-size: 12px; color: #8a8a8a">Shtyp një kartë — kalon vetë te pyetja tjetër.</div>
+</div>
+</sc-if>
+
+<sc-if value="{{isStep1}}" hint-placeholder-val="{{ false }}">
+<div class="qswap" style="display: flex; flex-direction: column; gap: 24px; flex: 1">
+<div><div style="font-size: 12px; letter-spacing: .16em; color: #E10600; font-weight: 800">02 / 03</div><div style="font-size: clamp(28px,2.6vw,40px); font-weight: 900; font-stretch: 125%; margin-top: 8px; line-height: 1">KU DO TË VOZITËSH?</div></div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<sc-for list="{{useOpts}}" as="o" hint-placeholder-count="4">
+<button class="tile2" onClick="{{o.pick}}" aria-pressed="{{o.pressed}}" style="min-height: 150px; padding: 20px; border: 2px solid; text-align: left; display: flex; flex-direction: column; justify-content: space-between; color: #fff; {{o.style}}">
+<span style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; background: #0A0A0A; border: 1px solid #2c2c2c">
+<sc-if value="{{o.iCity}}" hint-placeholder-val="{{ false }}"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 21h18M5 21V9l5-3v15M10 21V4l9 4v13M13 10h3M13 14h3M13 18h3"></path></svg></sc-if>
+<sc-if value="{{o.iTrip}}" hint-placeholder-val="{{ false }}"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 3 4 21M16 3l4 18M12 5v2M12 11v2M12 17v2"></path></svg></sc-if>
+<sc-if value="{{o.iTerrain}}" hint-placeholder-val="{{ false }}"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m3 20 6-11 4 6 2-3 6 8Z"></path></svg></sc-if>
+<sc-if value="{{o.iDaily}}" hint-placeholder-val="{{ false }}"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></sc-if>
+</span>
+<span><span style="display: block; font-size: 22px; font-weight: 900; font-stretch: 125%">{{o.big}}</span><span style="display: block; font-size: 13px; color: #bdbdbd; margin-top: 4px">{{o.sub}}</span></span>
+</button>
+</sc-for>
+</div>
+<button onClick="{{back}}" style="align-self: flex-start; background: transparent; border: none; color: #cfcfcf; font-size: 13px; min-height: 44px; padding: 0">← Mbrapa</button>
+</div>
+</sc-if>
+
+<sc-if value="{{isStep2}}" hint-placeholder-val="{{ false }}">
+<div class="qswap" style="display: flex; flex-direction: column; gap: 28px; flex: 1">
+<div><div style="font-size: 12px; letter-spacing: .16em; color: #E10600; font-weight: 800">03 / 03</div><div style="font-size: clamp(28px,2.6vw,40px); font-weight: 900; font-stretch: 125%; margin-top: 8px; line-height: 1">SA DËSHIRON TË HARXHOSH?</div></div>
+<div style="display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap">
+<div style="font-size: clamp(64px,7vw,104px); font-weight: 900; font-stretch: 115%; line-height: .9; letter-spacing: -.03em; font-variant-numeric: tabular-nums">{{budLabel}}</div>
+<div style="font-size: 14px; color: #9a9a9a">{{budHint}}</div>
+</div>
+<div>
+<label for="bud" style="font-size: 13px; color: #cfcfcf">Lëviz rrëshqitësin — gjilpëra reagon menjëherë</label>
+<input id="bud" type="range" min="1000" max="10000" step="250" value="{{bud}}" onChange="{{onBud}}" style="margin-top: 10px">
+<div style="display: flex; justify-content: space-between; font-size: 11px; color: #777; letter-spacing: .1em"><span>€1.000</span><span>€5.000</span><span>€10.000</span></div>
+</div>
+<div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center">
+<button class="opt" onClick="{{toggleAny}}" aria-pressed="{{anyPressed}}" style="min-height: 44px; padding: 0 18px; font-size: 13px; font-weight: 700; border: 1px solid; {{anyStyle}}">Pa limit buxheti</button>
+<span style="font-size: 13px; color: #9a9a9a">ose paguaj me këste — <a href="#finance" style="color: {{hl}}">llogarit këtu</a></span>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto; gap: 16px; flex-wrap: wrap">
+<button onClick="{{back}}" style="background: transparent; border: none; color: #cfcfcf; font-size: 13px; min-height: 44px; padding: 0">← Mbrapa</button>
+<button class="btn ignite" onClick="{{ignite}}" style="border: none; background: #E10600; color: #fff; min-height: 64px; padding: 0 34px; font-size: 15px; font-weight: 900; font-style: italic; letter-spacing: .12em; display: flex; align-items: center; gap: 12px; clip-path: polygon(14px 0,100% 0,calc(100% - 14px) 100%,0 100%)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 3v8M6.3 7.3a8 8 0 1 0 11.4 0"></path></svg>NDIZE MOTORIN</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{isStep3}}" hint-placeholder-val="{{ false }}">
+<div class="qswap" style="display: flex; flex-direction: column; gap: 20px; flex: 1">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap">
+<div style="font-size: 12px; letter-spacing: .16em; color: #E10600; font-weight: 800">REZULTATI · {{summary}}</div>
+<button onClick="{{restart}}" style="background: transparent; border: 1px solid #333; color: #cfcfcf; font-size: 12px; min-height: 40px; padding: 0 14px">↺ Fillo nga e para</button>
+</div>
+
+<sc-if value="{{hasTop}}" hint-placeholder-val="{{ true }}">
+<div class="res" style="display: flex; gap: 0; flex-wrap: wrap; border: 1px solid #E10600; background: #0A0A0A">
+<div class="hatch" style="flex: 1 1 240px; min-height: 220px; position: relative; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #6f6f6f; letter-spacing: .14em">
+[FOTO · {{top.name}}]
+<span style="position: absolute; top: 14px; left: 14px; background: {{hl}}; color: #0A0A0A; font-size: 11px; font-weight: 900; letter-spacing: .12em; padding: 6px 10px">ZGJEDHJA JONË</span>
+</div>
+<div style="flex: 1 1 260px; padding: 26px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: center; gap: 14px">
+<div style="position: relative; width: 64px; height: 64px; flex: none">
+<svg viewBox="0 0 36 36" style="width: 64px; height: 64px; transform: rotate(-90deg)" aria-hidden="true"><circle cx="18" cy="18" r="15.9" fill="none" stroke="#222" stroke-width="3"></circle><circle class="arc" cx="18" cy="18" r="15.9" fill="none" stroke="{{hl}}" stroke-width="3" stroke-dasharray="100" stroke-dashoffset="{{top.ringOffset}}"></circle></svg>
+<span style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 900">{{top.score}}%</span>
+</div>
+<div style="font-size: 12px; color: #9a9a9a; line-height: 1.4">përputhje me<br>përgjigjet e tua</div>
+</div>
+<div style="font-size: 11px; letter-spacing: .14em; color: #8a8a8a">{{top.brand}} · {{top.typeLabel}}</div>
+<div style="font-size: 32px; font-weight: 900; font-stretch: 125%; line-height: 1">{{top.name}}</div>
+<div style="display: flex; gap: 6px; flex-wrap: wrap"><span style="font-size: 11px; font-weight: 700; padding: 5px 9px; border: 1px solid #2c2c2c">{{top.ccTxt}}</span><span style="font-size: 11px; font-weight: 700; padding: 5px 9px; border: 1px solid #2c2c2c">PATENTA {{top.lic}}</span></div>
+<div style="display: flex; align-items: baseline; gap: 12px; margin-top: auto"><span style="font-size: 28px; font-weight: 900">{{top.priceTxt}}</span><span style="font-size: 13px; color: #9a9a9a">ose {{top.monthlyTxt}}/muaj</span></div>
+<div style="display: flex; gap: 8px; flex-wrap: wrap">
+<a href="#service" class="btn" style="background: #E10600; color: #fff; padding: 13px 18px; font-size: 12px; font-weight: 800; letter-spacing: .1em">REZERVO TEST RIDE</a>
+<button onClick="{{top.toFinance}}" class="btn ghost" style="border: 1px solid #fff; background: transparent; color: #fff; padding: 0 18px; min-height: 44px; font-size: 12px; font-weight: 800; letter-spacing: .1em">LLOGARIT KËSTIN</button>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{hasMore}}" hint-placeholder-val="{{ true }}">
+<div style="font-size: 12px; letter-spacing: .14em; color: #8a8a8a">EDHE KËTO TË PËRSHTATEN</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px">
+<sc-for list="{{others}}" as="m" hint-placeholder-count="3">
+<a href="#lineup" class="res card" style="display: flex; flex-direction: column; gap: 6px; padding: 14px; background: #0A0A0A; border: 1px solid #262626; color: #fff; {{m.delay}}">
+<div style="display: flex; justify-content: space-between; font-size: 11px; color: #8a8a8a; letter-spacing: .1em"><span>{{m.brand}}</span><span style="color: {{hl}}; font-weight: 800">{{m.score}}%</span></div>
+<div style="font-size: 17px; font-weight: 800; font-stretch: 115%">{{m.name}}</div>
+<div style="height: 3px; background: #222"><div class="seg" style="height: 100%; background: #E10600; width: {{m.score}}%"></div></div>
+<div style="font-size: 14px; font-weight: 700">{{m.priceTxt}}</div>
+</a>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{noMatch}}" hint-placeholder-val="{{ false }}">
+<div style="padding: 32px; border: 1px dashed #333; color: #bdbdbd; font-size: 15px; line-height: 1.55">Asnjë model nuk përshtatet me këtë kombinim. Rrit buxhetin, ndrysho përdorimin — ose <a href="#contact" style="color: {{hl}}">na shkruaj</a>, sjellim edhe me porosi.</div>
+</sc-if>
+</div>
+</sc-if>
+
+</div>
+</div>
+</section>
+
+<!-- BRANDS -->
+<section id="brands" style="padding: 40px 0 140px; overflow: hidden">
+<div class="rv" style="max-width: 1440px; margin: 0 auto 56px; padding: 0 clamp(20px,4vw,56px); display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap">
+<h2 style="margin: 0; font-size: clamp(44px,5vw,80px); font-weight: 900; font-stretch: 125%; line-height: .95; letter-spacing: -.03em">THE BRANDS<br>BEHIND THE RIDE<span style="color: #E10600">.</span></h2>
+<p style="margin: 0; color: #9a9a9a; font-size: 15px; max-width: 360px; line-height: 1.5">Përfaqësues [ZYRTAR] i NAS dhe QJMOTOR në Kosovë — me garanci, servis dhe pjesë origjinale.</p>
+</div>
+<div class="xs" style="white-space: nowrap; font-size: clamp(80px,10vw,160px); font-weight: 900; font-style: italic; font-stretch: 125%; line-height: 1.05; letter-spacing: -.03em">
+<span style="color: transparent; -webkit-text-stroke: 2px #fff">NAS </span><span style="color: #E10600">/ QJMOTOR /</span><span style="color: transparent; -webkit-text-stroke: 2px #fff"> NAS </span><span style="color: #E10600">/ QJMOTOR /</span>
+</div>
+<div class="xs2" style="white-space: nowrap; font-size: clamp(80px,10vw,160px); font-weight: 900; font-style: italic; font-stretch: 125%; line-height: 1.05; letter-spacing: -.03em">
+<span style="color: #2a2a2a">QJMOTOR / NAS / QJMOTOR / NAS / QJMOTOR</span>
+</div>
+</section>
+
+<!-- FINANCE — build your deal -->
+<section id="finance" style="background: #ECE8E1; color: #0A0A0A">
+<div style="max-width: 1440px; margin: 0 auto; padding: 130px clamp(20px,4vw,56px)">
+<div class="rv" style="display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; margin-bottom: 48px">
+<div>
+<div style="display: inline-block; background: #0A0A0A; color: {{hl}}; font-size: 12px; font-weight: 800; letter-spacing: .14em; padding: 8px 12px; margin-bottom: 24px">FINANCIM</div>
+<h2 style="margin: 0; font-size: clamp(44px,5vw,80px); font-weight: 900; font-stretch: 125%; line-height: .95; letter-spacing: -.03em">RIDE NOW<span style="color: #E10600">.</span><br>PAY MONTHLY<span style="color: #E10600">.</span></h2>
+</div>
+<p style="margin: 0; font-size: 16px; line-height: 1.55; color: #3a3a3a; max-width: 400px">Ndërto ofertën tënde në tre hapa. Aplikimi bëhet në showroom ose online me [BANKA PARTNERE].</p>
+</div>
+
+<div class="rv" style="display: flex; flex-direction: column; gap: 16px">
+
+<!-- 01 pick a bike -->
+<div style="background: #fff; padding: 28px; border: 1px solid #d8d3ca">
+<div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 18px; gap: 12px; flex-wrap: wrap">
+<div style="font-size: 13px; font-weight: 800; letter-spacing: .12em"><span style="color: #E10600">01</span>  ZGJIDH MOTORIN</div>
+<div style="font-size: 13px; color: #5a5a5a">Çmimi: <strong style="color: #0A0A0A; font-size: 18px">{{priceFmt}}</strong></div>
+</div>
+<div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px">
+<sc-for list="{{modelChips}}" as="c" hint-placeholder-count="5">
+<button class="opt" onClick="{{c.pick}}" aria-pressed="{{c.pressed}}" style="flex: none; min-width: 168px; min-height: 76px; padding: 12px 16px; text-align: left; border: 2px solid; {{c.style}}">
+<div style="font-size: 10px; letter-spacing: .14em; opacity: .7">{{c.brand}}</div>
+<div style="font-size: 15px; font-weight: 900; font-stretch: 115%; margin-top: 2px">{{c.name}}</div>
+<div style="font-size: 13px; font-weight: 600; margin-top: 4px">{{c.priceTxt}}</div>
+</button>
+</sc-for>
+</div>
+<sc-if value="{{isCustom}}" hint-placeholder-val="{{ false }}">
+<div class="qswap" style="margin-top: 18px">
+<label for="fin-price" style="font-size: 13px; color: #3a3a3a">Vendos çmimin e motorit</label>
+<input id="fin-price" type="range" min="1000" max="10000" step="100" value="{{price}}" onChange="{{onPrice}}">
+</div>
+</sc-if>
+</div>
+
+<div style="display: flex; gap: 16px; flex-wrap: wrap">
+<!-- 02 deposit as fuel cells -->
+<div style="flex: 1 1 420px; min-width: 0; background: #fff; padding: 28px; border: 1px solid #d8d3ca">
+<div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 18px; gap: 12px">
+<div style="font-size: 13px; font-weight: 800; letter-spacing: .12em"><span style="color: #E10600">02</span>  KAPARI</div>
+<div style="font-size: 13px; color: #5a5a5a"><strong style="color: #0A0A0A; font-size: 18px">{{down}}%</strong> · {{downFmt}}</div>
+</div>
+<div role="group" aria-label="Zgjidh kaparin" style="display: grid; grid-template-columns: repeat(11, minmax(0, 1fr)); gap: 5px; align-items: end; height: 96px">
+<sc-for list="{{cells}}" as="c" hint-placeholder-count="11">
+<button class="cell" onClick="{{c.pick}}" aria-label="{{c.aria}}" aria-pressed="{{c.pressed}}" style="border: none; padding: 0; min-height: 44px; transform-origin: bottom; {{c.style}}"></button>
+</sc-for>
+</div>
+<div style="display: flex; justify-content: space-between; font-size: 11px; color: #6a6a6a; letter-spacing: .1em; margin-top: 8px"><span>0%</span><span>25%</span><span>50%</span></div>
+<div style="display: flex; align-items: center; gap: 8px; margin-top: 14px; font-size: 12px; color: #5a5a5a"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 21V5a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v16M3 21h13M15 9h2a2 2 0 0 1 2 2v5a1.5 1.5 0 0 0 3 0V8l-3-3"></path></svg>Mbush rezervuarin: më shumë kapar, këst më i ulët.</div>
+</div>
+
+<!-- 03 term as a road -->
+<div style="flex: 1 1 420px; min-width: 0; background: #fff; padding: 28px; border: 1px solid #d8d3ca">
+<div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 18px; gap: 12px">
+<div style="font-size: 13px; font-weight: 800; letter-spacing: .12em"><span style="color: #E10600">03</span>  PERIUDHA</div>
+<div style="font-size: 13px; color: #5a5a5a"><strong style="color: #0A0A0A; font-size: 18px">{{months}} muaj</strong></div>
+</div>
+<div style="position: relative; height: 96px">
+<div style="position: absolute; left: 0; right: 0; top: 40px; height: 22px; background: #1A1A1A"></div>
+<div style="position: absolute; left: 0; right: 0; top: 50px; height: 2px; background: repeating-linear-gradient(90deg,#fff 0 18px,transparent 18px 34px)"></div>
+<div class="seg" style="position: absolute; left: 0; top: 40px; height: 22px; background: #E10600; opacity: .9; width: {{roadPct}}%"></div>
+<div class="rider" style="position: absolute; top: 6px; left: calc({{roadPct}}% - 22px); width: 44px; height: 32px; display: flex; align-items: center; justify-content: center; color: #0A0A0A">
+<svg width="40" height="28" viewBox="0 0 40 28" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="8" cy="20" r="6"></circle><circle cx="32" cy="20" r="6"></circle><path d="M8 20h10l6-9h5l3 9M18 20l-3-8h-5M24 11l-2-4h-5"></path></svg>
+</div>
+<div style="position: absolute; left: 0; right: 0; top: 66px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr))">
+<sc-for list="{{monthOpts}}" as="o" hint-placeholder-count="4">
+<button onClick="{{o.pick}}" aria-pressed="{{o.pressed}}" style="background: transparent; border: none; min-height: 44px; font-size: 14px; font-weight: 800; text-align: right; padding: 0; {{o.style}}">{{o.label}}</button>
+</sc-for>
+</div>
+</div>
+<div style="font-size: 12px; color: #5a5a5a; margin-top: 10px">Pagesa e fundit: <strong style="color: #0A0A0A">{{lastPay}}</strong></div>
+</div>
+</div>
+
+<!-- result slab -->
+<div style="background: #0A0A0A; color: #fff; padding: clamp(24px,3vw,40px); display: flex; gap: 40px; flex-wrap: wrap; align-items: center; position: relative; overflow: hidden">
+<div class="stripes" aria-hidden="true" style="position: absolute; right: -40px; top: 0; bottom: 0; width: 180px; opacity: .9; clip-path: polygon(40% 0,100% 0,100% 100%,0 100%)"></div>
+<div style="flex: 1 1 320px; min-width: 0; position: relative">
+<div style="font-size: 12px; color: #9a9a9a; letter-spacing: .14em">KËSTI YT MUJOR</div>
+<div style="font-size: clamp(72px,8vw,128px); font-weight: 900; font-stretch: 115%; line-height: .9; letter-spacing: -.03em; font-variant-numeric: tabular-nums" aria-live="polite">{{shownFmt}}<span style="font-size: 18px; font-weight: 500; color: #9a9a9a; letter-spacing: 0"> /muaj</span></div>
+<div style="font-size: 15px; color: #cfcfcf; margin-top: 12px">≈ <strong style="color: {{hl}}">{{dailyFmt}} në ditë</strong> — sa një kafe në Pejë.</div>
+</div>
+<div style="flex: 1 1 360px; min-width: 0; position: relative; display: flex; flex-direction: column; gap: 14px; padding-right: 120px">
+<div style="display: flex; height: 14px; background: #222; overflow: hidden">
+<div class="seg" style="height: 100%; background: #fff; width: {{downPctBar}}%"></div>
+<div class="seg" style="height: 100%; background: #E10600; width: {{finPctBar}}%"></div>
+</div>
+<div style="display: flex; justify-content: space-between; font-size: 13px; gap: 12px; flex-wrap: wrap">
+<span><span style="display: inline-block; width: 10px; height: 10px; background: #fff; margin-right: 8px"></span>Kapar sot · <strong>{{downFmt}}</strong></span>
+<span><span style="display: inline-block; width: 10px; height: 10px; background: #E10600; margin-right: 8px"></span>Me këste · <strong>{{finFmt}}</strong></span>
+</div>
+<div style="font-size: 11px; color: #8a8a8a">Shembull pa interes — norma reale dhe kushtet nga [BANKA PARTNERE].</div>
+<a href="#contact" class="btn" style="align-self: flex-start; background: #E10600; color: #fff; padding: 16px 24px; font-size: 12px; font-weight: 800; font-style: italic; letter-spacing: .1em; clip-path: polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%)">APLIKO PËR KËTË OFERTË →</a>
+</div>
+</div>
+
+</div>
+</div>
+</section>
+
+<!-- WORLD + NEWS merged -->
+<section id="world" style="max-width: 1440px; margin: 0 auto; padding: 140px clamp(20px,4vw,56px)">
+<div class="rv" style="display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 48px">
+<h2 style="margin: 0; font-size: clamp(44px,5vw,80px); font-weight: 900; font-stretch: 125%; line-height: .95; letter-spacing: -.03em">MOTO SHPATI<br>WORLD<span style="color: #E10600">.</span></h2>
+<div style="display: flex; gap: 20px; align-items: center; font-size: 13px; color: #cfcfcf"><span>Ngjarje · Lajme · Komuniteti</span><a href="#world">Shiko të gjitha →</a></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 240px; gap: 16px">
+<a href="#world" class="tile rv" style="grid-column: span 2; grid-row: span 2; position: relative; overflow: hidden; color: #fff; border: 1px solid #1e1e1e">
+<div class="zoom hatch" style="position: absolute; inset: 0"></div>
+<div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 32px; background: linear-gradient(0deg, rgba(0,0,0,.85), transparent)">
+<span style="background: {{hl}}; color: #0A0A0A; font-size: 11px; font-weight: 900; letter-spacing: .12em; padding: 6px 10px">EVENT · [DATA]</span>
+<div style="font-size: 34px; font-weight: 900; font-stretch: 125%; line-height: 1; margin-top: 16px">RIDE-OUT: PEJË → RUGOVË</div>
+<div style="font-size: 14px; color: #bdbdbd; margin-top: 10px">Bashkohu me komunitetin. Regjistrimi falas.</div>
+</div>
+</a>
+<a href="#world" class="tile rv" style="position: relative; overflow: hidden; color: #fff; border: 1px solid #1e1e1e">
+<div class="zoom hatch" style="position: absolute; inset: 0"></div>
+<div style="position: absolute; left: 20px; right: 20px; bottom: 20px"><span style="font-size: 11px; letter-spacing: .14em; color: #E10600; font-weight: 800">LAJME</span><div style="font-size: 18px; font-weight: 800; margin-top: 6px">[Titulli i lajmit]</div></div>
+</a>
+<a href="#world" class="tile rv" style="position: relative; overflow: hidden; color: #fff; border: 1px solid #1e1e1e">
+<div class="zoom hatch" style="position: absolute; inset: 0"></div>
+<div style="position: absolute; left: 20px; right: 20px; bottom: 20px"><span style="font-size: 11px; letter-spacing: .14em; color: #E10600; font-weight: 800">MODEL I RI</span><div style="font-size: 18px; font-weight: 800; margin-top: 6px">[Lansimi i modelit]</div></div>
+</a>
+<a href="#world" class="tile rv" style="position: relative; overflow: hidden; color: #fff; border: 1px solid #1e1e1e; background: #E10600">
+<div style="position: absolute; inset: 24px; display: flex; flex-direction: column; justify-content: space-between">
+<span style="font-size: 11px; letter-spacing: .14em; font-weight: 800">@MOTOSHPATI</span>
+<div style="font-size: 26px; font-weight: 900; font-stretch: 125%; line-height: 1">NA NDIQ NË INSTAGRAM →</div>
+</div>
+</a>
+<a href="#world" class="tile rv" style="position: relative; overflow: hidden; color: #fff; border: 1px solid #1e1e1e">
+<div class="zoom hatch" style="position: absolute; inset: 0"></div>
+<div style="position: absolute; left: 20px; right: 20px; bottom: 20px"><span style="font-size: 11px; letter-spacing: .14em; color: #E10600; font-weight: 800">KËSHILLA</span><div style="font-size: 18px; font-weight: 800; margin-top: 6px">[Përgatit motorin për dimër]</div></div>
+</a>
+</div>
+</section>
+
+<!-- SERVICE & SHOWROOM (new) -->
+<section id="service" style="background: #111111; border-top: 1px solid #1c1c1c">
+<div style="max-width: 1440px; margin: 0 auto; padding: 120px clamp(20px,4vw,56px); display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px">
+<div class="rv" style="grid-column: 1 / -1; margin-bottom: 32px">
+<h2 style="margin: 0; font-size: clamp(44px,5vw,80px); font-weight: 900; font-stretch: 125%; line-height: .95; letter-spacing: -.03em">MË SHUMË SE<br>NJË SHITJE<span style="color: #E10600">.</span></h2>
+</div>
+<div class="rv" style="border: 1px solid #262626; padding: 32px; display: flex; flex-direction: column; gap: 14px; min-height: 280px">
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#E10600" stroke-width="1.8" aria-hidden="true"><circle cx="6" cy="17" r="3"></circle><circle cx="18" cy="17" r="3"></circle><path d="M9 17h6l-3-7h4l2 7M12 10 9 6H6"></path></svg>
+<div style="font-size: 24px; font-weight: 900; font-stretch: 125%">TEST RIDE</div>
+<p style="margin: 0; color: #a8a8a8; font-size: 15px; line-height: 1.5; flex: 1">Provo çdo model para se të vendosësh. Sill vetëm patentën.</p>
+<a href="#contact" class="btn" style="align-self: flex-start; background: #E10600; color: #fff; padding: 14px 20px; font-size: 12px; font-weight: 800; letter-spacing: .1em">REZERVO</a>
+</div>
+<div class="rv" style="border: 1px solid #262626; padding: 32px; display: flex; flex-direction: column; gap: 14px; min-height: 280px">
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#E10600" stroke-width="1.8" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4Z"></path></svg>
+<div style="font-size: 24px; font-weight: 900; font-stretch: 125%">SERVIS & PJESË</div>
+<p style="margin: 0; color: #a8a8a8; font-size: 15px; line-height: 1.5; flex: 1">Servis i autorizuar dhe pjesë origjinale për çdo model që shesim.</p>
+<a href="#contact" class="btn ghost" style="align-self: flex-start; border: 1px solid #fff; color: #fff; padding: 13px 20px; font-size: 12px; font-weight: 800; letter-spacing: .1em">CAKTO TERMIN</a>
+</div>
+<div class="rv hatch" style="border: 1px solid #262626; padding: 32px; display: flex; flex-direction: column; gap: 10px; min-height: 280px; position: relative">
+<div style="display: flex; align-items: center; gap: 10px; font-size: 12px; letter-spacing: .12em; color: #d8d8d8"><i class="dot" style="width: 8px; height: 8px; border-radius: 4px; background: {{hl}}; display: block"></i>E HAPUR TANI</div>
+<div style="font-size: 24px; font-weight: 900; font-stretch: 125%">SHOWROOM PEJË</div>
+<p style="margin: 0; color: #cfcfcf; font-size: 15px; line-height: 1.6; flex: 1">[ADRESA]<br>Hën–Sht [ORARI]<br>[TELEFONI]</p>
+<a href="#contact" style="font-size: 13px; font-weight: 700; color: #fff">Hap në Google Maps →</a>
+</div>
+</div>
+</section>
+
+<!-- FINAL CTA -->
+<section style="position: relative; overflow: hidden; background: #0A0A0A">
+<div class="stripes hide-sm" aria-hidden="true" style="position: absolute; top: 0; bottom: 0; right: -80px; width: 48%; clip-path: polygon(30% 0,100% 0,100% 100%,0 100%)"></div>
+<div style="position: relative; max-width: 1440px; margin: 0 auto; padding: 150px clamp(20px,4vw,56px)">
+<h2 class="wipe" style="margin: 0; font-size: clamp(52px,6.4vw,112px); font-weight: 900; font-stretch: 125%; line-height: .92; letter-spacing: -.03em">YOUR NEXT<br>RIDE STARTS<br><span style="font-style: italic">HERE<span style="color: #E10600">.</span></span></h2>
+<p style="margin: 28px 0 36px; color: #a8a8a8; font-size: 17px">Gjej makinën që të lëviz.</p>
+<a href="#lineup" class="btn" style="display: inline-block; background: #E10600; color: #fff; padding: 18px 30px; font-size: 13px; font-weight: 800; font-style: italic; letter-spacing: .1em; clip-path: polygon(12px 0,100% 0,calc(100% - 12px) 100%,0 100%)">EKSPLORO MODELET →</a>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact" style="border-top: 1px solid #1c1c1c; overflow: hidden">
+<div style="max-width: 1440px; margin: 0 auto; padding: 80px clamp(20px,4vw,56px) 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 40px; font-size: 14px">
+<div style="display: flex; flex-direction: column; gap: 12px"><div style="font-size: 12px; letter-spacing: .14em; color: #8a8a8a; margin-bottom: 6px">MODELET</div><a href="#lineup">Motorë</a><a href="#lineup">Skuterë</a><a href="#lineup">ATV</a><a href="#lineup">Të rejat</a></div>
+<div style="display: flex; flex-direction: column; gap: 12px"><div style="font-size: 12px; letter-spacing: .14em; color: #8a8a8a; margin-bottom: 6px">SHËRBIME</div><a href="#service">Servisi</a><a href="#service">Pjesë rezervë</a><a href="#finance">Blej me këste</a><a href="#service">Test ride</a></div>
+<div style="display: flex; flex-direction: column; gap: 12px"><div style="font-size: 12px; letter-spacing: .14em; color: #8a8a8a; margin-bottom: 6px">KOMPANIA</div><a href="#top">Rreth nesh</a><a href="#world">Moto Shpati World</a><a href="#world">Lajme</a><a href="#contact">Kontakti</a></div>
+<div style="display: flex; flex-direction: column; gap: 12px; grid-column: span 2; min-width: 0">
+<label for="nl" style="font-size: 12px; letter-spacing: .14em; color: #8a8a8a; margin-bottom: 6px">MERR OFERTAT E PARA</label>
+<div style="display: flex; border-bottom: 1px solid #444">
+<input id="nl" type="email" placeholder="email@shembull.com" style="flex: 1; min-width: 0; background: transparent; border: none; color: #fff; font: inherit; font-size: 16px; padding: 14px 0">
+<button style="background: transparent; border: none; color: #E10600; font-weight: 800; letter-spacing: .1em; font-size: 12px; min-height: 44px">REGJISTROHU →</button>
+</div>
+</div>
+</div>
+<div class="xs" aria-hidden="true" style="white-space: nowrap; margin-top: 80px; font-size: clamp(120px,17vw,280px); font-weight: 900; font-style: italic; font-stretch: 125%; line-height: .85; letter-spacing: -.04em"><span style="color: #fff">MOTO </span><span style="color: #E10600">SHPATI</span><span style="color: transparent; -webkit-text-stroke: 2px #2a2a2a"> MOTO SHPATI</span></div>
+<div style="max-width: 1440px; margin: 0 auto; padding: 28px clamp(20px,4vw,56px); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 12px; color: #8a8a8a; border-top: 1px solid #1c1c1c">
+<span>© 2026 Moto Shpati · Pejë, Kosovë</span><span>Instagram · Facebook · TikTok</span>
+</div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"highlight":{"editor":"color","default":"#FFB21A","options":["#FFB21A","#3DDCFF","#C6FF3D","#FF7A1A"],"section":"Look"},"motion":{"editor":"boolean","default":true,"section":"Look"},"heroGrade":{"editor":"enum","options":["Mono","Color"],"default":"Mono","section":"Look"},"$preview":{"width":1440,"height":7000}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.DATA = [
+      { brand: 'NAS', name: 'MAX 350', type: 'scooter', cc: 350, lic: 'A2', price: 4890, isNew: true },
+      { brand: 'QJMOTOR', name: 'STREET 350', type: 'motor', cc: 350, lic: 'A2', price: 3990, isNew: false },
+      { brand: '[MARKA]', name: '[MODELI] 125', type: 'scooter', cc: 125, lic: 'A1', price: 2290, isNew: false },
+      { brand: '[MARKA]', name: '[MODELI] 50', type: 'scooter', cc: 50, lic: 'AM', price: 1490, isNew: false },
+      { brand: 'QJMOTOR', name: '[MODELI] 125', type: 'motor', cc: 125, lic: 'A1', price: 2690, isNew: true },
+      { brand: 'QJMOTOR', name: '[MODELI] 700', type: 'motor', cc: 700, lic: 'A', price: 6900, isNew: false },
+      { brand: '[MARKA]', name: '[MODELI] ATV 300', type: 'atv', cc: 300, lic: 'A1', price: 5200, isNew: false },
+      { brand: '[MARKA]', name: '[MODELI] ATV 570', type: 'atv', cc: 570, lic: 'A1', price: 7500, isNew: true }
+    ];
+    this.CUTS = [0, 2.875, 5.0, 7.0, 10.05];
+    const init = { slide: 0, cat: 'all', step: 0, lic: 'A2', use: 'city', bud: 5000, budAny: false, model: 1, price: 3990, down: 20, months: 24 };
+    init.shown = this.calc(init);
+    this.state = init;
+  }
+  calc(s) { return (s.price - s.price * s.down / 100) / s.months; }
+  componentWillUnmount() { cancelAnimationFrame(this.raf); cancelAnimationFrame(this.vraf); clearTimeout(this.t); }
+  fin(patch) {
+    const next = { ...this.state, ...patch };
+    this.setState(patch);
+    cancelAnimationFrame(this.raf);
+    const from = this.state.shown, to = this.calc(next), t0 = performance.now();
+    const tick = (t) => {
+      const k = Math.min(1, (t - t0) / 650), e = 1 - Math.pow(1 - k, 3);
+      this.setState({ shown: from + (to - from) * e });
+      if (k < 1) this.raf = requestAnimationFrame(tick);
+    };
+    this.raf = requestAnimationFrame(tick);
+  }
+  renderVals() {
+    const s = this.state;
+    const DATA = this.DATA;
+    const hl = this.props.highlight ?? '#FFB21A';
+    const motion = this.props.motion ?? true;
+    const eur = (n) => '€' + Math.round(n).toLocaleString('de-DE');
+    const RANK = { AM: 0, A1: 1, A2: 2, A: 3 };
+    const TYPE = { motor: 'MOTOR', scooter: 'SKUTER', atv: 'ATV' };
+    const deco = (b, i) => ({
+      ...b, typeLabel: TYPE[b.type], ccTxt: b.cc + 'cc', priceTxt: eur(b.price),
+      monthlyTxt: eur(b.price * 0.8 / 36), delay: 'animation-delay:' + (i * 80) + 'ms'
+    });
+
+    // ---------- lineup ----------
+    const tabOn = 'background:#E10600;color:#fff;border-color:#E10600';
+    const off = 'background:transparent;color:#cfcfcf;border-color:#333';
+    const tabs = [['all', 'Të gjitha'], ['motor', 'Motorë'], ['scooter', 'Skuterë'], ['atv', 'ATV']].map(([id, label]) => ({
+      label, count: id === 'all' ? DATA.length : DATA.filter(b => b.type === id).length,
+      pressed: s.cat === id ? 'true' : 'false', style: s.cat === id ? tabOn : off,
+      pick: () => this.setState({ cat: id })
+    }));
+    const bikes = DATA.filter(b => s.cat === 'all' || b.type === s.cat).map(deco);
+
+    // ---------- finder ----------
+    const budget = s.budAny ? 100000 : s.bud;
+    const useOk = (b) => {
+      if (s.use === 'terrain') return b.type === 'atv';
+      if (b.type === 'atv') return false;
+      if (s.use === 'city') return b.cc <= 400;
+      if (s.use === 'trip') return b.cc >= 125;
+      return true;
+    };
+    const ok = DATA.filter(b => (b.type === 'atv' || RANK[b.lic] <= RANK[s.lic]) && useOk(b) && b.price <= budget);
+    const ref = s.budAny ? 8000 : s.bud;
+    const scored = ok.map(b => {
+      const fit = 1 - Math.min(1, Math.abs(ref - b.price) / ref);
+      const head = s.lic === 'A' || b.type === 'atv' ? 0 : Math.max(0, RANK[s.lic] - RANK[b.lic]);
+      const score = Math.max(62, Math.min(98, Math.round(72 + fit * 26 - head * 6)));
+      return { ...b, score };
+    }).sort((a, b) => b.score - a.score);
+    const goFin = (b) => () => {
+      this.fin({ model: DATA.indexOf(DATA.find(d => d.name === b.name && d.brand === b.brand)), price: b.price });
+      const el = document.getElementById('finance');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    };
+    const topRaw = scored[0];
+    const top = topRaw ? { ...deco(topRaw, 0), score: topRaw.score, ringOffset: 100 - topRaw.score, toFinance: goFin(topRaw) } : { name: '', score: 0, ringOffset: 100 };
+    const others = scored.slice(1, 4).map((b, i) => ({ ...deco(b, i + 1), score: b.score }));
+
+    const p = ok.length / DATA.length;
+    const advance = (patch) => {
+      this.setState(patch);
+      clearTimeout(this.t);
+      this.t = setTimeout(() => this.setState({ step: Math.min(2, this.state.step + 1) }), 320);
+    };
+    const tileOn = 'background:#1a0605;border-color:#E10600';
+    const tileOff = 'background:#0A0A0A;border-color:#262626';
+    const licOpts = [['AM', 'deri 50cc · skuterë të vegjël'], ['A1', 'deri 125cc'], ['A2', 'deri 35 kW (~400cc)'], ['A', 'pa kufi fuqie']].map(([id, sub]) => ({
+      big: id, sub, pressed: s.lic === id ? 'true' : 'false', style: s.lic === id ? tileOn : tileOff,
+      pick: () => advance({ lic: id })
+    }));
+    const useOpts = [['city', 'QYTET', 'Trafik, parkim, çdo ditë në punë'], ['trip', 'RRUGË & UDHËTIME', 'Autostradë, Rugovë, fundjavë'], ['terrain', 'TERREN', 'Mal, fushë, fermë'], ['daily', 'PAK NGA TË GJITHA', 'Një motor për gjithçka']].map(([id, big, sub]) => ({
+      big, sub, iCity: id === 'city', iTrip: id === 'trip', iTerrain: id === 'terrain', iDaily: id === 'daily',
+      pressed: s.use === id ? 'true' : 'false', style: s.use === id ? tileOn : tileOff,
+      pick: () => advance({ use: id })
+    }));
+    const useName = { city: 'Qytet', trip: 'Udhëtime', terrain: 'Terren', daily: 'Të gjitha' }[s.use];
+    const budTxt = s.budAny ? 'Pa limit' : '≤ ' + eur(s.bud);
+    const steps = [['01', 'PATENTA', s.lic], ['02', 'PËRDORIMI', useName], ['03', 'BUXHETI', budTxt]].map(([num, title, value], i) => ({
+      num, title, value,
+      current: s.step === i ? 'step' : 'false',
+      style: s.step === i ? 'border-color:#E10600;color:#E10600' : 'border-color:#262626;color:#9a9a9a',
+      go: () => this.setState({ step: i })
+    }));
+    const stepLabels = ['HAPI 1 / 3', 'HAPI 2 / 3', 'HAPI 3 / 3', 'GATI'];
+
+    // ---------- finance ----------
+    const chipOn = 'background:#0A0A0A;color:#fff;border-color:#0A0A0A';
+    const chipOff = 'background:#fff;color:#0A0A0A;border-color:#d8d3ca';
+    const modelChips = DATA.map((b, i) => ({
+      brand: b.brand, name: b.name, priceTxt: eur(b.price),
+      pressed: s.model === i ? 'true' : 'false', style: s.model === i ? chipOn : chipOff,
+      pick: () => this.fin({ model: i, price: b.price })
+    })).concat([{
+      brand: 'TJETËR', name: 'Çmim tjetër', priceTxt: 'vendos vetë',
+      pressed: s.model === 'custom' ? 'true' : 'false', style: s.model === 'custom' ? chipOn : chipOff,
+      pick: () => this.fin({ model: 'custom' })
+    }]);
+    const cells = Array.from({ length: 11 }, (_, i) => {
+      const v = i * 5;
+      const h = 34 + i * 6.6;
+      const fill = v <= s.down ? (v === s.down ? '#0A0A0A' : '#E10600') : '#E6E1D8';
+      return { aria: 'Kapar ' + v + '%', pressed: v === s.down ? 'true' : 'false', style: 'height:' + h + '%;background:' + fill, pick: () => this.fin({ down: v }) };
+    });
+    const monthOpts = [12, 24, 36, 48].map(m => ({
+      label: m + ' m', pressed: s.months === m ? 'true' : 'false',
+      style: s.months === m ? 'color:#E10600' : 'color:#6a6a6a',
+      pick: () => this.fin({ months: m })
+    }));
+    const MON = ['Janar', 'Shkurt', 'Mars', 'Prill', 'Maj', 'Qershor', 'Korrik', 'Gusht', 'Shtator', 'Tetor', 'Nëntor', 'Dhjetor'];
+    const d = new Date(); d.setMonth(d.getMonth() + s.months);
+    const downAmt = s.price * s.down / 100;
+
+    return {
+      hl, motionClass: motion ? '' : 'still',
+      heroFilter: (this.props.heroGrade ?? 'Mono') === 'Mono' ? 'filter: grayscale(1) contrast(1.15) brightness(.75)' : 'filter: saturate(1.05) brightness(.8)',
+      videoRef: this.vref || (this.vref = (el) => {
+        cancelAnimationFrame(this.vraf); this.vid = el;
+        if (!el) return;
+        el.muted = true; const pr = el.play && el.play(); if (pr && pr.catch) pr.catch(() => {});
+        const loop = () => {
+          const t = el.currentTime; let i = 0;
+          for (let k = 0; k < 4; k++) if (t >= this.CUTS[k]) i = k;
+          if (i !== this.state.slide) this.setState({ slide: i });
+          this.vraf = requestAnimationFrame(loop);
+        };
+        this.vraf = requestAnimationFrame(loop);
+      }),
+      heroBars: ['Skuter në qytet', 'Adventure në rrugë', 'Sport në mal', 'ATV në terren'].map((label, i) => ({
+        aria: 'Slajdi ' + (i + 1) + ': ' + label,
+        cls: 'hbar' + (i === s.slide ? ' on' : ''),
+        current: i === s.slide ? 'true' : 'false',
+        dur: 'animation-duration:' + (this.CUTS[i + 1] - this.CUTS[i]).toFixed(2) + 's',
+        go: () => { if (this.vid) { this.vid.currentTime = this.CUTS[i] + 0.02; const p = this.vid.play && this.vid.play(); if (p && p.catch) p.catch(() => {}); } }
+      })),
+      tabs, bikes,
+      // finder
+      total: DATA.length, matchCount: ok.length,
+      gaugeAria: ok.length + ' nga ' + DATA.length + ' modele të përshtaten',
+      arcOffset: 377 * (1 - p), needleDeg: p * 180,
+      steps, stepLabel: stepLabels[s.step], progressPct: ((s.step + (s.step === 3 ? 0 : 0)) / 3) * 100,
+      isStep0: s.step === 0, isStep1: s.step === 1, isStep2: s.step === 2, isStep3: s.step === 3,
+      licOpts, useOpts,
+      bud: s.bud, budLabel: s.budAny ? 'PA LIMIT' : eur(s.bud),
+      budHint: ok.length + (ok.length === 1 ? ' model' : ' modele') + ' brenda kësaj shume',
+      onBud: (e) => this.setState({ bud: Number(e.target.value), budAny: false }),
+      toggleAny: () => this.setState({ budAny: !s.budAny }),
+      anyPressed: s.budAny ? 'true' : 'false',
+      anyStyle: s.budAny ? 'background:#fff;color:#0A0A0A;border-color:#fff' : off,
+      back: () => this.setState({ step: Math.max(0, s.step - 1) }),
+      ignite: () => this.setState({ step: 3 }),
+      restart: () => this.setState({ step: 0 }),
+      summary: s.lic + ' · ' + useName.toUpperCase() + ' · ' + budTxt.toUpperCase(),
+      top, others, hasTop: !!topRaw, hasMore: others.length > 0, noMatch: ok.length === 0,
+      // finance
+      modelChips, isCustom: s.model === 'custom', cells, monthOpts,
+      price: s.price, down: s.down, months: s.months,
+      priceFmt: eur(s.price), downFmt: eur(downAmt), finFmt: eur(s.price - downAmt),
+      shownFmt: eur(s.shown), dailyFmt: '€' + (this.calc(s) / 30).toFixed(2).replace('.', ','),
+      downPctBar: s.down, finPctBar: 100 - s.down,
+      roadPct: s.months / 48 * 100,
+      lastPay: MON[d.getMonth()] + ' ' + d.getFullYear(),
+      onPrice: (e) => this.fin({ price: Number(e.target.value) })
+    };
+  }
+}
+</script>
+</body>
+</html>

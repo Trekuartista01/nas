@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Placeholder until the real logo arrives: the brand's red /// slashes on ink. -->
+  <rect width="64" height="64" rx="12" fill="#0a0a0a"/>
+  <g fill="#e10600">
+    <polygon points="17,52 25,52 33,12 25,12"/>
+    <polygon points="29,52 37,52 45,12 37,12"/>
+    <polygon points="41,52 49,52 57,12 49,12"/>
+  </g>
+</svg>

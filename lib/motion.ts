@@ -36,3 +36,76 @@ export const FOOTER_REVEAL = { start: 560, max: 500 } as const;
 
 /** Phones get half the parallax travel. */
 export const MOBILE_PARALLAX = 0.5;
+
+/**
+ * Sport Line "lights behind the logo" (homepage #sport-line, components/nas/LogoBacklight.tsx).
+ * The stages read one progress value from 0 to 1: scroll on screens ≥ 768px (pinned), a timed run
+ * on phones, fixed at 1 with reduced motion. Timeline numbers are shares of that progress.
+ * The light flash itself is time-based (ms), fired when progress crosses `timeline.lightsOn`.
+ */
+export const SPORT_BACKLIGHT = {
+  /** Scroll while pinned, in screen heights (the wrapper is this + 1 screen tall). */
+  pinScreens: 2,
+  /** Phones: the same sequence played once, in seconds. */
+  mobileDuration: 2.5,
+  colors: {
+    bg: "#0C0C0C",
+    red: "#EA2028",
+    redCore: "#FF4A4A",
+    white: "#FFFFFF",
+    /** Edge of the LED shapes (hard white core → this). */
+    ledEdge: "#E6F0FF",
+    /** Thin light rim around the dark (silhouette) wordmark. */
+    rim: "rgba(244,248,255,.55)",
+  },
+  timeline: {
+    /** 0–20%: white wordmark settles in. */
+    settle: [0, 0.2] as const,
+    logoScale: [0.96, 1] as const,
+    /** 20–35%: the S turns red and the red tail glow fades in. */
+    red: [0.2, 0.35] as const,
+    tailGlow: 0.8,
+    /** The lights fire here (flash below); scrolling back above it switches them off. */
+    lightsOn: 0.42,
+    /** The front "rolls closer" (scale) across this range. */
+    approach: [0.42, 0.6] as const,
+    approachScale: [0.92, 1] as const,
+    /** On the final "on": the white N+A fade to this under the dark silhouette, which settles at `silhouette`
+     *  (below 1 so the lights show faintly through the letters); the red S settles at dimS. */
+    dimNA: 0,
+    silhouette: 0.72,
+    dimS: 0.55,
+    /** 60–80%: caption rises, lights breathe (± breathe). */
+    caption: [0.6, 0.8] as const,
+    breathe: 0.02,
+    /** 80–100%: hold, then the pin releases. */
+  },
+  /** The light flash, in ms: DRLs on, then the eyes double-flash and stay on. */
+  flash: {
+    drlIn: 80,
+    on1: 60,
+    off1: 70,
+    on2: 60,
+    off2: 90,
+    /** Bloom opacity on each flash peak, and the white wash over the stage (desktop only). */
+    bloomPeak: 0.9,
+    wash: 0.08,
+    washMs: 120,
+    /** How long the logo takes to dim once the lights are on for good. */
+    dimMs: 120,
+    /** Steady state afterwards: a slow 1 → min → 1 shimmer, period in seconds. */
+    shimmerMin: 0.95,
+    shimmerPeriod: 3,
+  },
+  /**
+   * The sportsbike front (LED eyes, DRL slashes, centre intake light), drawn in a 600 × 80 box.
+   * `width`: share of the wordmark width (phones scale with the wordmark); `y`: its centre, as a share of
+   * the wordmark height. Shapes: FACE in LogoBacklight.tsx.
+   */
+  face: { width: 0.5, y: 0.7 },
+  /** Bloom copies behind the lights (blur in px at the full 1100px wordmark; scales with it). */
+  bloom: { tight: { blur: 8, opacity: 0.6 }, wide: { blur: 24, opacity: 0.25 } },
+  /** Use the darkened Sport Line front photo behind the lights (the CSS-only version is the default). */
+  photo: false,
+  photoSrc: "/nas-images/web/sportline-front.webp",
+} as const;

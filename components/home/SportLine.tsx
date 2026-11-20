@@ -1,25 +1,23 @@
 "use client";
 
-import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import Rise from "@/components/motion/Rise";
-import { useParallaxScale, usePinnable } from "@/components/motion/useMotionScale";
+import { useParallaxScale } from "@/components/motion/useMotionScale";
 import DarkModelCard from "@/components/nas/DarkModelCard";
+import LogoBacklight from "@/components/nas/LogoBacklight";
 import { BlockButton } from "@/components/ui/Buttons";
 import { LogoMark } from "@/components/ui/Logo";
 import type { Model } from "@/data/models";
 import { NAS_HOME } from "@/data/nas-home";
 import { MOTION } from "@/lib/motion";
 
-const RED = "#e10600"; // --color-red (animated colour values need the literal)
-const WHITE = "#ffffff";
-
 /**
  * SPORT LINE as a short scroll story (red is the accent here, used more boldly than elsewhere):
  *  1. Full-screen intro: the red scooter on the pedestal wipes in (clip-path) with the Sport Line logo.
- *  2. The red S: the plain NAS wordmark, large and white. Desktop: pinned for one screen of scroll,
- *     the S fills red, then the line underneath reveals (scrubbed). Phones / reduced motion: it plays
- *     once when in view.
+ *  2. Lights behind the logo (components/nas/LogoBacklight.tsx): the wordmark large on black, the S
+ *     turns red, the logo dims to a silhouette as a bike's lights switch on behind it, then the line. Pinned
+ *     on ≥ 768px; phones play it once; reduced motion shows the end state.
  *  3. Labelled detail shots: one large + two smaller, red lines drawing under the labels, light
  *     parallax in opposite directions.
  *  4. The Sport Line models (type "sport") and an "Explore Sport Line" button to /sport-line.
@@ -114,67 +112,10 @@ function Intro() {
 }
 
 const RED_S_LINE = "In the Sport Line, red is the signal of performance.";
-const WORDMARK = "h-auto w-[min(1100px,86vw)] text-white";
 
-/** 2. The red S. Pinned and scrubbed on desktop; played once when in view elsewhere. */
+/** 2. Lights behind the logo: the S turns red, the wordmark dims and a bike's lights switch on behind it. */
 function RedS() {
-  return usePinnable() ? <RedSPinned /> : <RedSOnce />;
-}
-
-/** Desktop: one screen of pinned scroll; the S fills red, then the line reveals (scrubbed). */
-function RedSPinned() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
-  const p = useSpring(scrollYProgress, MOTION.scrub);
-  const sFill = useTransform(p, [0.12, 0.45], [WHITE, RED]);
-  const lineClip = useTransform(p, [0.5, 0.85], ["inset(0 100% 0 0)", "inset(0 0% 0 0)"]);
-  const lineY = useTransform(p, [0.5, 0.85], [24, 0]);
-  const bar = useTransform(p, [0.5, 0.9], [0, 1]);
-
-  return (
-    <div ref={ref} className="relative h-[200svh]">
-      <div className="sticky top-0 flex h-svh flex-col items-center justify-center gap-10 overflow-hidden px-4">
-        <motion.div style={{ "--s-fill": sFill } as unknown as React.CSSProperties}>
-          <LogoMark bare sVariable title="NAS" className={WORDMARK} />
-        </motion.div>
-        <div className="text-center">
-          <motion.p style={{ clipPath: lineClip, y: lineY }} className="headline text-[clamp(24px,2.6vw,44px)] leading-tight">
-            {RED_S_LINE}
-          </motion.p>
-          <motion.span aria-hidden style={{ scaleX: bar }} className="mx-auto mt-6 block h-[3px] w-40 origin-left bg-red" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/** Phones and reduced motion: plays once when in view. */
-function RedSOnce() {
-  return (
-    <motion.div
-      className="flex flex-col items-center gap-8 px-4 py-[clamp(90px,14vw,140px)]"
-      initial="hidden"
-      whileInView="shown"
-      viewport={{ once: true, amount: 0.6 }}
-    >
-      <motion.div variants={{ hidden: { "--s-fill": WHITE }, shown: { "--s-fill": RED, transition: { duration: 1, ease: MOTION.ease, delay: 0.2 } } }}>
-        <LogoMark bare sVariable title="NAS" className={WORDMARK} />
-      </motion.div>
-      <motion.p
-        data-anim
-        className="headline max-w-[640px] text-center text-[clamp(24px,6vw,44px)] leading-tight"
-        variants={{ hidden: { opacity: 0, y: MOTION.rise }, shown: { opacity: 1, y: 0, transition: { duration: MOTION.text, ease: MOTION.ease, delay: 0.9 } } }}
-      >
-        {RED_S_LINE}
-      </motion.p>
-      <motion.span
-        aria-hidden
-        data-anim
-        className="block h-[3px] w-32 origin-left bg-red"
-        variants={{ hidden: { scaleX: 0 }, shown: { scaleX: 1, transition: { duration: MOTION.wipeDuration, ease: MOTION.wipe, delay: 1.1 } } }}
-      />
-    </motion.div>
-  );
+  return <LogoBacklight caption={RED_S_LINE} />;
 }
 
 const SHOTS = [

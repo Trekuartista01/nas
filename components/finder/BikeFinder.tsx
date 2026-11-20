@@ -3,15 +3,15 @@
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { TbBuildingSkyscraper, TbClock, TbMountain, TbPower, TbRoad, TbRotate } from "react-icons/tb";
+import { TbBuildingSkyscraper, TbClock, TbPower, TbRoad, TbRotate } from "react-icons/tb";
 import Gauge from "@/components/finder/Gauge";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Reveal from "@/components/ui/Reveal";
-import { models, TYPE_LABEL, type Licence } from "@/data/models";
+import { GhostButton, SlashButton, SlashFrame } from "@/components/ui/Buttons";
+import { TYPE_LABEL, type Licence, type Model } from "@/data/models";
 import { eur } from "@/lib/format";
 import { fromMonthly } from "@/lib/finance";
 import { matchModels, type Use } from "@/lib/finder";
-import { selectFinanceModel } from "@/components/finance/FinanceCalculator";
 
 const EASE = [0.2, 0.8, 0.2, 1] as const;
 
@@ -25,7 +25,6 @@ const LICENCES: { id: Licence; sub: string }[] = [
 const USES: { id: Use; title: string; sub: string; short: string; Icon: typeof TbRoad }[] = [
   { id: "city", title: "QYTET", sub: "Trafik, parkim, çdo ditë në punë", short: "Qytet", Icon: TbBuildingSkyscraper },
   { id: "trip", title: "RRUGË & UDHËTIME", sub: "Autostradë, Rugovë, fundjavë", short: "Udhëtime", Icon: TbRoad },
-  { id: "terrain", title: "TERREN", sub: "Mal, fushë, fermë", short: "Terren", Icon: TbMountain },
   { id: "daily", title: "PAK NGA TË GJITHA", sub: "Një motor për gjithçka", short: "Të gjitha", Icon: TbClock },
 ];
 
@@ -59,7 +58,8 @@ function StepTitle({ n, children }: { n: string; children: React.ReactNode }) {
   );
 }
 
-export default function BikeFinder({ headingAs = "h2" }: { headingAs?: "h1" | "h2" }) {
+/** `models`: the published models, loaded on the server (lib/data/catalog.ts). */
+export default function BikeFinder({ models, headingAs = "h2" }: { models: Model[]; headingAs?: "h1" | "h2" }) {
   const [step, setStep] = useState(0);
   const [licence, setLicence] = useState<Licence>("A2");
   const [use, setUse] = useState<Use>("city");
@@ -69,7 +69,7 @@ export default function BikeFinder({ headingAs = "h2" }: { headingAs?: "h1" | "h
 
   useEffect(() => () => clearTimeout(timer.current), []);
 
-  const matches = useMemo(() => matchModels(models, { licence, use, budget, noLimit }), [licence, use, budget, noLimit]);
+  const matches = useMemo(() => matchModels(models, { licence, use, budget, noLimit }), [models, licence, use, budget, noLimit]);
   const top = matches[0];
   const others = matches.slice(1, 4);
   const useShort = USES.find((u) => u.id === use)!.short;
@@ -103,7 +103,7 @@ export default function BikeFinder({ headingAs = "h2" }: { headingAs?: "h1" | "h
         {/* Instrument cluster */}
         <div className="relative flex min-w-0 flex-[1_1_380px] flex-col gap-6 overflow-hidden border border-[#222] bg-panel p-8">
           <div className="flex justify-between text-[11px] tracking-[0.16em] text-faint">
-            <span>MOTO SHPATI · FINDER</span>
+            <span>NAS · FINDER</span>
             <span>{STEP_LABELS[step]}</span>
           </div>
           <Gauge value={matches.length} max={models.length} />
@@ -168,7 +168,7 @@ export default function BikeFinder({ headingAs = "h2" }: { headingAs?: "h1" | "h
             {step === 1 && (
               <Swap id="s1">
                 <StepTitle n="02 / 03">KU DO TË VOZITËSH?</StepTitle>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid gap-3 sm:grid-cols-3">
                   {USES.map(({ id, title, sub, Icon }) => (
                     <button
                       key={id}
@@ -243,23 +243,25 @@ export default function BikeFinder({ headingAs = "h2" }: { headingAs?: "h1" | "h
                   </button>
                   <span className="text-[13px] text-muted">
                     ose paguaj me këste —{" "}
-                    <a href="#financim" className="text-highlight hover:underline">
+                    <Link href="/financim" className="text-highlight hover:underline">
                       llogarit këtu
-                    </a>
+                    </Link>
                   </span>
                 </div>
                 <div className="mt-auto flex flex-wrap items-center justify-between gap-4">
                   <button type="button" onClick={() => setStep(1)} className="min-h-11 text-[13px] text-[#cfcfcf] hover:text-white">
                     ← Mbrapa
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => setStep(3)}
-                    className="slant btn-sheen flex min-h-16 animate-glow items-center gap-3 bg-red px-8 text-[15px] font-black italic tracking-[0.12em] text-white"
-                  >
-                    <TbPower size={20} aria-hidden />
-                    NDIZE MOTORIN
-                  </button>
+                  <SlashFrame>
+                    <button
+                      type="button"
+                      onClick={() => setStep(3)}
+                      className="slant-lg btn-sheen flex min-h-16 animate-glow items-center gap-3 bg-red px-11 text-[15px] font-black italic tracking-[0.12em] text-white"
+                    >
+                      <TbPower size={20} aria-hidden />
+                      NDIZE MOTORIN
+                    </button>
+                  </SlashFrame>
                 </div>
               </Swap>
             )}
@@ -314,20 +316,13 @@ export default function BikeFinder({ headingAs = "h2" }: { headingAs?: "h1" | "h
                           <span className="text-[28px] font-black">{eur(top.price)}</span>
                           <span className="text-[13px] text-muted">ose {eur(fromMonthly(top.price))}/muaj</span>
                         </div>
-                        <div className="flex flex-wrap gap-2">
-                          <Link
-                            href={`/servisi?test-ride=${top.slug}#test-ride`}
-                            className="btn-sheen bg-red px-4.5 py-3.5 text-xs font-extrabold tracking-[0.1em] text-white hover:text-white"
-                          >
+                        <div className="flex flex-wrap gap-x-5 gap-y-3">
+                          <SlashButton href={`/modelet/${top.slug}#test-ride`} size="sm">
                             REZERVO TEST RIDE
-                          </Link>
-                          <button
-                            type="button"
-                            onClick={() => selectFinanceModel(top.slug)}
-                            className="btn-sheen min-h-11 border border-white px-4.5 text-xs font-extrabold tracking-[0.1em] hover:bg-white hover:text-ink"
-                          >
+                          </SlashButton>
+                          <GhostButton href={`/financim?model=${top.slug}`}>
                             LLOGARIT KËSTIN
-                          </button>
+                          </GhostButton>
                         </div>
                       </div>
                     </div>

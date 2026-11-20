@@ -18,7 +18,7 @@ export interface CatalogCardProps {
   cutout?: boolean;
 }
 
-/** Compact grid card for /modelet and /aksesoret (design: Moto Shpati Modelet / Aksesoret Page.png). */
+/** Compact grid card for /modelet and /aksesoret (design: NAS Modelet / Aksesoret Page.png). */
 export default function CatalogCard({ href, brand, name, meta, price, image, isNew = false, cutout = false }: CatalogCardProps) {
   // Saved in this browser; the card's page path is its id.
   const [saved, toggleSaved] = useFavourite(href);

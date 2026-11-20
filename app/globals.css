@@ -5,6 +5,8 @@
   --color-ink: #0a0a0a;
   --color-surface: #111111;
   --color-surface-2: #121212;
+  /* Lineup section background (design: Frame 27756) */
+  --color-surface-3: #151515;
   --color-panel: #0e0e0e;
   --color-line: #1e1e1e;
   --color-line-2: #262626;
@@ -12,12 +14,18 @@
   --color-muted-2: #a8a8a8;
   --color-faint: #8a8a8a;
   --color-red: #e10600;
+  /* NAS homepage (Nov 2026 design): card borders and body copy */
+  --color-line-3: #2a2a2a;
+  --color-panel-2: #161616;
+  --color-body: #bdbdbd;
+  --color-light: #e7e7e7;
   --color-highlight: #ffb21a;
   --color-bone: #ece8e1;
 
-  --font-sans: var(--font-archivo), system-ui, sans-serif;
+  --font-sans: var(--font-publica), system-ui, sans-serif;
 
   --ease-moto: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-nas: cubic-bezier(0.2, 0.7, 0.1, 1);
 
   --animate-marquee: marquee 28s linear infinite;
   --animate-pulse-dot: pulse-dot 1.6s ease-in-out infinite;
@@ -52,7 +60,12 @@
 
 @keyframes stripes {
   to {
-    background-position: 160px 0;
+    transform: translateX(88.27px);
+  }
+}
+@keyframes stripes-lg {
+  to {
+    transform: translateX(340px);
   }
 }
 @keyframes sheen {
@@ -73,8 +86,9 @@
 }
 
 /* ───────────────── Utilities ───────────────── */
+/* Publica Sans tops out at 800 (ExtraBold). font-stretch only matters if a width-axis font returns. */
 @utility headline {
-  font-weight: 900;
+  font-weight: 800;
   font-stretch: 125%;
   letter-spacing: -0.03em;
   line-height: 0.95;
@@ -83,18 +97,53 @@
 @utility wide {
   font-stretch: 125%;
 }
+/* Red parallelograms. The cut = button height × tan 24°, the same angle as the /// marks
+   (-skew-x-[24deg]), so the button's edges run parallel to them. */
 @utility slant {
-  clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+  /* ~48px tall buttons */
+  clip-path: polygon(21px 0, 100% 0, calc(100% - 21px) 100%, 0 100%);
 }
 @utility slant-sm {
-  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  /* ~44px tall buttons */
+  clip-path: polygon(19px 0, 100% 0, calc(100% - 19px) 100%, 0 100%);
+}
+@utility slant-lg {
+  /* 64px tall (bike finder ignition) */
+  clip-path: polygon(28px 0, 100% 0, calc(100% - 28px) 100%, 0 100%);
+}
+/* Big moving bars (final CTA). The element is skewed -28° from its bottom-left corner, so its
+   left edge leans like the bars; inside, plain vertical bars slide right by one period (340px). */
+@utility stripes-lg {
+  overflow: hidden;
+  transform: skewX(-28deg);
+  transform-origin: bottom left;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    left: -340px;
+    background: repeating-linear-gradient(90deg, var(--color-red) 0 230px, transparent 230px 340px);
+    animation: stripes-lg 4s linear infinite;
+    will-change: transform;
+  }
 }
 @utility hatch {
   background: repeating-linear-gradient(115deg, #141414 0 38px, #171717 38px 39px);
 }
+/* Moving red stripes. The pattern sits on an oversized ::before that slides by exactly one
+   horizontal period (80px / sin 65° ≈ 88.27px), so the loop is seamless and runs on the GPU
+   (transform) instead of repainting the background every frame. Used on absolute elements. */
 @utility stripes {
-  background: repeating-linear-gradient(115deg, var(--color-red) 0 46px, transparent 46px 80px);
-  animation: stripes 3s linear infinite;
+  overflow: hidden;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    left: -88.27px;
+    background: repeating-linear-gradient(115deg, var(--color-red) 0 46px, transparent 46px 80px);
+    animation: stripes 1.65s linear infinite;
+    will-change: transform;
+  }
 }
 /* Same gutters as the Wilson site: mx-auto w-full max-w-[120rem] px-4 sm:px-6 lg:px-14 */
 @utility container-moto {
@@ -197,5 +246,55 @@ input[type="range"].price-range::-moz-range-thumb {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* ───────────────── Chrome (NAS dealer section + footer wordmark ONLY) ─────────────────
+   Metal / premium accent. Hard contrast bands; it only reads as chrome when light moves, so every
+   chrome element gets a glint (once on entry, or scroll-linked). Not used anywhere else on the site. */
+:root {
+  --chrome: linear-gradient(100deg, #5d5f63 0%, #f4f5f6 18%, #9a9da2 32%, #2b2c2f 48%, #d9dbde 62%, #ffffff 70%, #7c7f84 84%, #3a3b3e 100%);
+  /* Text version: darkest stops lifted so "LEAD." stays readable on #161616. */
+  --chrome-text: linear-gradient(100deg, #8d9095 0%, #f4f5f6 18%, #b6b9be 32%, #74777c 48%, #e2e4e7 62%, #ffffff 70%, #a5a8ad 84%, #82858a 100%);
+  --glint: linear-gradient(100deg, transparent 42%, rgba(255, 255, 255, 0.9) 50%, transparent 58%);
+}
+/* Chrome fill; move it with background-position (wide image so there is room to travel). */
+@utility chrome {
+  background-image: var(--chrome);
+  background-size: 200% 100%;
+  background-position: 0% 0;
+}
+/* Chrome text with its own glint layer (first background). */
+@utility chrome-text {
+  background-image: var(--glint), var(--chrome-text);
+  background-size: 300% 100%, 200% 100%;
+  background-position: 100% 0, 0% 0;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+/* Glint layer: a narrow white band, parked off to the right (background-position-x 100%).
+   Sweeping 100% → 0% moves it left → right across the element. */
+@utility glint {
+  background-image: var(--glint);
+  background-size: 300% 100%;
+  background-position: 100% 0;
+  background-repeat: no-repeat;
+}
+@keyframes glint-sweep {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0% 0;
+  }
+}
+@keyframes glint-sweep-text {
+  from {
+    background-position: 100% 0, 0% 0;
+  }
+  to {
+    background-position: 0% 0, 0% 0;
   }
 }

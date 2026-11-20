@@ -10,6 +10,9 @@ const ARC = `M${CX - R} ${CY} A${R} ${R} 0 0 1 ${CX + R} ${CY}`;
 const ARC_LEN = Math.PI * R;
 const NEEDLE = 96; // stays inside the tick ring
 
+// Rounded to 0.01px: server and browser trig can differ in the last decimal, which breaks hydration.
+const r2 = (n: number) => Math.round(n * 100) / 100;
+
 function makeTicks(max: number) {
   return Array.from({ length: max + 1 }, (_, i) => {
   const a = Math.PI * (1 - i / max);
@@ -17,19 +20,19 @@ function makeTicks(max: number) {
   const sin = Math.sin(a);
   return {
     i,
-    x1: CX + 104 * cos,
-    y1: CY - 104 * sin,
-    x2: CX + 96 * cos,
-    y2: CY - 96 * sin,
-    lx: CX + 82 * cos,
-    ly: CY - 82 * sin + 4,
+    x1: r2(CX + 104 * cos),
+    y1: r2(CY - 104 * sin),
+    x2: r2(CX + 96 * cos),
+    y2: r2(CY - 96 * sin),
+    lx: r2(CX + 82 * cos),
+    ly: r2(CY - 82 * sin + 4),
   };
   });
 }
 
 // Red zone: last quarter of the dial.
 const RED_START = Math.PI * 0.25;
-const RED_ARC = `M${CX + R * Math.cos(RED_START)} ${CY - R * Math.sin(RED_START)} A${R} ${R} 0 0 1 ${CX + R} ${CY}`;
+const RED_ARC = `M${r2(CX + R * Math.cos(RED_START))} ${r2(CY - R * Math.sin(RED_START))} A${R} ${R} 0 0 1 ${CX + R} ${CY}`;
 
 /**
  * Rev-counter: needle + arc show how many models match (value / max).

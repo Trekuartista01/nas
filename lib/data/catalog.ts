@@ -2,7 +2,7 @@ import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import { accessories as localAccessories, type Accessory } from "@/data/accessories";
 import { brands as localBrands, heroVideo as localHero, worldTiles as localWorld, type Brand, type HeroSlide } from "@/data/home";
-import { models as localModels, type Model } from "@/data/models";
+import { inPublicCatalog, models as localModels, type Model } from "@/data/models";
 import {
   ACCESSORY_COLUMNS,
   MODEL_COLUMNS,
@@ -48,10 +48,10 @@ export async function getModels(): Promise<Model[]> {
   cacheTag(CACHE_TAGS.models);
   cacheLife("hours");
   const db = createPublicClient();
-  if (!db) return localModels;
+  if (!db) return localModels.filter(inPublicCatalog);
   const { data, error } = await db.from("models").select(MODEL_COLUMNS).eq("published", true).order("sort").order("created_at");
   if (error) fail("models", error);
-  return (data as ModelRow[]).map(toModel);
+  return (data as ModelRow[]).map(toModel).filter(inPublicCatalog);
 }
 
 export async function getModel(slug: string): Promise<Model | undefined> {
@@ -124,7 +124,7 @@ export interface WorldTile {
 }
 
 /**
- * Homepage "Moto Shpati World" tiles: one feature + three small.
+ * Homepage "NAS World" tiles: one feature + three small.
  * Featured posts first, then the newest. While fewer than 4 posts are published, the remaining
  * tiles keep the current placeholders so the grid never has holes.
  */
@@ -152,4 +152,49 @@ export async function getWorldTiles(): Promise<{ feature: WorldTile; small: [Wor
   const rest = tiles.slice(1);
   const small = [0, 1, 2].map((i) => rest[i] ?? localWorld.small[i]) as [WorldTile, WorldTile, WorldTile];
   return { feature, small };
+}
+
+export interface Post {
+  slug: string;
+  kind: PostRow["kind"];
+  tag: string;
+  title: string;
+  excerpt: string;
+  /** Plain text; blank lines separate paragraphs. */
+  body: string;
+  image?: string;
+  eventDate?: string;
+  publishedAt?: string;
+}
+
+const toPost = (p: PostRow): Post => ({
+  slug: p.slug,
+  kind: p.kind,
+  tag: p.tag,
+  title: p.title,
+  excerpt: p.excerpt,
+  body: p.body,
+  image: mediaUrl(p.image_path),
+  eventDate: p.event_date ?? undefined,
+  publishedAt: p.published_at ?? undefined,
+});
+
+/** Published NAS World posts, newest first. No local fallback: posts only exist in the database. */
+export async function getPosts(): Promise<Post[]> {
+  "use cache";
+  cacheTag(CACHE_TAGS.posts);
+  cacheLife("hours");
+  const db = createPublicClient();
+  if (!db) return [];
+  const { data, error } = await db
+    .from("posts")
+    .select(POST_COLUMNS)
+    .eq("published", true)
+    .order("published_at", { ascending: false, nullsFirst: false });
+  if (error) fail("posts", error);
+  return (data as PostRow[]).map(toPost);
+}
+
+export async function getPost(slug: string): Promise<Post | undefined> {
+  return (await getPosts()).find((p) => p.slug === slug);
 }

@@ -2,18 +2,20 @@
 
 import { motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { SlashButton } from "@/components/ui/Buttons";
-import { heroVideo } from "@/data/home";
+import { BlockButton } from "@/components/ui/Buttons";
+import type { HeroVideo } from "@/lib/data/catalog";
 
 const EASE = [0.2, 0.8, 0.2, 1] as const;
 
 interface BannerProps {
+  /** Video, poster and cut points (admin → Banneri), loaded on the server. */
+  heroVideo: HeroVideo;
   /** Video grade. The design used mono; the client asked for full colour. */
   grade?: "mono" | "color";
 }
 
 
-export default function Banner({ grade = "color" }: BannerProps) {
+export default function Banner({ heroVideo, grade = "color" }: BannerProps) {
   const video = useRef<HTMLVideoElement>(null);
   const [slide, setSlide] = useState(0);
   const slides = heroVideo.slides;
@@ -99,7 +101,7 @@ export default function Banner({ grade = "color" }: BannerProps) {
           >
             From city streets to untamed terrain.
             <br />
-            Find your next ride at Moto Shpati.
+            Find your next ride at NAS.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -107,9 +109,9 @@ export default function Banner({ grade = "color" }: BannerProps) {
             transition={{ duration: 0.9, ease: EASE, delay: 0.7 }}
             className="mt-7"
           >
-            <SlashButton href="/modelet" slashes>
+            <BlockButton href="/modelet">
               EKSPLORO MODELET
-            </SlashButton>
+            </BlockButton>
           </motion.div>
         </div>
 

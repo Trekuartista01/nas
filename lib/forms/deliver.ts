@@ -1,5 +1,5 @@
 import "server-only";
-import { getModel } from "@/data/models";
+import type { Model } from "@/data/models";
 import { monthlyPayment } from "@/lib/finance";
 import { emailConfigured, sendSubmissionEmail } from "@/lib/forms/email";
 import { FORM_LABEL, type FormKind, type FormValues } from "@/lib/forms/schemas";
@@ -15,9 +15,13 @@ export interface Submission<K extends FormKind = FormKind> {
   model?: { slug: string; name: string; price: number; monthly?: number };
 }
 
-export function buildSubmission<K extends FormKind>(kind: K, data: FormValues<K>): Submission<K> {
-  const slug = "model" in data && typeof data.model === "string" ? data.model : undefined;
-  const found = slug ? getModel(slug) : undefined;
+/** The model slug a form picked, if it has a model field and it was filled in. */
+export function pickedModelSlug(data: Record<string, unknown>): string | undefined {
+  return "model" in data && typeof data.model === "string" && data.model ? data.model : undefined;
+}
+
+/** `found`: the picked model from the live catalog (looked up by the caller), if any. */
+export function buildSubmission<K extends FormKind>(kind: K, data: FormValues<K>, found?: Model): Submission<K> {
   let model: Submission["model"];
   if (found) {
     model = { slug: found.slug, name: `${found.brand} ${found.name}`, price: found.price };
@@ -54,11 +58,16 @@ async function saveSubmission(s: Submission): Promise<void> {
     if (s.model.monthly !== undefined) extra.monthly = s.model.monthly;
   }
   const str = (v: unknown) => (typeof v === "string" && v ? v : null);
+  // Dealer enquiries are stored as contact leads (the leads.kind check has no "dealer" yet),
+  // with the subject saying what they are; the one "phone or email" field fills the right column.
+  const dealer = s.kind === "dealer";
+  const reach = dealer ? String(data.reach) : "";
+  if (dealer) extra.subject = FORM_LABEL.dealer;
   const { error } = await db.from("leads").insert({
-    kind: s.kind,
+    kind: dealer ? "contact" : s.kind,
     name: str(data.name),
-    email: str(data.email),
-    phone: str(data.phone),
+    email: dealer ? (reach.includes("@") ? reach : null) : str(data.email),
+    phone: dealer ? (reach.includes("@") ? null : reach) : str(data.phone),
     model_slug: str(data.model),
     data: extra,
   });

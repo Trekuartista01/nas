@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 
 /**
- * Admin building blocks. Same tokens as the site (ink/surface/line/red, Archivo), but calm and
+ * Admin building blocks. Same tokens as the site (ink/surface/line/red, Publica Sans), but calm and
  * functional: normal-width type, square edges, no slanted buttons or motion (decided with the client).
  */
 
@@ -98,5 +98,14 @@ export function AdminLoading() {
       <div className="h-4 w-80 bg-surface" />
       <div className="mt-6 h-64 border border-line bg-panel" />
     </div>
+  );
+}
+
+/** The "edit" button at the end of each list row (the name links to the same page). */
+export function EditLink({ href, label }: { href: string; label: string }) {
+  return (
+    <Link href={href} aria-label={`Ndrysho ${label}`} className={buttonClass.small}>
+      Ndrysho
+    </Link>
   );
 }

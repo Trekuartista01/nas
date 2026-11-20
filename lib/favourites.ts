@@ -10,7 +10,7 @@ import { useCallback, useSyncExternalStore } from "react";
  * Storage can be missing or blocked (private mode, disabled site data): then hearts still
  * toggle for the current visit and simply aren't remembered.
  */
-const KEY = "motoshpati:favourites";
+const KEY = "nas:favourites";
 const MAX_ITEMS = 200;
 const EMPTY: readonly string[] = [];
 

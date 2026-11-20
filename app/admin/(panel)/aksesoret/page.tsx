@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { PublishToggle } from "@/components/admin/RowActions";
-import { AdminLoading, Badge, ButtonLink, EmptyState, PageHeader, Table, Td, Th, Thumb } from "@/components/admin/ui";
+import { AdminLoading, EditLink, Badge, ButtonLink, EmptyState, PageHeader, Table, Td, Th, Thumb } from "@/components/admin/ui";
 import { ACCESSORY_CATEGORY_ADMIN_LABEL } from "@/lib/admin/format";
 import { ADMIN_PATHS, NEW_SEGMENT } from "@/lib/admin/paths";
 import { listAccessories } from "@/lib/admin/queries";
@@ -38,6 +38,7 @@ async function Accessories() {
           <Th>Kategoria</Th>
           <Th>Çmimi</Th>
           <Th>Statusi</Th>
+          <Th className="w-px"><span className="sr-only">Veprime</span></Th>
         </tr>
       </thead>
       <tbody>
@@ -61,6 +62,9 @@ async function Accessories() {
             <Td className="tabular-nums">{eur(a.price)}</Td>
             <Td>
               <PublishToggle table="accessories" id={a.id} published={a.published} label={`${a.brand} ${a.name}`} />
+            </Td>
+            <Td className="text-right">
+              <EditLink href={`${ADMIN_PATHS.accessories}/${a.id}`} label={`${a.brand} ${a.name}`} />
             </Td>
           </tr>
         ))}

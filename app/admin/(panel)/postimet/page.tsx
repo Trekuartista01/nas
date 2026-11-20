@@ -2,20 +2,20 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { PublishToggle } from "@/components/admin/RowActions";
-import { AdminLoading, Badge, ButtonLink, EmptyState, PageHeader, Table, Td, Th, Thumb } from "@/components/admin/ui";
+import { AdminLoading, EditLink, Badge, ButtonLink, EmptyState, PageHeader, Table, Td, Th, Thumb } from "@/components/admin/ui";
 import { formatDate, POST_KIND_LABEL } from "@/lib/admin/format";
 import { ADMIN_PATHS, NEW_SEGMENT } from "@/lib/admin/paths";
 import { listPosts } from "@/lib/admin/queries";
 import { mediaUrl } from "@/lib/supabase/config";
 
-export const metadata: Metadata = { title: "Postimet", description: "Evente, lajme dhe këshilla për Moto Shpati World." };
+export const metadata: Metadata = { title: "Postimet", description: "Evente, lajme dhe këshilla për NAS World." };
 
 export default function Page() {
   return (
     <>
       <PageHeader
         title="Postimet"
-        description="Moto Shpati World: evente, lajme, modele të reja dhe këshilla. Katër të fundit (kryesori i pari) dalin në faqen kryesore."
+        description="NAS World: evente, lajme, modele të reja dhe këshilla. Katër të fundit (kryesori i pari) dalin në faqen kryesore."
         actions={<ButtonLink href={`${ADMIN_PATHS.posts}/${NEW_SEGMENT}`}>+ Postim i ri</ButtonLink>}
       />
       <Suspense fallback={<AdminLoading />}>
@@ -37,6 +37,7 @@ async function Posts() {
           <Th>Lloji</Th>
           <Th>Publikuar më</Th>
           <Th>Statusi</Th>
+          <Th className="w-px"><span className="sr-only">Veprime</span></Th>
         </tr>
       </thead>
       <tbody>
@@ -59,6 +60,9 @@ async function Posts() {
             <Td className="tabular-nums text-muted-2">{p.published_at ? formatDate(p.published_at) : "—"}</Td>
             <Td>
               <PublishToggle table="posts" id={p.id} published={p.published} label={p.title} />
+            </Td>
+            <Td className="text-right">
+              <EditLink href={`${ADMIN_PATHS.posts}/${p.id}`} label={p.title} />
             </Td>
           </tr>
         ))}

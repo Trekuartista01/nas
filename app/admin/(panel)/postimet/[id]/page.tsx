@@ -6,7 +6,7 @@ import { formatDateTime } from "@/lib/admin/format";
 import { ADMIN_PATHS } from "@/lib/admin/paths";
 import { getPostRow } from "@/lib/admin/queries";
 
-export const metadata: Metadata = { title: "Ndrysho postimin", description: "Ndrysho një postim të Moto Shpati World." };
+export const metadata: Metadata = { title: "Ndrysho postimin", description: "Ndrysho një postim të NAS World." };
 
 export default function Page({ params }: PageProps<"/admin/postimet/[id]">) {
   return (

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Suspense, useState, type ReactNode } from "react";
 import { ADMIN_PATHS } from "@/lib/admin/paths";
+import { LogoMark } from "@/components/ui/Logo";
 
 const LINKS: { href: string; label: string; group?: string }[] = [
   { href: ADMIN_PATHS.home, label: "Paneli" },
@@ -103,10 +104,8 @@ function NavView({ pathname, account }: { pathname: string; account: ReactNode }
 
 function Brand() {
   return (
-    <Link href={ADMIN_PATHS.home} className="flex items-baseline gap-2">
-      <span className="wide text-[15px] font-black italic tracking-tight">
-        MOTO SHPATI<span className="text-red">.</span>
-      </span>
+    <Link href={ADMIN_PATHS.home} className="flex items-center gap-2.5">
+      <LogoMark title="NAS" className="h-5 w-auto text-white" />
       <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-faint">Admin</span>
     </Link>
   );

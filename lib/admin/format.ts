@@ -12,17 +12,7 @@ const dateOnly = new Intl.DateTimeFormat("de-DE", { timeZone: "Europe/Belgrade",
 export const formatDateTime = (iso: string) => dateTime.format(new Date(iso));
 export const formatDate = (iso: string) => dateOnly.format(new Date(iso));
 
-/** "brand name" → "brand-name" (for slugs). Handles Albanian ë/ç. */
-export function slugify(input: string): string {
-  return input
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 80)
-    .replace(/-+$/, "");
-}
+export { slugify } from "@/lib/format";
 
 export const LEAD_KIND_LABEL: Record<string, string> = {
   offer: "Ofertë",

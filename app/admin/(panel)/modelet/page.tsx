@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { PublishToggle } from "@/components/admin/RowActions";
-import { AdminLoading, Badge, ButtonLink, EmptyState, PageHeader, Table, Td, Th, Thumb } from "@/components/admin/ui";
+import { AdminLoading, EditLink, Badge, ButtonLink, EmptyState, PageHeader, Table, Td, Th, Thumb } from "@/components/admin/ui";
 import { VEHICLE_TYPE_LABEL } from "@/lib/admin/format";
 import { ADMIN_PATHS, NEW_SEGMENT } from "@/lib/admin/paths";
 import { listModels } from "@/lib/admin/queries";
@@ -40,6 +40,7 @@ async function Models() {
           <Th>Patenta</Th>
           <Th>Çmimi</Th>
           <Th>Statusi</Th>
+          <Th className="w-px"><span className="sr-only">Veprime</span></Th>
         </tr>
       </thead>
       <tbody>
@@ -65,6 +66,9 @@ async function Models() {
             <Td className="tabular-nums">{eur(m.price)}</Td>
             <Td>
               <PublishToggle table="models" id={m.id} published={m.published} label={`${m.brand} ${m.name}`} />
+            </Td>
+            <Td className="text-right">
+              <EditLink href={`${ADMIN_PATHS.models}/${m.id}`} label={`${m.brand} ${m.name}`} />
             </Td>
           </tr>
         ))}

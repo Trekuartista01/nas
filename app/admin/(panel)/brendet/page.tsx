@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { PublishToggle } from "@/components/admin/RowActions";
-import { AdminLoading, ButtonLink, EmptyState, PageHeader, Table, Td, Th, Thumb } from "@/components/admin/ui";
+import { AdminLoading, EditLink, ButtonLink, EmptyState, PageHeader, Table, Td, Th, Thumb } from "@/components/admin/ui";
 import { ADMIN_PATHS, NEW_SEGMENT } from "@/lib/admin/paths";
 import { listBrands } from "@/lib/admin/queries";
 import { mediaUrl } from "@/lib/supabase/config";
@@ -35,6 +35,7 @@ async function Brands() {
           <Th>Emri</Th>
           <Th>Renditja</Th>
           <Th>Statusi</Th>
+          <Th className="w-px"><span className="sr-only">Veprime</span></Th>
         </tr>
       </thead>
       <tbody>
@@ -51,6 +52,9 @@ async function Brands() {
             <Td className="tabular-nums text-muted-2">{b.sort}</Td>
             <Td>
               <PublishToggle table="brands" id={b.id} published={b.published} label={b.name} />
+            </Td>
+            <Td className="text-right">
+              <EditLink href={`${ADMIN_PATHS.brands}/${b.id}`} label={b.name} />
             </Td>
           </tr>
         ))}

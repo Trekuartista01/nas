@@ -9,25 +9,23 @@ import {
   ChipGrid,
   ClearFilters,
   FilterGroup,
-  InlineSelect,
   PriceRange,
   ResultCount,
   SearchField,
   SortSelect,
   type Option,
 } from "@/components/catalog/CatalogParts";
-import { modelSearchIndex, models, type Licence, type Model } from "@/data/models";
+import { modelSearchIndex, type Licence, type Model } from "@/data/models";
 import { createCatalogSearch } from "@/lib/search";
 import { SORT_OPTIONS, sortItems, type CatalogSort } from "@/lib/catalog";
 
-type TypeFilter = "all" | "motore" | "skuter" | "atv";
+type TypeFilter = "all" | "motore" | "skuter";
 type LicenceFilter = "all" | Licence;
 
 const TYPE_OPTIONS: Option<TypeFilter>[] = [
   { id: "all", label: "Të gjitha" },
   { id: "motore", label: "Motorë" },
   { id: "skuter", label: "Skuterë" },
-  { id: "atv", label: "ATVs" },
 ];
 
 const LICENCE_OPTIONS: Option<LicenceFilter>[] = [
@@ -38,40 +36,51 @@ const LICENCE_OPTIONS: Option<LicenceFilter>[] = [
   { id: "A", label: "A" },
 ];
 
-const BRAND_OPTIONS: Option<string>[] = [
-  { id: "all", label: "Të gjitha" },
-  ...Array.from(new Set(models.map((m) => m.brand)))
-    .sort()
-    .map((b) => ({ id: b, label: b })),
-];
-// Built once: each model's own fields plus all synonyms of its type, licence and brand.
-const search = createCatalogSearch(models, (m) => m.slug, modelSearchIndex);
-const PRICE_MAX = Math.max(9000, Math.ceil(Math.max(...models.map((m) => m.price)) / 1000) * 1000);
+const priceMax = (models: Model[]) => Math.max(9000, Math.ceil(Math.max(0, ...models.map((m) => m.price)) / 1000) * 1000);
 
-/** Homepage category links use ?kategoria=sport|dirt|skuter|atv. */
+/** Header search links use ?patenta=AM|A1|A2|A. */
+function licenceFromQuery(q?: string): LicenceFilter {
+  const up = q?.toUpperCase();
+  return LICENCE_OPTIONS.some((o) => o.id === up) ? (up as LicenceFilter) : "all";
+}
+
+/** Homepage category links use ?kategoria=sport|dirt|skuter (ATVs are not in the catalog). */
 function typeFromQuery(q?: string): TypeFilter {
   if (q === "sport" || q === "dirt" || q === "motore") return "motore";
   if (q === "skuter") return "skuter";
-  if (q === "atv") return "atv";
   return "all";
 }
 
 function matchesType(m: Model, t: TypeFilter) {
   if (t === "all") return true;
   if (t === "motore") return m.type === "sport" || m.type === "dirt";
-  if (t === "skuter") return m.type === "scooter";
-  return m.type === "atv";
+  return m.type === "scooter";
 }
 
-export default function ModelsPage({ initialCategory }: { initialCategory?: string }) {
-  const [query, setQuery] = useState("");
+/** `models`: the published models, loaded on the server (lib/data/catalog.ts). */
+export default function ModelsPage({
+  models,
+  initialCategory,
+  initialQuery = "",
+  initialLicence,
+}: {
+  models: Model[];
+  initialCategory?: string;
+  /** ?kerko= from the header search. */
+  initialQuery?: string;
+  /** ?patenta= from the header search (AM, A1, A2, A). */
+  initialLicence?: string;
+}) {
+  const PRICE_MAX = useMemo(() => priceMax(models), [models]);
+  // Built once per catalog: each model's own fields plus all synonyms of its type, licence and brand.
+  const search = useMemo(() => createCatalogSearch(models, (m) => m.slug, modelSearchIndex), [models]);
+  const [query, setQuery] = useState(initialQuery);
   const [type, setType] = useState<TypeFilter>(() => typeFromQuery(initialCategory));
-  const [licence, setLicence] = useState<LicenceFilter>("all");
-  const [brand, setBrand] = useState("all");
+  const [licence, setLicence] = useState<LicenceFilter>(() => licenceFromQuery(initialLicence));
   const [maxPrice, setMaxPrice] = useState(PRICE_MAX);
   const [sort, setSort] = useState<CatalogSort>("newest");
 
-  const hits = useMemo(() => search(query), [query]);
+  const hits = useMemo(() => search(query), [search, query]);
 
   const shown = useMemo(() => {
     const list = models.filter(
@@ -79,17 +88,15 @@ export default function ModelsPage({ initialCategory }: { initialCategory?: stri
         (!hits || hits.has(m.slug)) &&
         matchesType(m, type) &&
         (licence === "all" || m.licence === licence) &&
-        (brand === "all" || m.brand === brand) &&
         m.price <= maxPrice,
     );
     return sortItems(list, sort);
-  }, [hits, type, licence, brand, maxPrice, sort]);
+  }, [models, hits, type, licence, maxPrice, sort]);
 
   const clearFilters = () => {
     setQuery("");
     setType("all");
     setLicence("all");
-    setBrand("all");
     setMaxPrice(PRICE_MAX);
   };
 
@@ -105,9 +112,6 @@ export default function ModelsPage({ initialCategory }: { initialCategory?: stri
             </FilterGroup>
             <FilterGroup title="PATENTA">
               <ChipGrid options={LICENCE_OPTIONS} value={licence} onChange={setLicence} label="Patenta" />
-            </FilterGroup>
-            <FilterGroup title="BRANDS">
-              <InlineSelect options={BRAND_OPTIONS} value={brand} onChange={setBrand} label="Marka" />
             </FilterGroup>
             <PriceRange value={maxPrice} max={PRICE_MAX} onChange={setMaxPrice} />
             <ClearFilters onClick={clearFilters} />

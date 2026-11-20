@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import Reveal from "@/components/ui/Reveal";
 import { eur } from "@/lib/format";
 
@@ -44,19 +44,25 @@ interface ProductDetailProps {
   specs: ProductSpec[];
   price: number;
   related: RelatedProduct[];
+  /** Extra sections between the specs strip and the related row (models: the SPECS section). */
+  details?: ReactNode;
+  /** Replaces the stage + name/specs sections (models use ModelShowcase). */
+  hero?: ReactNode;
 }
 
 /**
- * Product detail layout (design: Moto Shpati Aksesoret Detail Page.png).
+ * Product detail layout (design: NAS Aksesoret Detail Page.png).
  * Built generic so /modelet/[slug] can reuse it with bike views and specs.
  */
-export default function ProductDetail({ brand, name, word, views, isNew = false, cutout = false, colours = [], specs, price, related }: ProductDetailProps) {
+export default function ProductDetail({ brand, name, word, views, isNew = false, cutout = false, colours = [], specs, price, related, details, hero }: ProductDetailProps) {
   const [view, setView] = useState(0);
   const [colour, setColour] = useState(0);
   const current = views[view];
 
   return (
     <>
+      {hero ?? (
+      <>
       {/* ───── Stage ───── */}
       <section className="relative overflow-hidden">
         <div
@@ -179,8 +185,12 @@ export default function ProductDetail({ brand, name, word, views, isNew = false,
           </div>
         </Reveal>
       </section>
+      </>
+      )}
 
       {/* ───── You may also like ───── */}
+      {details}
+
       {related.length > 0 && (
         <section className="bg-[#171717]">
           <div className="container-moto pb-24 pt-14">

@@ -9,41 +9,38 @@ import { createSessionClient } from "@/lib/supabase/server";
 
 export interface LoginState {
   error?: string;
-  email?: string;
 }
 
-const loginSchema = z.object({
-  email: z.email().max(254),
-  password: z.string().min(1).max(200),
-});
+const passwordSchema = z.string().min(1).max(200);
 
-const WRONG = "Email-i ose fjalëkalimi është gabim.";
+const WRONG = "Fjalëkalimi është gabim.";
 
 /**
- * Admin sign-in (email + password, Supabase Auth). The same message is shown for a wrong
- * password, an unknown email and a non-admin account, so the form can't be used to discover
- * which emails have accounts. Rate limited per visitor on top of Supabase's own auth limits.
+ * Admin sign-in: password only (decided with the client). There is one shared admin account in
+ * Supabase Auth; its email lives in ADMIN_EMAIL on the server and is never shown or asked for.
+ * Still a real Supabase session underneath, so Row Level Security and the audit log work as before.
+ * Rate limited per visitor on top of Supabase's own auth limits.
  */
 export async function signIn(_prev: LoginState, formData: FormData): Promise<LoginState> {
-  if (!supabaseConfigured()) return { error: "Paneli nuk është lidhur ende me databazën." };
+  const email = process.env.ADMIN_EMAIL?.trim();
+  if (!supabaseConfigured() || !email) return { error: "Paneli nuk është lidhur ende me databazën." };
 
-  const raw = { email: String(formData.get("email") ?? "").trim(), password: String(formData.get("password") ?? "") };
-  const parsed = loginSchema.safeParse(raw);
-  if (!parsed.success) return { error: WRONG, email: raw.email.slice(0, 254) };
+  const parsed = passwordSchema.safeParse(String(formData.get("password") ?? ""));
+  if (!parsed.success) return { error: WRONG };
 
   const waitMinutes = await checkRateLimit(await visitorId(), "admin-login");
   if (waitMinutes > 0) {
-    return { error: `Shumë përpjekje. Provo përsëri pas ${waitMinutes} ${waitMinutes === 1 ? "minute" : "minutash"}.`, email: raw.email };
+    return { error: `Shumë përpjekje. Provo përsëri pas ${waitMinutes} ${waitMinutes === 1 ? "minute" : "minutash"}.` };
   }
 
   const db = await createSessionClient();
-  const { error } = await db.auth.signInWithPassword(parsed.data);
-  if (error) return { error: WRONG, email: raw.email };
+  const { error } = await db.auth.signInWithPassword({ email, password: parsed.data });
+  if (error) return { error: WRONG };
 
   const { data: isAdmin } = await db.rpc("is_admin");
   if (isAdmin !== true) {
     await db.auth.signOut();
-    return { error: WRONG, email: raw.email };
+    return { error: WRONG };
   }
   redirect(ADMIN_HOME_PATH);
 }

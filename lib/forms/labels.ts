@@ -19,6 +19,8 @@ export const FIELD_LABELS: Record<string, string> = {
   deposit: "Kapari",
   months: "Afati",
   monthly: "Kësti mujor (llogaritur)",
+  company: "Kompania",
+  reach: "Telefoni ose email-i",
   subject: "Tema",
   message: "Mesazhi",
 };

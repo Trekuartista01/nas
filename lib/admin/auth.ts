@@ -1,6 +1,7 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { cache } from "react";
 import { ADMIN_PATHS } from "@/lib/admin/paths";
 import { supabaseConfigured } from "@/lib/supabase/config";
@@ -28,6 +29,10 @@ export const ADMIN_HOME_PATH = ADMIN_PATHS.home;
 /** The signed-in admin, or null. Cached per request, so a page and its parts share one check. */
 export const getAdmin = cache(async (): Promise<Admin | null> => {
   if (!supabaseConfigured()) return null;
+  // Request time only. With partial prefetching Next may read the session cookie while building
+  // the prefetch shell, and the token check below compares expiry times with Date.now(), which is
+  // not allowed there ("unstable value Date.now() while prerendering").
+  await connection();
   const db = await createSessionClient();
   const { data, error } = await db.auth.getClaims();
   const claims = data?.claims;

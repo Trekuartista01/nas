@@ -1,9 +1,12 @@
+import { LogoMark } from "@/components/ui/Logo";
+
 /** Shown instead of the admin panel until the Supabase settings are in .env.local / Vercel. */
 export default function NotConnected() {
   return (
     <div className="mx-auto flex min-h-screen max-w-xl flex-col justify-center px-4 py-16">
-      <p className="wide text-[15px] font-black italic">
-        MOTO SHPATI<span className="text-red">.</span> <span className="text-xs font-semibold not-italic tracking-[0.14em] text-faint">ADMIN</span>
+      <p className="flex items-center gap-2.5">
+        <LogoMark title="NAS" className="h-5 w-auto text-white" />
+        <span className="text-xs font-semibold tracking-[0.14em] text-faint">ADMIN</span>
       </p>
       <h1 className="mt-6 text-2xl font-bold">Paneli nuk është lidhur ende me databazën</h1>
       <p className="mt-3 text-muted">

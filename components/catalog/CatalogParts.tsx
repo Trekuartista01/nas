@@ -33,7 +33,12 @@ export function CatalogLayout({ filters, toolbar, children }: { filters: ReactNo
   return (
     <section className="container-moto pb-28 pt-6">
       <div className="grid gap-10 lg:grid-cols-[373px_1fr] lg:gap-12">
-        <aside aria-label="Filtrat" className="flex flex-col gap-10">
+        {/* Desktop: the filters stay in view while the grid scrolls (top clears the sticky header).
+            If they are taller than the screen they scroll on their own. */}
+        <aside
+          aria-label="Filtrat"
+          className="flex flex-col gap-10 lg:sticky lg:top-24 lg:max-h-[calc(100dvh-7rem)] lg:self-start lg:overflow-y-auto lg:overscroll-contain lg:pb-2 lg:pr-2 lg:[scrollbar-width:thin]"
+        >
           {filters}
         </aside>
         <div>

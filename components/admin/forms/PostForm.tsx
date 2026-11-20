@@ -8,7 +8,7 @@ import { savePost } from "@/lib/admin/actions";
 import { POST_KIND_LABEL } from "@/lib/admin/format";
 import type { PostRow } from "@/lib/data/rows";
 
-/** Moto Shpati World: events, news, new models, tips. */
+/** NAS World: events, news, new models, tips. */
 export default function PostForm({ row }: { row?: PostRow }) {
   return (
     <AdminForm
@@ -18,7 +18,7 @@ export default function PostForm({ row }: { row?: PostRow }) {
     >
       <FormSection title="Postimi">
         <TextField name="title" label="Titulli" required defaultValue={row?.title} maxLength={140} />
-        <SlugField name="slug" label="Adresa e faqes (slug)" required from={["title"]} prefix="/moto-shpati-world/" defaultValue={row?.slug} />
+        <SlugField name="slug" label="Adresa e faqes (slug)" required from={["title"]} prefix="/nas-world/" defaultValue={row?.slug} />
         <FieldRow cols={3}>
           <SelectField
             name="kind"
@@ -41,7 +41,7 @@ export default function PostForm({ row }: { row?: PostRow }) {
 
       <FormSection title="Shfaqja">
         <CheckboxField name="published" label="I publikuar" hint="Data e publikimit ruhet herën e parë që publikohet." defaultChecked={row?.published ?? false} />
-        <CheckboxField name="featured" label="Kryesor" hint="Del si karta e madhe në “Moto Shpati World” në faqen kryesore." defaultChecked={row?.featured ?? false} />
+        <CheckboxField name="featured" label="Kryesor" hint="Del si karta e madhe në “NAS World” në faqen kryesore." defaultChecked={row?.featured ?? false} />
       </FormSection>
     </AdminForm>
   );

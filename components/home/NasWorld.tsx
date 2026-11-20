@@ -1,7 +1,8 @@
 import Link from "next/link";
+import { BUSINESS } from "@/data/business";
 import Reveal from "@/components/ui/Reveal";
 import SectionHeading from "@/components/ui/SectionHeading";
-import { worldTiles } from "@/data/home";
+import { getWorldTiles } from "@/lib/data/catalog";
 
 const tileBase =
   "group relative overflow-hidden border border-line text-white transition-transform duration-500 ease-moto hover:scale-[.985] hover:text-white";
@@ -21,7 +22,7 @@ function Photo({ src }: { src?: string }) {
 
 function SmallTile({ tag, title, image }: { tag: string; title: string; image?: string }) {
   return (
-    <Link href="/moto-shpati-world" className={`${tileBase} min-h-[240px]`}>
+    <Link href="/nas-world" className={`${tileBase} min-h-[240px]`}>
       <Photo src={image} />
       <div className={shade} />
       <div className="absolute inset-x-5 bottom-5">
@@ -32,23 +33,23 @@ function SmallTile({ tag, title, image }: { tag: string; title: string; image?: 
   );
 }
 
-export default function MotoShpatiWorld() {
-  const { feature, small } = worldTiles;
+export default async function NasWorld() {
+  const { feature, small } = await getWorldTiles();
   return (
     <section id="world" className="container-moto py-36">
       <SectionHeading
-        lines={["MOTO SHPATI", "WORLD"]}
+        lines={["NAS", "WORLD"]}
         aside={
           <div className="flex items-center gap-5 text-[13px] text-[#cfcfcf]">
             <span>Ngjarje · Lajme · Komuniteti</span>
-            <Link href="/moto-shpati-world" className="hover:text-red">
+            <Link href="/nas-world" className="hover:text-red">
               Shiko të gjitha →
             </Link>
           </div>
         }
       />
       <Reveal className="grid auto-rows-[240px] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Link href="/moto-shpati-world" className={`${tileBase} sm:col-span-2 sm:row-span-2`}>
+        <Link href="/nas-world" className={`${tileBase} sm:col-span-2 sm:row-span-2`}>
           <Photo src={feature.image} />
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent p-8 pt-24">
             <span className="bg-highlight px-2.5 py-1.5 text-[11px] font-black tracking-[0.12em] text-ink">{feature.tag}</span>
@@ -58,9 +59,9 @@ export default function MotoShpatiWorld() {
         </Link>
         <SmallTile {...small[0]} />
         <SmallTile {...small[1]} />
-        <a href="https://www.instagram.com/moto.shpati/" target="_blank" rel="noreferrer" className={`${tileBase} bg-red`}>
+        <a href={BUSINESS.instagram} target="_blank" rel="noreferrer" className={`${tileBase} bg-red`}>
           <div className="absolute inset-6 flex flex-col justify-between">
-            <span className="text-[11px] font-extrabold tracking-[0.14em]">@MOTO.SHPATI</span>
+            <span className="text-[11px] font-extrabold tracking-[0.14em]">INSTAGRAM</span>
             <div className="wide text-[26px] font-black leading-none">NA NDIQ NË INSTAGRAM →</div>
           </div>
         </a>

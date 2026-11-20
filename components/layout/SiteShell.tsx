@@ -12,7 +12,8 @@ export default function SiteShell({ children }: { children: ReactNode }) {
   return (
     <>
       <Header />
-      <main className="overflow-x-clip">{children}</main>
+      {/* Above the footer (z-2, solid) so the footer can slide out from underneath (FooterReveal). */}
+      <main className="relative z-[2] overflow-x-clip bg-ink">{children}</main>
       <Footer />
       <ScrollToTop />
     </>

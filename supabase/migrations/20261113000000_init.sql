@@ -1,4 +1,4 @@
--- Moto Shpati: initial schema (Phase 4).
+-- NAS: initial schema (Phase 4).
 -- Run once on a new Supabase project: Dashboard → SQL Editor → paste → Run
 -- (or `npx supabase db push` with the Supabase CLI). See supabase/README.md.
 --
@@ -96,7 +96,7 @@ create table public.accessories (
   updated_at timestamptz not null default now()
 );
 
--- Moto Shpati World: events, news, new models, tips.
+-- NAS World: events, news, new models, tips.
 create table public.posts (
   id uuid primary key default gen_random_uuid(),
   slug text not null unique check (slug ~ '^[a-z0-9]+(-[a-z0-9]+)*$' and char_length(slug) <= 100),

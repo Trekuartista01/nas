@@ -4,7 +4,7 @@ import NotFoundPage from "@/components/pages/NotFoundPage";
 
 export const metadata: Metadata = {
   title: "Faqja nuk u gjet",
-  description: "Kjo faqe nuk ekziston ose është zhvendosur. Shiko modelet dhe aksesorët e Moto Shpatit.",
+  description: "Kjo faqe nuk ekziston ose është zhvendosur. Shiko modelet dhe aksesorët e NAS.",
 };
 
 // Renders under the root layout only, so it brings the site chrome itself (same SiteShell as app/(site)).

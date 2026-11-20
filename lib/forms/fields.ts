@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { getModel } from "@/data/models";
 
 /**
  * Field rules shared by every form. Checked on the SERVER (a browser check can be bypassed);
@@ -60,10 +59,17 @@ export const shortText = (label: string, max = 120) =>
     .regex(SINGLE_LINE, singleLineError);
 
 /** A model from our catalog (checked against the real list, so made-up slugs are refused). */
+export const MODEL_NOT_FOUND = "Zgjidh një model nga lista.";
+
+/**
+ * Model picker value. Only the format is checked here (this file also runs in the browser);
+ * the server action then checks the slug against the live catalog (lib/forms/actions.ts).
+ */
 export const modelSlug = z
   .string({ error: "Zgjidh modelin." })
   .trim()
-  .refine((slug) => !!getModel(slug), { error: "Zgjidh një model nga lista." });
+  .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, { error: MODEL_NOT_FOUND })
+  .max(120, { error: MODEL_NOT_FOUND });
 
 /** Privacy consent checkbox: must be ticked. HTML checkboxes send "on". */
 export const consent = z.preprocess(
@@ -101,4 +107,3 @@ export const appointmentDate = z
   .refine((d) => d <= addDays(todayInKosovo(), MAX_DAYS_AHEAD), { error: "Zgjidh një datë brenda 3 muajve." })
   .refine((d) => new Date(`${d}T12:00:00Z`).getUTCDay() !== 0, { error: "Të dielën jemi të mbyllur. Zgjidh një ditë tjetër." });
 
-export const timeOfDay = z.enum(["paradite", "pasdite"], { error: "Zgjidh paradite ose pasdite." });

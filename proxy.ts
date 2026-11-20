@@ -1,6 +1,8 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { accessories } from "@/data/accessories";
+import { brands, brandSlug } from "@/data/home";
+import { inPublicCatalog, models, type Model } from "@/data/models";
 import { ADMIN_PATHS } from "@/lib/admin/paths";
 import { supabasePublicConfig } from "@/lib/supabase/config";
 
@@ -10,13 +12,76 @@ import { supabasePublicConfig } from "@/lib/supabase/config";
  * 1. Real 404 status for unknown product URLs.
  *    Detail pages read the slug inside <Suspense>, so a page-level notFound() would stream with a 200.
  *    Checking the slug here, before rendering starts, lets an unknown URL return a true 404.
- *    Keep this check cheap: a set lookup only (later: a cached slug list from Supabase).
+ *    The lists of published slugs are kept in memory (see isKnownSlug below), so most requests
+ *    are a set lookup with no database call.
  *
  * 2. Admin panel (/admin/*): refreshes the Supabase session cookie and sends signed-out
  *    visitors to the login page. This is only a fast, optimistic check; the real one
  *    (valid session AND listed admin) runs on the server in lib/admin/auth.ts.
  */
-const ACCESSORY_SLUGS = new Set(accessories.map((a) => a.slug));
+/**
+ * Detail-page sections checked here: URL section → table, the column that makes the URL
+ * (brands have no slug: their URL comes from the name), plus the local fallback list.
+ */
+const CATALOGS: Record<string, { table: string; column: "slug" | "name"; local: Set<string> }> = {
+  aksesoret: { table: "accessories", column: "slug", local: new Set(accessories.map((a) => a.slug)) },
+  modelet: { table: "models", column: "slug", local: new Set(models.filter(inPublicCatalog).map((m) => m.slug)) },
+  brendet: { table: "brands", column: "name", local: new Set(brands.map((b) => brandSlug(b.name))) },
+  // Posts exist only in the database; without it the list is empty.
+  "nas-world": { table: "posts", column: "slug", local: new Set() },
+};
+type Section = string;
+const isCatalogSection = (s: string): s is Section => Object.hasOwn(CATALOGS, s);
+
+const SLUGS_MAX_AGE_MS = 5 * 60_000;
+/** An unknown slug triggers a reload (a product just added in the admin), but at most this often. */
+const SLUGS_MIN_RELOAD_MS = 10_000;
+
+const slugCache = new Map<Section, { slugs: Set<string>; loadedAt: number }>();
+const slugLoads = new Map<Section, Promise<void>>();
+
+async function loadSlugs(section: Section): Promise<void> {
+  const { table, column, local } = CATALOGS[section];
+  const config = supabasePublicConfig();
+  if (!config) {
+    slugCache.set(section, { slugs: local, loadedAt: Date.now() });
+    return;
+  }
+  // Models: only the brands/types the public catalog shows (inPublicCatalog), so hidden ones 404.
+  const select = table === "models" ? "slug,brand,type" : column;
+  const res = await fetch(`${config.url}/rest/v1/${table}?select=${select}&published=eq.true`, {
+    headers: { apikey: config.key },
+    signal: AbortSignal.timeout(3000),
+  });
+  if (!res.ok) throw new Error(`status ${res.status}`);
+  let rows = (await res.json()) as Record<string, string>[];
+  if (table === "models") rows = rows.filter((r) => inPublicCatalog({ brand: r.brand ?? "", type: r.type as Model["type"] }));
+  const slugs = rows.map((r) => (column === "name" ? brandSlug(r.name) : r.slug));
+  slugCache.set(section, { slugs: new Set(slugs), loadedAt: Date.now() });
+}
+
+/**
+ * Is this a published product? `null` = could not tell (database unreachable): the page then
+ * renders and shows "not found" itself if needed, so a hiccup never hides real products.
+ */
+async function isKnownSlug(section: Section, slug: string): Promise<boolean | null> {
+  const cached = slugCache.get(section);
+  const age = cached ? Date.now() - cached.loadedAt : Infinity;
+  const stale = age > SLUGS_MAX_AGE_MS;
+  const missing = cached !== undefined && !cached.slugs.has(slug) && age > SLUGS_MIN_RELOAD_MS;
+  if (stale || missing) {
+    let load = slugLoads.get(section);
+    if (!load) {
+      load = loadSlugs(section)
+        .catch((error) => console.error(`[proxy] ${section} slugs unavailable:`, error instanceof Error ? error.message : error))
+        .finally(() => slugLoads.delete(section));
+      slugLoads.set(section, load);
+    }
+    await load;
+  }
+  const current = slugCache.get(section);
+  return current ? current.slugs.has(slug) : null;
+}
 
 // Any path no route matches renders app/not-found.tsx with a 404 status.
 const NOT_FOUND_PATH = "/__nuk-u-gjet";
@@ -27,14 +92,14 @@ export async function proxy(request: NextRequest) {
 
   if (section === "admin") return adminSession(request);
 
-  if (section === "aksesoret" && slug && rest.length === 0) {
+  if (isCatalogSection(section) && slug && rest.length === 0) {
     let decoded = slug;
     try {
       decoded = decodeURIComponent(slug);
     } catch {
       // malformed escape sequence: treat as unknown
     }
-    if (!ACCESSORY_SLUGS.has(decoded)) {
+    if ((await isKnownSlug(section, decoded)) === false) {
       return NextResponse.rewrite(new URL(NOT_FOUND_PATH, request.url));
     }
   }
@@ -93,5 +158,5 @@ function withCookies(target: NextResponse, source: NextResponse): NextResponse {
 }
 
 export const config = {
-  matcher: ["/aksesoret/:slug", "/admin", "/admin/:path*"],
+  matcher: ["/aksesoret/:slug", "/modelet/:slug", "/brendet/:slug", "/nas-world/:slug", "/admin", "/admin/:path*"],
 };

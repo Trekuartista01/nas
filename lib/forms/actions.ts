@@ -1,7 +1,9 @@
 "use server";
 
 import { BUSINESS } from "@/data/business";
-import { buildSubmission, deliverSubmission } from "@/lib/forms/deliver";
+import { getModel } from "@/lib/data/catalog";
+import { buildSubmission, deliverSubmission, pickedModelSlug } from "@/lib/forms/deliver";
+import { MODEL_NOT_FOUND } from "@/lib/forms/fields";
 import { checkRateLimit, visitorId } from "@/lib/forms/rate-limit";
 import { TURNSTILE_FIELD, verifyTurnstile } from "@/lib/forms/turnstile";
 import { FORM_SCHEMAS, validateForm, type FormKind } from "@/lib/forms/schemas";
@@ -27,6 +29,7 @@ const SUCCESS: Record<FormKind, string> = {
   service: "Faleminderit! Kërkesa për servis u dërgua. Do të të telefonojmë për ta konfirmuar terminin.",
   finance: "Faleminderit! Aplikimi u dërgua. Do të të kontaktojmë me detajet e financimit.",
   contact: "Faleminderit! Mesazhi u dërgua. Do të përgjigjemi sa më shpejt.",
+  dealer: "Faleminderit! Kërkesa u dërgua. Ekipi ynë do të të kontaktojë me gamën dhe kushtet e partneritetit.",
   newsletter: "Faleminderit! U regjistrove për ofertat tona.",
 };
 
@@ -72,6 +75,11 @@ async function handle(kind: FormKind, formData: FormData): Promise<FormState> {
   const result = validateForm(kind, values);
   if (!result.ok) return { status: "error", message: INVALID, errors: result.errors, values: echo(values) };
 
+  // The picked model must be in the live (published) catalog; its price is taken from there, never from the form.
+  const slug = pickedModelSlug(result.data);
+  const model = slug ? await getModel(slug) : undefined;
+  if (slug && !model) return { status: "error", message: INVALID, errors: { model: MODEL_NOT_FOUND }, values: echo(values) };
+
   // Counted only for valid submissions (the ones that would send an email), so a visitor
   // fixing a typo is never locked out.
   const waitMinutes = await checkRateLimit(await visitorId(), kind);
@@ -89,7 +97,7 @@ async function handle(kind: FormKind, formData: FormData): Promise<FormState> {
   }
 
   try {
-    await deliverSubmission(buildSubmission(kind, result.data));
+    await deliverSubmission(buildSubmission(kind, result.data, model));
   } catch (error) {
     // Log the reason for us, never the visitor's personal data.
     console.error(`[forms] ${kind} delivery failed:`, error instanceof Error ? error.message : error);
@@ -116,6 +124,10 @@ export async function submitFinance(_prev: FormState, formData: FormData): Promi
 
 export async function submitContact(_prev: FormState, formData: FormData): Promise<FormState> {
   return handle("contact", formData);
+}
+
+export async function submitDealer(_prev: FormState, formData: FormData): Promise<FormState> {
+  return handle("dealer", formData);
 }
 
 export async function submitNewsletter(_prev: FormState, formData: FormData): Promise<FormState> {

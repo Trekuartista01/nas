@@ -1,5 +1,7 @@
 /** Homepage content blocks. Future admin data (BannerManager etc.). */
 import type { CategoryCardItem } from "@/components/ui/CategoryCards";
+import type { VehicleType } from "@/data/models";
+import { slugify } from "@/lib/format";
 
 export interface HeroSlide {
   start: number; // seconds into the hero video where this shot begins
@@ -19,14 +21,33 @@ export const heroVideo = {
   ] satisfies HeroSlide[],
 };
 
-export const vehicleCategories: CategoryCardItem[] = [
+/** Find your vehicle card: a category card plus the model type it counts and its cut-out bike. */
+export interface VehicleCategory extends CategoryCardItem {
+  type: VehicleType;
+  /** Giant outlined word behind the bike. */
+  word: string;
+  /** Transparent bike image. TEMP cut-outs made from the photos below; replace with studio cut-outs. */
+  cutout?: string;
+  /**
+   * Scroll-section clip: the bike riding in from the right and ending on the left (16:9, no audio).
+   * Scroll scrubs it, so encode all-keyframe (see VehicleScroll). Until it exists the cut-out slides.
+   */
+  video?: string;
+  /** First frame of the video, shown while it loads. */
+  poster?: string;
+}
+
+export const vehicleCategories: VehicleCategory[] = [
   {
     num: "01",
     title: "SPORT BIKES",
     count: "[XX] MODELE",
     description: "Naked, sport dhe touring — nga 125cc deri në [XXX]cc.",
     photoLabel: "[FOTO MOTOR]",
-    image: "/images/motoshpati-model-zontes-703rr.jpg",
+    image: "/images/nas-cat-nas-sport.jpg",
+    type: "sport",
+    word: "SPORT",
+    cutout: "/images/nas-cat-nas-sport-cutout.webp",
     href: "/modelet?kategoria=sport",
   },
   {
@@ -35,7 +56,10 @@ export const vehicleCategories: CategoryCardItem[] = [
     count: "[XX] MODELE",
     description: "Enduro dhe motocross — për terren, shtigje dhe pista.",
     photoLabel: "[FOTO DIRT BIKE]",
-    image: "/images/motoshpati-model-mrz-da250-enduro.jpg",
+    image: "/images/nas-cat-nas-dirt.jpg",
+    type: "dirt",
+    word: "DIRT",
+    cutout: "/images/nas-cat-nas-dirt-cutout.webp",
     href: "/modelet?kategoria=dirt",
   },
   {
@@ -44,18 +68,13 @@ export const vehicleCategories: CategoryCardItem[] = [
     count: "[XX] MODELE",
     description: "Për qytetin: 50cc pa patentë A, maxi-skuterë deri në 350cc.",
     photoLabel: "[FOTO SKUTER]",
-    image: "/images/motoshpati-cat-scooters.jpg",
+    image: "/images/nas-model-nas-max-x-125.jpg",
     href: "/modelet?kategoria=skuter",
+    type: "scooter",
+    word: "SKUTER",
+    cutout: "/images/nas-model-nas-max-x-125-cutout.webp",
   },
-  {
-    num: "04",
-    title: "ATVS",
-    count: "[XX] MODELE",
-    description: "Për mal, fermë dhe aventurë — 4x4 dhe utility.",
-    photoLabel: "[FOTO ATV]",
-    image: "/images/motoshpati-cat-atvs.jpg",
-    href: "/modelet?kategoria=atv",
-  },
+  // ATVs removed from the catalog (Nov 2026).
 ];
 
 export const accessoryCategories: CategoryCardItem[] = [
@@ -65,7 +84,7 @@ export const accessoryCategories: CategoryCardItem[] = [
     count: "[XX] PRODUKTE",
     description: "Full-face, modulare dhe open-face — të certifikuara.",
     photoLabel: "[FOTO KASKË]",
-    image: "/images/motoshpati-acc-helmets.jpg",
+    image: "/images/nas-acc-helmets.jpg",
     href: "/aksesoret?kategoria=kaska",
   },
   {
@@ -74,7 +93,7 @@ export const accessoryCategories: CategoryCardItem[] = [
     count: "[XX] PRODUKTE",
     description: "Xhaketa, pantallona dhe kombinezone me mbrojtëse.",
     photoLabel: "[FOTO XHAKETË]",
-    image: "/images/motoshpati-acc-apparel.jpg",
+    image: "/images/nas-acc-apparel.jpg",
     href: "/aksesoret?kategoria=veshje",
   },
   {
@@ -83,7 +102,7 @@ export const accessoryCategories: CategoryCardItem[] = [
     count: "[XX] PRODUKTE",
     description: "Dorëza dhe çizme për verë, dimër dhe terren.",
     photoLabel: "[FOTO DORËZA]",
-    image: "/images/motoshpati-acc-gloves-boots.jpg",
+    image: "/images/nas-acc-gloves-boots.jpg",
     href: "/aksesoret?kategoria=doreza-cizme",
   },
   {
@@ -92,18 +111,18 @@ export const accessoryCategories: CategoryCardItem[] = [
     count: "[XX] PRODUKTE",
     description: "Top-case, çanta, kyçe, mbulesa dhe pjesë origjinale.",
     photoLabel: "[FOTO AKSESORË]",
-    image: "/images/motoshpati-acc-parts.jpg",
+    image: "/images/nas-acc-parts.jpg",
     href: "/aksesoret?kategoria=pjese",
   },
 ];
 
-/** Moto Shpati World tiles — photos from @moto.shpati, titles still placeholders. */
+/** NAS World tiles — photos from the dealer Instagram, titles still placeholders. */
 export const worldTiles = {
-  feature: { tag: "EVENT · [DATA]", title: "RIDE-OUT: PEJË → RUGOVË", text: "Bashkohu me komunitetin. Regjistrimi falas.", image: "/images/motoshpati-world-ride-out.jpg" },
+  feature: { tag: "EVENT · [DATA]", title: "RIDE-OUT: PEJË → RUGOVË", text: "Bashkohu me komunitetin. Regjistrimi falas.", image: "/images/nas-world-ride-out.jpg" },
   small: [
-    { tag: "LAJME", title: "Unboxing: QJMOTOR mbërriti në Pejë", image: "/images/motoshpati-world-qj-unboxing.jpg" },
-    { tag: "MODEL I RI", title: "ZONTES 703 RR", image: "/images/motoshpati-world-new-model.jpg" },
-    { tag: "KËSHILLA", title: "[Përgatit motorin për dimër]", image: "/images/motoshpati-world-tips.jpg" },
+    { tag: "LAJME", title: "Unboxing: QJMOTOR mbërriti në Pejë", image: "/images/nas-world-qj-unboxing.jpg" },
+    { tag: "MODEL I RI", title: "ZONTES 703 RR", image: "/images/nas-world-new-model.jpg" },
+    { tag: "KËSHILLA", title: "[Përgatit motorin për dimër]", image: "/images/nas-world-tips.jpg" },
   ],
 };
 
@@ -115,13 +134,16 @@ export const tickerItems = [
   "PEJË, KOSOVË",
 ];
 
+/** Address of a brand page: /brendet/<slug>. Derived from the name (brands have no slug field). */
+export const brandSlug = (name: string) => slugify(name);
+
 export interface Brand {
   name: string;
   /** Optional logo in /public/images/brands/. Until it arrives, the name is set as a wordmark. */
   logo?: string;
 }
 
-/** Every brand Moto Shpati sells (from the current catalog). Confirm the full list with the client. */
+/** Every brand NAS sells (from the current catalog). Confirm the full list with the client. */
 export const brands: Brand[] = [
   { name: "NAS" },
   { name: "QJMOTOR" },

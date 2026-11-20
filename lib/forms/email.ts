@@ -40,7 +40,7 @@ const headerSafe = (s: string) => s.replace(/[\p{Cc}]+/gu, " ").trim().slice(0, 
 export function composeEmail(s: Submission) {
   const data = s.data as Record<string, unknown>;
   const who = typeof data.name === "string" ? data.name : typeof data.email === "string" ? data.email : "";
-  const subject = headerSafe(`[Moto Shpati] ${s.label}${who ? ` · ${who}` : ""}`);
+  const subject = headerSafe(`[NAS] ${s.label}${who ? ` · ${who}` : ""}`);
   const rows = emailRows(s);
   const received = new Intl.DateTimeFormat("sq-AL", { timeZone: "Europe/Belgrade", dateStyle: "short", timeStyle: "short" }).format(new Date(s.receivedAt));
 
@@ -48,7 +48,7 @@ export function composeEmail(s: Submission) {
 
   const html = `<!doctype html><html lang="sq"><body style="margin:0;padding:24px;background:#f4f4f4;font-family:Arial,Helvetica,sans-serif;color:#111">
 <table role="presentation" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;margin:0 auto;background:#fff;border-top:4px solid #e10600">
-<tr><td style="padding:24px 28px 8px"><div style="font-size:12px;letter-spacing:2px;color:#e10600;font-weight:bold">MOTO SHPATI</div>
+<tr><td style="padding:24px 28px 8px"><div style="font-size:12px;letter-spacing:2px;color:#e10600;font-weight:bold">NAS</div>
 <h1 style="margin:6px 0 4px;font-size:22px">${escapeHtml(s.label)}</h1>
 <div style="font-size:13px;color:#666">Marrë: ${escapeHtml(received)}</div></td></tr>
 <tr><td style="padding:12px 28px 28px"><table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;font-size:15px">

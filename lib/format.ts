@@ -32,3 +32,15 @@ const MONTHS_SQ = [
 export function monthYearSq(date: Date): string {
   return `${MONTHS_SQ[date.getMonth()]} ${date.getFullYear()}`;
 }
+
+/** "brand name" → "brand-name" (for slugs). Handles Albanian ë/ç. */
+export function slugify(input: string): string {
+  return input
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80)
+    .replace(/-+$/, "");
+}

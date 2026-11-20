@@ -37,7 +37,8 @@ const csp: Record<string, string[]> = {
   "media-src": ["'self'", ...supabase],
   "font-src": ["'self'"],
   "connect-src": ["'self'", ...supabase],
-  "frame-src": ["https://challenges.cloudflare.com"],
+  // www.google.com: the map on /kontakti (loaded only after the visitor clicks "Shfaq hartën").
+  "frame-src": ["https://challenges.cloudflare.com", "https://www.google.com"],
   "object-src": ["'none'"],
   "base-uri": ["'self'"],
   "form-action": ["'self'"],

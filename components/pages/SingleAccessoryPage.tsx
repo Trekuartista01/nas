@@ -6,7 +6,8 @@ import { productSchema } from "@/lib/structured-data";
 // Same photo for every view until the client sends per-angle product shots.
 const VIEW_LABELS = ["Anash", "Përpara", "Prapa", "Detaj"];
 
-export default function SingleAccessoryPage({ accessory: a }: { accessory: Accessory }) {
+/** `all`: every published product (for the "related" row), loaded on the server. */
+export default function SingleAccessoryPage({ accessory: a, all }: { accessory: Accessory; all: Accessory[] }) {
   return (
     <>
       <JsonLd
@@ -30,7 +31,7 @@ export default function SingleAccessoryPage({ accessory: a }: { accessory: Acces
         colours={a.colours}
         specs={a.specs}
         price={a.price}
-        related={relatedAccessories(a).map((r) => ({
+        related={relatedAccessories(a, all).map((r) => ({
           href: `/aksesoret/${r.slug}`,
           brand: r.brand,
           name: r.name,

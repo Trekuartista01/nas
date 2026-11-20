@@ -55,10 +55,10 @@ export const ACCESSORY_CATEGORY_WORD: Record<AccessoryCategory, string> = {
 };
 
 const photo: Record<AccessoryCategory, string> = {
-  kaska: "/images/motoshpati-acc-helmets.jpg",
-  veshje: "/images/motoshpati-acc-apparel.jpg",
-  "doreza-cizme": "/images/motoshpati-acc-gloves-boots.jpg",
-  pjese: "/images/motoshpati-acc-parts.jpg",
+  kaska: "/images/nas-acc-helmets.jpg",
+  veshje: "/images/nas-acc-apparel.jpg",
+  "doreza-cizme": "/images/nas-acc-gloves-boots.jpg",
+  pjese: "/images/nas-acc-parts.jpg",
 };
 
 const specsFor: Record<AccessoryCategory, AccessorySpec[]> = {
@@ -134,7 +134,7 @@ export const accessories: Accessory[] = [
   item("zontes-helmeta", "kaska", "HELMETA", "[XS–XXL]", 86, ["helmet-full-face", "brand-zontes"], {
     isNew: true,
     brand: "ZONTES",
-    image: "/images/motoshpati-acc-zontes-helmeta.png",
+    image: "/images/nas-acc-zontes-helmeta.png",
     cutout: true,
   }),
   item("kaske-full-face", "kaska", "KASKË FULL-FACE", "[XS–XXL]", 189, ["helmet-full-face"], { isNew: true }),
@@ -159,12 +159,12 @@ export function getAccessory(slug: string): Accessory | undefined {
 export function accessoryDescription(a: Accessory): string {
   const label = ACCESSORY_CATEGORY_LABEL[a.category];
   const name = isPlaceholder(a.brand) ? a.name : `${a.brand} ${a.name}`;
-  return `${name} në Moto Shpati, Pejë. ${label} për motoristë: shiko ngjyrat, specifikat dhe çmimin.`;
+  return `${name} në NAS, Pejë. ${label} për motoristë: shiko ngjyrat, specifikat dhe çmimin.`;
 }
 
-export function relatedAccessories(a: Accessory, count = 3): Accessory[] {
-  const same = accessories.filter((x) => x.slug !== a.slug && x.category === a.category);
-  const others = accessories.filter((x) => x.slug !== a.slug && x.category !== a.category);
+export function relatedAccessories(a: Accessory, all: Accessory[], count = 3): Accessory[] {
+  const same = all.filter((x) => x.slug !== a.slug && x.category === a.category);
+  const others = all.filter((x) => x.slug !== a.slug && x.category !== a.category);
   return [...same, ...others].slice(0, count);
 }
 

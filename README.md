@@ -1,4 +1,4 @@
-# Moto Shpati — website
+# NAS — website
 
 Next.js (App Router) + TypeScript + Tailwind v4 + Framer Motion. See `CLAUDE.md` for the conventions and `design/homepage-v2.dc.html` for the approved homepage design.
 

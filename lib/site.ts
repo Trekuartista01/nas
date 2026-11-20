@@ -1,13 +1,21 @@
 /**
  * Public address of the site, used for absolute URLs (sitemap, robots, social previews).
  *
- * Set SITE_URL (e.g. https://motoshpati.com) once the domain is chosen. It is not a secret.
+ * Set SITE_URL (e.g. https://www.example.com) once the domain is chosen. It is not a secret.
  * On Vercel the production domain is picked up automatically until then; locally it is localhost.
  */
-export const SITE_URL = (
-  process.env.SITE_URL ??
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000")
-).replace(/\/$/, "");
+export const SITE_URL = resolveSiteUrl();
+
+function resolveSiteUrl(): string {
+  // An empty `SITE_URL=` line (as copied from .env.example) counts as not set.
+  const configured = process.env.SITE_URL?.trim();
+  const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
+  const url = (configured || (vercel ? `https://${vercel}` : "http://localhost:3000")).replace(/\/$/, "");
+  if (!URL.canParse(url)) {
+    throw new Error(`SITE_URL must be a full address like https://www.example.com (got "${url}"). Check .env.local or the Vercel settings.`);
+  }
+  return url;
+}
 
 /**
  * Public pages that exist today. Add each inner page here when it is built,
@@ -17,12 +25,19 @@ export const STATIC_PAGES: { path: string; priority: number }[] = [
   { path: "/", priority: 1 },
   { path: "/modelet", priority: 0.9 },
   { path: "/aksesoret", priority: 0.8 },
+  { path: "/financim", priority: 0.8 },
+  { path: "/kerko-oferte", priority: 0.7 },
+  { path: "/gjej-motorin", priority: 0.7 },
+  { path: "/nas-world", priority: 0.6 },
+  { path: "/kontakti", priority: 0.7 },
+  { path: "/rreth-nesh", priority: 0.6 },
+  { path: "/sport-line", priority: 0.7 },
 ];
 
-export const SITE_NAME = "Moto Shpati";
-export const SITE_TITLE = "Moto Shpati — Motorë, skuterë dhe ATV në Pejë";
+export const SITE_NAME = "NAS";
+export const SITE_TITLE = "NAS — Motorë dhe skuterë në Pejë";
 export const SITE_DESCRIPTION =
-  "Moto Shpati, Pejë: motorë, skuterë dhe ATV nga NAS dhe QJMOTOR. Test ride falas, financim me këste, servis i autorizuar dhe pjesë origjinale.";
+  "NAS, Pejë: motorë dhe skuterë NAS. Test ride falas, financim me këste dhe pjesë origjinale.";
 
 /** Link-preview defaults (home page and layout). */
 export const OPEN_GRAPH_DEFAULTS = {
@@ -36,7 +51,7 @@ export const OPEN_GRAPH_DEFAULTS = {
 const DEFAULT_SHARE_IMAGE = { url: "/opengraph-image", width: 1200, height: 630, alt: SITE_TITLE };
 
 interface PageMetaInput {
-  /** Short page title; the layout adds " — Moto Shpati". */
+  /** Short page title; the layout adds " — NAS". */
   title: string;
   description: string;
   /** Path of the page, e.g. "/modelet". Becomes the canonical URL (query strings like ?kategoria= are dropped). */

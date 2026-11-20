@@ -1,15 +1,14 @@
 "use client";
 
-import Link from "next/link";
 import { AnimatePresence, motion, useSpring, useTransform } from "framer-motion";
-import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { TbGasStation, TbMotorbike } from "react-icons/tb";
 import Reveal from "@/components/ui/Reveal";
-import { getModel, models } from "@/data/models";
+import { SlashButton } from "@/components/ui/Buttons";
+import type { Model } from "@/data/models";
 import { DEPOSIT_STEPS, monthlyPayment, TERM_OPTIONS, type Term } from "@/lib/finance";
 import { eur, eurCents, monthYearSq } from "@/lib/format";
 
-const EVENT = "motoshpati:finance-select";
 const ANCHOR = "financim";
 const EASE = [0.2, 0.8, 0.2, 1] as const;
 
@@ -21,37 +20,28 @@ function lastPaymentMonth(months: number): string {
   return monthYearSq(d);
 }
 
-/** Lets other sections (e.g. BikeFinder) load a model into the calculator and scroll to it. */
-export function selectFinanceModel(slug: string) {
-  window.dispatchEvent(new CustomEvent<string>(EVENT, { detail: slug }));
-  document.getElementById(ANCHOR)?.scrollIntoView({ behavior: "smooth" });
-}
-
 interface Props {
+  /** Published models (loaded on the server: lib/data/catalog.ts). */
+  models: Model[];
   /** Preselect a model (model detail pages). */
   initialModelSlug?: string;
-  /** Show the big section heading (home, /financim). Off on model pages. */
+  /** Show the big section heading (on /financim). */
   withHeading?: boolean;
 }
 
-export default function FinanceCalculator({ initialModelSlug = "zontes-g1-200", withHeading = true }: Props) {
-  const initial = getModel(initialModelSlug) ?? models[0];
+export default function FinanceCalculator(props: Props) {
+  // Nothing published (everything hidden in the admin): leave the section out rather than show an empty calculator.
+  if (props.models.length === 0) return null;
+  return <Calculator {...props} />;
+}
+
+function Calculator({ models, initialModelSlug, withHeading = true }: Props) {
+  const getModel = (slug: string) => models.find((m) => m.slug === slug);
+  const initial = (initialModelSlug && getModel(initialModelSlug)) || models[0];
   const [modelSlug, setModelSlug] = useState<string | "custom">(initial.slug);
   const [price, setPrice] = useState(initial.price);
   const [deposit, setDeposit] = useState(20);
   const [months, setMonths] = useState<Term>(24);
-
-  // Listen for "LLOGARIT KËSTIN" from the bike finder.
-  useEffect(() => {
-    const onSelect = (e: Event) => {
-      const m = getModel((e as CustomEvent<string>).detail);
-      if (!m) return;
-      setModelSlug(m.slug);
-      setPrice(m.price);
-    };
-    window.addEventListener(EVENT, onSelect);
-    return () => window.removeEventListener(EVENT, onSelect);
-  }, []);
 
   const monthly = monthlyPayment(price, deposit, months);
   const depositAmount = (price * deposit) / 100;
@@ -66,7 +56,7 @@ export default function FinanceCalculator({ initialModelSlug = "zontes-g1-200", 
   const lastPay = isClient ? lastPaymentMonth(months) : "";
 
   const roadPct = (months / 48) * 100;
-  const chips = useMemo(() => models, []);
+  const chips = models;
 
   return (
     <section id={ANCHOR} className="scroll-mt-20 bg-bone text-ink">
@@ -290,12 +280,9 @@ export default function FinanceCalculator({ initialModelSlug = "zontes-g1-200", 
                 </span>
               </div>
               <p className="text-[11px] text-faint">Shembull pa interes — norma reale dhe kushtet nga [BANKA PARTNERE].</p>
-              <Link
-                href={`/financim?modeli=${modelSlug}&kapari=${deposit}&muaj=${months}#aplikimi`}
-                className="slant-sm btn-sheen self-start bg-red px-6 py-4 text-xs font-extrabold italic tracking-[0.1em] text-white hover:text-white"
-              >
+              <SlashButton href={`/financim?model=${modelSlug}#apliko`} className="self-start">
                 APLIKO PËR KËTË OFERTË →
-              </Link>
+              </SlashButton>
             </div>
           </div>
         </Reveal>

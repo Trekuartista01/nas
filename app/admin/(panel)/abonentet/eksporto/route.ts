@@ -12,7 +12,7 @@ export async function GET() {
   return new Response(`﻿${csv}\r\n`, {
     headers: {
       "Content-Type": "text/csv; charset=utf-8",
-      "Content-Disposition": `attachment; filename="abonentet-moto-shpati-${date}.csv"`,
+      "Content-Disposition": `attachment; filename="abonentet-nas-${date}.csv"`,
       "Cache-Control": "private, no-store",
     },
   });

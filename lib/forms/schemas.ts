@@ -11,7 +11,6 @@ import {
   optional,
   phone,
   shortText,
-  timeOfDay,
 } from "@/lib/forms/fields";
 
 /**
@@ -38,16 +37,13 @@ export const offerSchema = z.object({
   consent,
 });
 
-/** /servisi#test-ride: book a test ride. */
+/** Test-ride form on each model page. No date, time or licence (removed Nov 2026): the shop calls to set the time. */
 export const testRideSchema = z.object({
   ...base,
   name,
   phone,
   email: optional(email),
   model: modelSlug,
-  date: appointmentDate,
-  time: timeOfDay,
-  licence: optional(z.enum(["AM", "A1", "A2", "A", "pa-patente"], { error: "Zgjidh patentën." })),
   message: optional(message),
   consent,
 });
@@ -106,6 +102,25 @@ export const contactSchema = z.object({
   consent,
 });
 
+/** Phone number or email in one field (dealer form): either format is accepted. */
+const phoneOrEmail = z
+  .string({ error: "Shkruaj telefonin ose email-in." })
+  .trim()
+  .min(1, { error: "Shkruaj telefonin ose email-in." })
+  .max(254, { error: "Kjo fushë është shumë e gjatë." })
+  .refine((v) => email.safeParse(v).success || phone.safeParse(v).success, {
+    error: "Shkruaj një numër telefoni (p.sh. 044 123 456) ose një email të saktë.",
+  });
+
+/** Homepage "Lead. Don't follow.": a business asking to become a NAS dealer. */
+export const dealerSchema = z.object({
+  ...base,
+  name,
+  company: shortText("emrin e biznesit"),
+  reach: phoneOrEmail,
+  consent,
+});
+
 /** Footer: newsletter sign-up. */
 export const newsletterSchema = z.object({
   ...base,
@@ -118,6 +133,7 @@ export const FORM_SCHEMAS = {
   service: serviceSchema,
   finance: financeSchema,
   contact: contactSchema,
+  dealer: dealerSchema,
   newsletter: newsletterSchema,
 } as const;
 
@@ -131,6 +147,7 @@ export const FORM_LABEL: Record<FormKind, string> = {
   service: "Termin servisi",
   finance: "Aplikim për financim",
   contact: "Mesazh kontakti",
+  dealer: "Kërkesë për dealer",
   newsletter: "Regjistrim në newsletter",
 };
 

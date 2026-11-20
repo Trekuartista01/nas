@@ -2,7 +2,7 @@
 
 ---
 
-You're building the **Moto Shpati** website (a motorcycle / scooter / ATV dealer in Pejë, Kosovo) for Trekuartista.
+You're building the **NAS** website (a motorcycle / scooter / ATV dealer in Pejë, Kosovo) for Trekuartista.
 
 Read `CLAUDE.md` first. It holds the stack, design tokens, component list and rules. Then read `design/homepage-v2.dc.html`, the approved homepage design. It's a design-canvas export: treat it as a spec, not code to copy.
 
@@ -33,8 +33,8 @@ Read `CLAUDE.md` first. It holds the stack, design tokens, component list and ru
 | `/gjej-motorin` | `BikeFinderPage` | Full-page `BikeFinder` |
 | `/financim` | `FinancePage` | `FinanceCalculator` + bank partner info + FAQ + application form |
 | `/servisi` | `ServicePage` | Service + test-ride booking forms |
-| `/moto-shpati-world` | `WorldPage` | Events + news list |
-| `/moto-shpati-world/[slug]` | `SinglePageOfPost` | |
+| `/nas-world` | `WorldPage` | Events + news list |
+| `/nas-world/[slug]` | `SinglePageOfPost` | |
 | `/brendet/[slug]` | `SinglePageOfBrand` | Brand story + that brand's models |
 | `/rreth-nesh` | `AboutPage` | |
 | `/kontakti` | `ContactPage` | `ContactForm` + `Map` + showroom hours |

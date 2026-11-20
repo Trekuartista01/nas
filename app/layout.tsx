@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { archivo } from "./fonts";
+import { publica } from "./fonts";
 import MotionProvider from "@/components/layout/MotionProvider";
 import { OPEN_GRAPH_DEFAULTS, SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/lib/site";
 
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     default: SITE_TITLE,
-    template: "%s — Moto Shpati",
+    template: "%s — NAS",
   },
   description: SITE_DESCRIPTION,
   // Defaults for link previews. A page that sets its own openGraph must repeat siteName/locale (Next merges shallowly).
@@ -19,7 +19,13 @@ export const metadata: Metadata = {
 // Header/Footer live in app/(site)/layout.tsx (public pages) so the admin panel can have its own chrome.
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="sq" className={`${archivo.variable} antialiased`}>
+    <html lang="sq" className={`${publica.variable} antialiased`}>
+      <head>
+        {/* Without JavaScript, nothing waits for a reveal animation: show everything as is. */}
+        <noscript>
+          <style>{`[data-anim]{opacity:1!important;transform:none!important;clip-path:none!important}`}</style>
+        </noscript>
+      </head>
       <body className="min-h-screen bg-ink font-sans text-white">
         <MotionProvider>{children}</MotionProvider>
       </body>

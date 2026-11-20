@@ -1,10 +1,10 @@
 /**
- * Moto Shpati business details: one source for the page and for Google (structured data).
+ * NAS business details: one source for the page and for Google (structured data).
  * Values come from the approved design. Missing ones stay null and are left out of the
  * structured data until the client confirms them (the page keeps showing the [PLACEHOLDER]).
  */
 export const BUSINESS = {
-  name: "Moto Shpati",
+  name: "NAS",
   street: "Konferenca e Bujanit",
   city: "Pejë",
   postalCode: "30000",
@@ -13,6 +13,9 @@ export const BUSINESS = {
   phone: "+38344155662",
   phoneDisplay: "044 155 662",
   mapsUrl: "https://maps.app.goo.gl/5tpdRcF7HA4sv7718",
+  /** What the embedded map searches for (the address; the Google listing still carries the old shop name). */
+  mapsQuery: "Konferenca e Bujanit, Pejë",
+  /** Still the old shop account; swap for the NAS account when the client sends it. */
   instagram: "https://www.instagram.com/moto.shpati/",
   /** [FACEBOOK URL] — not confirmed yet. */
   facebook: null as string | null,

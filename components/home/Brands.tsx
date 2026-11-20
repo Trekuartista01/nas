@@ -1,6 +1,7 @@
 import Marquee from "@/components/ui/Marquee";
 import SectionHeading from "@/components/ui/SectionHeading";
-import { brands, type Brand } from "@/data/home";
+import type { Brand } from "@/data/home";
+import { getBrands } from "@/lib/data/catalog";
 
 /** Repeat the list so one copy is always wider than the widest screen. */
 const REPEAT = 3;
@@ -29,7 +30,9 @@ function Row({ items, reverse }: { items: Brand[]; reverse?: boolean }) {
   );
 }
 
-export default function Brands() {
+export default async function Brands() {
+  const brands = await getBrands();
+  if (brands.length === 0) return null;
   // Second row starts mid-list so the same brand never sits above itself.
   const offset = Math.ceil(brands.length / 2);
   const second = [...brands.slice(offset), ...brands.slice(0, offset)];

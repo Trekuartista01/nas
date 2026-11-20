@@ -9,26 +9,13 @@ export default function LoginForm() {
   const [state, action, pending] = useActionState<LoginState, FormData>(signIn, {});
   return (
     <form action={action} className="space-y-4" aria-describedby={state.error ? "login-error" : undefined}>
-      <div>
-        <label htmlFor="admin-email" className="mb-1.5 block text-sm font-medium text-muted-2">
-          Email
-        </label>
-        <input
-          id="admin-email"
-          name="email"
-          type="email"
-          autoComplete="username"
-          required
-          maxLength={254}
-          defaultValue={state.email}
-          className={inputClass}
-        />
-      </div>
+      {/* Lets password managers save the password under a name; not sent to the server. */}
+      <input type="text" autoComplete="username" value="NAS admin" readOnly hidden />
       <div>
         <label htmlFor="admin-password" className="mb-1.5 block text-sm font-medium text-muted-2">
           Fjalëkalimi
         </label>
-        <input id="admin-password" name="password" type="password" autoComplete="current-password" required maxLength={200} className={inputClass} />
+        <input id="admin-password" name="password" type="password" autoComplete="current-password" required maxLength={200} autoFocus className={inputClass} />
       </div>
       {state.error && (
         <p id="login-error" role="alert" className="border border-red/50 bg-red/10 px-3 py-2 text-sm text-[#ff7a73]">

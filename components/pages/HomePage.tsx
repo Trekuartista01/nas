@@ -1,33 +1,28 @@
-import Banner from "@/components/home/Banner";
-import Brands from "@/components/home/Brands";
-import FinalCta from "@/components/home/FinalCta";
-import FindYourVehicle from "@/components/home/FindYourVehicle";
-import GearUp from "@/components/home/GearUp";
-import Lineup from "@/components/home/Lineup";
-import MotoShpatiWorld from "@/components/home/MotoShpatiWorld";
-import ServiceShowroom from "@/components/home/ServiceShowroom";
-import Ticker from "@/components/home/Ticker";
-import BikeFinder from "@/components/finder/BikeFinder";
-import FinanceCalculator from "@/components/finance/FinanceCalculator";
+import DealerCta from "@/components/home/DealerCta";
+import HomeHero from "@/components/home/HomeHero";
+import Range from "@/components/home/Range";
+import SportLine from "@/components/home/SportLine";
+import Statement from "@/components/home/Statement";
+import VisionPanels from "@/components/home/VisionPanels";
 import JsonLd from "@/components/seo/JsonLd";
+import { getHeroVideo, getModels } from "@/lib/data/catalog";
 import { dealerSchema } from "@/lib/structured-data";
 
-/** Stacked full-width sections, in the order of design/homepage-v2.dc.html. */
-export default function HomePage() {
+/**
+ * NAS homepage (design "NAS — Homepage", Nov 2026; replaced the old homepage-v2 sections,
+ * whose components stay in components/home/). Motion timings: lib/motion.ts.
+ */
+export default async function HomePage() {
+  const [models, heroVideo] = await Promise.all([getModels(), getHeroVideo()]);
   return (
     <>
       <JsonLd data={dealerSchema()} />
-      <Banner />
-      <Ticker />
-      <FindYourVehicle />
-      <Lineup />
-      <GearUp />
-      <BikeFinder />
-      <Brands />
-      <FinanceCalculator />
-      <MotoShpatiWorld />
-      <ServiceShowroom />
-      <FinalCta />
+      <HomeHero heroVideo={heroVideo} />
+      <Statement />
+      <VisionPanels />
+      <Range models={models} />
+      <SportLine models={models} />
+      <DealerCta />
     </>
   );
 }

@@ -21,7 +21,7 @@ export default async function HomePage() {
       <Statement />
       <VisionPanels />
       <Range models={models} />
-      <SportLine models={models} />
+      <SportLine />
       <DealerCta />
     </>
   );

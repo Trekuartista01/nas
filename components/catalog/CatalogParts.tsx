@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import type { ReactNode } from "react";
+import { Children, Fragment, isValidElement, type ReactElement, type ReactNode } from "react";
+import { LINEUP_EASE, useLineupReveal } from "@/components/catalog/LineupReveal";
 import { TbSearch } from "react-icons/tb";
 import Reveal from "@/components/ui/Reveal";
 import { eur } from "@/lib/format";
@@ -28,6 +29,34 @@ export function CatalogHero({ title }: { title: string }) {
   );
 }
 
+/** A fragment's children as a flat list (so each filter block can get its own entrance). */
+function pieces(node: ReactNode): ReactNode[] {
+  if (isValidElement(node) && node.type === Fragment) return Children.toArray((node as ReactElement<{ children?: ReactNode }>).props.children);
+  return Children.toArray(node);
+}
+
+/**
+ * Behind the /modelet shutter (LineupReveal is true/false): wait, then fade in while moving into
+ * place, `order` steps after the door is half open. `from`: "below" rises 28px; "left" slides 24px in
+ * (the filter column scrolls on its own, and an offset downwards would flash its scrollbar; one to
+ * the left never overflows). Elsewhere (null) the piece renders as before, untouched.
+ */
+function Entrance({ order, from = "below", className, children }: { order: number; from?: "below" | "left"; className?: string; children: ReactNode }) {
+  const reveal = useLineupReveal();
+  if (reveal === null) return className ? <div className={className}>{children}</div> : <>{children}</>;
+  const away = from === "left" ? { opacity: 0, x: -24 } : { opacity: 0, y: 28 };
+  return (
+    <motion.div
+      className={className}
+      initial={away}
+      animate={reveal ? { opacity: 1, x: 0, y: 0 } : away}
+      transition={{ duration: 0.7, ease: LINEUP_EASE, delay: reveal ? 0.05 + order * 0.06 : 0 }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 /** Sidebar + results layout. */
 export function CatalogLayout({ filters, toolbar, children }: { filters: ReactNode; toolbar: ReactNode; children: ReactNode }) {
   return (
@@ -40,10 +69,16 @@ export function CatalogLayout({ filters, toolbar, children }: { filters: ReactNo
           aria-label="Filtrat"
           className="flex flex-col gap-10 lg:sticky lg:mt-[72px] lg:top-24 lg:max-h-[calc(100dvh-7rem)] lg:self-start lg:overflow-y-auto lg:overscroll-contain lg:pb-2 lg:pr-2 lg:[scrollbar-width:thin]"
         >
-          {filters}
+          {pieces(filters).map((piece, i) => (
+            <Entrance key={i} order={i} from="left">
+              {piece}
+            </Entrance>
+          ))}
         </aside>
         <div>
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-4 lg:justify-end">{toolbar}</div>
+          <Entrance order={0} className="mb-6 flex flex-wrap items-center justify-between gap-4 lg:justify-end">
+            {toolbar}
+          </Entrance>
           {children}
           <Reveal className="mt-16 lg:mt-[100px]">
             <div className="flex flex-wrap items-center justify-between gap-4 border-l-4 border-red bg-[#141414] px-6 py-4">
@@ -262,6 +297,9 @@ export function CatalogGrid<T>({
   emptyTitle: string;
   onClear: () => void;
 }) {
+  // Behind the /modelet shutter: the cards wait for the door, then rise in one after another.
+  const reveal = useLineupReveal();
+  const gated = reveal !== null;
   if (items.length === 0) {
     return (
       <div className="flex flex-col items-start gap-4 border border-line py-16 pl-8">
@@ -282,9 +320,13 @@ export function CatalogGrid<T>({
             key={getKey(item)}
             layout
             initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={gated && !reveal ? { opacity: 0, y: 40 } : { opacity: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96 }}
-            transition={{ duration: 0.5, ease: [0.2, 0.8, 0.2, 1], delay: Math.min(i, 8) * 0.04 }}
+            transition={
+              gated
+                ? { duration: 0.75, ease: LINEUP_EASE, delay: reveal ? 0.15 + Math.min(i, 8) * 0.07 : 0 }
+                : { duration: 0.5, ease: LINEUP_EASE, delay: Math.min(i, 8) * 0.04 }
+            }
           >
             {render(item)}
           </motion.div>

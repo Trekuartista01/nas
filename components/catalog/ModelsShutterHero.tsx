@@ -1,7 +1,8 @@
 "use client";
 
 import { animate, motion, useMotionValue, useMotionValueEvent, useTransform, type MotionValue } from "framer-motion";
-import { useEffect, useId, type ReactNode } from "react";
+import { useEffect, useId, useLayoutEffect, useState, type ReactNode } from "react";
+import { LineupReveal } from "@/components/catalog/LineupReveal";
 import { useIsMobile, useReducedMotionSafe } from "@/components/motion/useMotionScale";
 
 interface ModelsShutterHeroProps {
@@ -27,7 +28,9 @@ const RAIL = 26;
  * the door rolls up by itself (`duration`, 1s, after a short `delay`): slat by slat, bottom first, each
  * slat riding up into the one above, then squashing to 0.85 into the drum, and uncovers the lineup
  * (filters + model grid) sitting in its normal place behind it. The door is a fixed overlay that
- * hides when it is up; the page scrolls normally the whole time.
+ * hides when it is up; the page scrolls normally the whole time. At half open it tells the lineup
+ * (LineupReveal) to ease in: filters, sort row and cards rise into place one after another.
+ * Plays on every visit, also when Next shows a kept-alive copy of the page again.
  * The header stays clear while the door moves (`data-nav-clear` on <html>, as on the Sport Line video).
  * Reduced motion: no door, just the lineup. The slats are aria-hidden; the real <h1> is visually hidden.
  */
@@ -38,6 +41,15 @@ export default function ModelsShutterHero({ title = "MODELET", children, slats =
 
   const progress = useMotionValue(0);
   const visibility = useTransform(progress, (v) => (v >= 1 ? "hidden" : "visible"));
+  // The lineup eases in once the door is about half open (LineupReveal → CatalogLayout / CatalogGrid);
+  // set from the progress change events below.
+  const [opened, setOpened] = useState(false);
+
+  // Every visit starts with the door shut, before paint: Next can keep this page alive in the
+  // background and show it again (e.g. "See all models" on the homepage), and effects re-run then.
+  useLayoutEffect(() => {
+    if (!reduce) progress.set(0);
+  }, [reduce, progress]);
 
   // Roll up once, on arrival. Wait until the browser is idle after the page has rendered (hydration
   // and the first image decodes cost long frames), then two frames more, so the door never starts on a
@@ -69,6 +81,8 @@ export default function ModelsShutterHero({ title = "MODELET", children, slats =
 
   // Header clear while the door is shut or moving.
   useMotionValueEvent(progress, "change", (p) => {
+    // Follows the door both ways: the reset to 0 hides the lineup again, half open shows it.
+    setOpened(p >= 0.45);
     const html = document.documentElement;
     if (p < 1) html.setAttribute("data-nav-clear", "");
     else html.removeAttribute("data-nav-clear");
@@ -78,7 +92,7 @@ export default function ModelsShutterHero({ title = "MODELET", children, slats =
   return (
     <>
       <h1 className="sr-only">{title}</h1>
-      {children}
+      <LineupReveal.Provider value={opened}>{children}</LineupReveal.Provider>
       {!reduce && (
         <motion.div style={{ visibility }} className="pointer-events-none fixed inset-0 z-40">
           <Shutter title={title} count={n} progress={progress} />

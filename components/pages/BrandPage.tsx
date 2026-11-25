@@ -3,15 +3,14 @@ import Rise from "@/components/motion/Rise";
 import { SectionLine, WipeIn } from "@/components/motion/SectionIntro";
 import HeroMedia from "@/components/nas/HeroMedia";
 import { headingLines, IdeaSection, Kicker, SectionHead } from "@/components/nas/Parts";
-import { BlockButton, OutlineBlockButton } from "@/components/ui/Buttons";
 import { NAS_PAGES } from "@/data/nas-pages";
 import { MOTION } from "@/lib/motion";
 
 
 /**
  * THE BRAND (design "NAS — The Brand", Nov 2026): hero, the idea, the lion (light section),
- * the vision cards, the four values, and a closing call to action over the tunnel photo.
- * Copy is English, as in the design.
+ * the vision cards and the four values. Copy is English, as in the design. (The closing call to action
+ * over the tunnel photo was removed, Nov 2026.)
  */
 export default function BrandPage() {
   const P = NAS_PAGES.brand;
@@ -120,20 +119,6 @@ export default function BrandPage() {
               </Rise>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ───── Closing call to action ───── */}
-      <section className="relative flex min-h-[620px] items-center overflow-hidden bg-ink">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={P.closing} alt="" loading="lazy" className="absolute inset-0 size-full object-cover brightness-[.55]" />
-        <div aria-hidden className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,10,10,.6),transparent_70%)]" />
-        <div className="container-moto relative py-24">
-          <Lines className="headline text-[clamp(40px,5.6vw,96px)]" lines={headingLines(["BORN TO ROAR.", "BUILT FOR THE", "ROAD."])} />
-          <Rise delay={0.35} className="mt-10 flex flex-wrap gap-4">
-            <BlockButton href="/#range">Explore the range</BlockButton>
-            <OutlineBlockButton href="/kontakti">Become a dealer</OutlineBlockButton>
-          </Rise>
         </div>
       </section>
     </>

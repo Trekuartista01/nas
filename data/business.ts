@@ -12,6 +12,10 @@ export const BUSINESS = {
   country: "XK",
   phone: "+38344155662",
   phoneDisplay: "044 155 662",
+  /** [EMAIL]: the shop's address is not confirmed yet. While null the contact hero shows "[EMAIL]" (no link). */
+  email: null as string | null,
+  /** TODO(client): confirm WhatsApp is on this number (assumed the shop phone, Nov 2026). Digits for wa.me. */
+  whatsapp: "38344155662",
   mapsUrl: "https://maps.app.goo.gl/5tpdRcF7HA4sv7718",
   /** What the embedded map searches for (the address; the Google listing still carries the old shop name). */
   mapsQuery: "Konferenca e Bujanit, Pejë",

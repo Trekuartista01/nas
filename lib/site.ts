@@ -26,7 +26,6 @@ export const STATIC_PAGES: { path: string; priority: number }[] = [
   { path: "/modelet", priority: 0.9 },
   { path: "/aksesoret", priority: 0.8 },
   { path: "/financim", priority: 0.8 },
-  { path: "/kerko-oferte", priority: 0.7 },
   { path: "/gjej-motorin", priority: 0.7 },
   { path: "/nas-world", priority: 0.6 },
   { path: "/kontakti", priority: 0.7 },

@@ -2,9 +2,9 @@
 
 import { useMemo, useState } from "react";
 import CatalogCard from "@/components/catalog/CatalogCard";
+import ModelsShutterHero from "@/components/catalog/ModelsShutterHero";
 import {
   CatalogGrid,
-  CatalogHero,
   CatalogLayout,
   ChipGrid,
   ClearFilters,
@@ -101,8 +101,7 @@ export default function ModelsPage({
   };
 
   return (
-    <>
-      <CatalogHero title="MODELET" />
+    <ModelsShutterHero title="MODELET">
       <CatalogLayout
         filters={
           <>
@@ -142,6 +141,6 @@ export default function ModelsPage({
           )}
         />
       </CatalogLayout>
-    </>
+    </ModelsShutterHero>
   );
 }

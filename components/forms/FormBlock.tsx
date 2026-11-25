@@ -13,7 +13,7 @@ export default function FormBlock({
   children,
   as: Tag = "h2",
 }: {
-  /** Anchor for links like /modelet/<slug>#test-ride. */
+  /** Optional anchor id for links to the form. */
   id?: string;
   /** Headline lines; a red full stop is added to the last one. */
   lines: string[];

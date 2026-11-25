@@ -27,9 +27,10 @@ const ROWS = LINES.map((line, l) => {
 export default function Statement() {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotionSafe();
-  // Fill spans from entering the screen until the section is a little above centre, smoothed by a spring.
-  const { scrollYProgress: raw } = useScroll({ target: ref, offset: ["start 88%", "center 35%"] });
-  const scrollYProgress = useSpring(raw, { stiffness: 90, damping: 28, mass: 0.7, restDelta: 0.0005 });
+  // Fill spans from entering the screen until the section is just below centre (a short stretch, so it
+  // fills quickly), smoothed by a spring.
+  const { scrollYProgress: raw } = useScroll({ target: ref, offset: ["start 88%", "center 58%"] });
+  const scrollYProgress = useSpring(raw, { stiffness: 150, damping: 32, mass: 0.6, restDelta: 0.0005 });
 
   return (
     <section ref={ref} className="bg-ink">
@@ -38,7 +39,7 @@ export default function Statement() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={NAS_HOME.lion} alt="" width={128} height={154} className="h-auto w-full mix-blend-lighten" />
         </Rise>
-        <Rise delay={0.25} duration={MOTION.text + 0.2}>
+        <Rise delay={0.15} duration={MOTION.text}>
           <h2 aria-label={LINES.join(" ")} className="headline text-[clamp(28px,4.4vw,72px)] leading-[1.02]">
             {ROWS.map((row, l) => (
               <span key={l} aria-hidden className="block">

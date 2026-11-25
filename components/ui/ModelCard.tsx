@@ -1,5 +1,4 @@
 import Link from "next/link";
-import FavouriteButton from "@/components/ui/FavouriteButton";
 import { TYPE_LABEL, type Model } from "@/data/models";
 import { eur } from "@/lib/format";
 import { fromMonthly } from "@/lib/finance";
@@ -21,7 +20,6 @@ export default function ModelCard({ model }: { model: Model }) {
             E RE
           </span>
         )}
-        <FavouriteButton id={`/modelet/${model.slug}`} name={model.name} className="absolute right-2.5 top-2.5" />
       </div>
       <div className="flex flex-1 flex-col gap-3 p-5">
         <div className="text-[11px] tracking-[0.14em] text-faint">

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { TbBrandInstagram, TbClock, TbMapPin, TbPhone } from "react-icons/tb";
-import { CatalogHero } from "@/components/catalog/CatalogParts";
+import ContactKeyHero from "@/components/contact/ContactKeyHero";
 import MapEmbed from "@/components/contact/MapEmbed";
 import FormBlock from "@/components/forms/FormBlock";
 import { ContactForm } from "@/components/forms/LeadForms";
@@ -43,7 +43,14 @@ const ROWS: { icon: typeof TbMapPin; label: string; value: ReactNode }[] = [
 export default function ContactPage() {
   return (
     <>
-      <CatalogHero title="KONTAKTI" />
+      <ContactKeyHero
+        phone={BUSINESS.phone}
+        phoneDisplay={BUSINESS.phoneDisplay}
+        email={BUSINESS.email}
+        whatsapp={BUSINESS.whatsapp}
+        mapsUrl={BUSINESS.mapsUrl}
+        formId="na-shkruaj"
+      />
       <section className="container-moto pb-20">
         <div className="grid border border-line-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
           <Reveal className="flex flex-col divide-y divide-line-2">
@@ -62,7 +69,7 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-      <FormBlock lines={["NA", "SHKRUAJ"]} intro={<p>Pyetje për një model, pjesë, servis apo diçka tjetër? Na shkruaj dhe të përgjigjemi sa më shpejt.</p>}>
+      <FormBlock id="na-shkruaj" lines={["NA", "SHKRUAJ"]} intro={<p>Pyetje për një model, pjesë, servis apo diçka tjetër? Na shkruaj dhe të përgjigjemi sa më shpejt.</p>}>
         <ContactForm />
       </FormBlock>
     </>

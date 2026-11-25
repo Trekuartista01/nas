@@ -10,13 +10,29 @@ export const CATEGORY_TAG: Record<VehicleType, string> = { scooter: "SCOOTER", s
 const CARD_CUT = "polygon(55px 0, 100% 0, 100% calc(100% - 66px), calc(100% - 65px) 100%, 0 100%, 0 55px)";
 /** The photo repeats the top-left cut, parallel to the card's at the 16px padding. */
 const PHOTO_CUT = "polygon(46px 0, 100% 0, 100% 100%, 0 100%, 0 46px)";
+/** Arrow box: a square with the brand's 45° top-left cut (circles are not part of the NAS language). */
+const BOX_CUT = "polygon(14px 0, 100% 0, 100% 100%, 0 100%, 0 14px)";
+/** Its 1px outline: outer shape minus the inner one (evenodd; the diagonal moves in by √2). */
+const BOX_OUTLINE =
+  "polygon(evenodd, 14px 0, 100% 0, 100% 100%, 0 100%, 0 14px, 14px 0, 14.4px 1px, 1px 14.4px, 1px calc(100% - 1px), calc(100% - 1px) calc(100% - 1px), calc(100% - 1px) 1px, 14.4px 1px)";
+
+/** Outlined arrow box with the cut corner; card hover / focus fills it red and nudges the arrow right. */
+function ArrowBox() {
+  return (
+    <span aria-hidden style={{ clipPath: BOX_CUT }} className="relative flex size-14 shrink-0 items-center justify-center">
+      <span className="absolute inset-0 bg-red opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100" />
+      <span style={{ clipPath: BOX_OUTLINE }} className="absolute inset-0 bg-white/40 transition-colors duration-300 group-hover:bg-red group-focus-visible:bg-red" />
+      <TbArrowRight size={18} className="relative transition-transform duration-300 group-hover:translate-x-1 group-focus-visible:translate-x-1" />
+    </span>
+  );
+}
 
 /**
  * Dark model card (NAS designs): the bike photo leads, on a dark panel with a thin border.
  * Number top-left, category top-right, wide uppercase name with a short red underline, the price
- * small as "From €X", and a round outlined arrow. The whole card is the link.
+ * small as "From €X", and an outlined arrow box with a cut corner. The whole card is the link.
  * Hover / keyboard focus: photo scales to 1.05, the underline grows to the name's width, the arrow
- * circle fills white and the arrow nudges right. Size comes from `className` (the parent decides).
+ * box fills red and the arrow nudges right. Size comes from `className` (the parent decides).
  */
 export default function DarkModelCard({
   model: m,
@@ -71,15 +87,13 @@ export default function DarkModelCard({
           </h3>
           <p className="mt-7 text-[14px] text-body">From {eur(m.price)}</p>
         </div>
-        <span className="flex size-14 shrink-0 items-center justify-center rounded-full border border-white/40 transition-colors duration-300 group-hover:border-white group-hover:bg-white group-hover:text-black group-focus-visible:bg-white group-focus-visible:text-black">
-          <TbArrowRight size={18} aria-hidden className="transition-transform duration-300 group-hover:translate-x-1 group-focus-visible:translate-x-1" />
-        </span>
+        <ArrowBox />
       </div>
     </Link>
   );
 }
 
-/** Closing card of a model row: "See all models" with the round arrow, to the catalog. */
+/** Closing card of a model row: "See all models" with the arrow box, to the catalog. */
 export function SeeAllCard({ className = "", label = "See all models", cut = false }: { className?: string; label?: string; cut?: boolean }) {
   return (
     <Link
@@ -90,9 +104,7 @@ export function SeeAllCard({ className = "", label = "See all models", cut = fal
       <span aria-hidden className="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-[0.15] bg-red transition-transform duration-700 ease-nas group-hover:scale-x-100" />
       <div className="flex items-end justify-between gap-4">
         <span className="headline text-[clamp(28px,2.6vw,42px)]">{label}</span>
-        <span className="flex size-14 shrink-0 items-center justify-center rounded-full border border-white/40 transition-colors duration-300 group-hover:border-white group-hover:bg-white group-hover:text-black group-focus-visible:bg-white group-focus-visible:text-black">
-          <TbArrowRight size={18} aria-hidden className="transition-transform duration-300 group-hover:translate-x-1 group-focus-visible:translate-x-1" />
-        </span>
+        <ArrowBox />
       </div>
     </Link>
   );

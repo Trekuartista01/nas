@@ -3,11 +3,11 @@
 import { ConsentField, ContactFields, LeadForm, SelectField, TextArea, TextField, type SelectOption } from "@/components/forms/FormParts";
 import { DEPOSIT_STEPS, TERM_OPTIONS } from "@/lib/finance";
 import { motion } from "framer-motion";
-import { submitContact, submitDealer, submitFinance, submitOffer, submitTestRide } from "@/lib/forms/actions";
+import { submitContact, submitDealer, submitFinance } from "@/lib/forms/actions";
 import { MOTION } from "@/lib/motion";
 
 /**
- * The site lead forms (the service form went with /servisi; its server action and schema stay for old leads in Admin → Kërkesat). Each lands in Admin → Kërkesat (and in the shop's inbox once email is set up).
+ * The site lead forms (the service, offer and test-ride forms were removed; their schemas stay for old leads in Admin → Kërkesat). Each lands in Admin → Kërkesat (and in the shop's inbox once email is set up).
  * Fields match the server schemas in lib/forms/schemas.ts.
  * `models`: the published models ({ value: slug, label }), loaded on the server.
  * `model`: preselect one (e.g. coming from a model page).
@@ -20,28 +20,6 @@ interface ModelProps {
 
 /** Only preselect a model that is actually in the list. */
 const pick = (models: SelectOption[], slug?: string) => (slug && models.some((m) => m.value === slug) ? slug : undefined);
-
-export function OfferForm({ models, model }: ModelProps) {
-  return (
-    <LeadForm action={submitOffer} label="Kërko ofertë" submitLabel="DËRGO KËRKESËN">
-      <ContactFields />
-      <SelectField name="model" label="Modeli" options={models} defaultValue={pick(models, model)} placeholder="Ende s’kam vendosur" wide />
-      <TextArea name="message" label="Mesazhi" placeholder="P.sh. ngjyra, pagesa me këste, ndërrim i motorit të vjetër…" />
-      <ConsentField />
-    </LeadForm>
-  );
-}
-
-export function TestRideForm({ models, model }: ModelProps) {
-  return (
-    <LeadForm action={submitTestRide} label="Rezervo test ride" submitLabel="REZERVO TEST RIDE">
-      <ContactFields />
-      <SelectField name="model" label="Modeli që do të provosh" options={models} defaultValue={pick(models, model)} required wide />
-      <TextArea name="message" label="Mesazhi" rows={3} />
-      <ConsentField />
-    </LeadForm>
-  );
-}
 
 export function FinanceForm({ models, model }: ModelProps) {
   return (

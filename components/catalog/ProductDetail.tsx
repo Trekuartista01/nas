@@ -20,6 +20,8 @@ export interface ProductSpec {
 export interface ProductColour {
   name: string;
   hex: string;
+  /** The first view (side) in this colour. Missing = the view’s own photo. */
+  image?: string;
 }
 
 export interface RelatedProduct {
@@ -57,7 +59,8 @@ interface ProductDetailProps {
 export default function ProductDetail({ brand, name, word, views, isNew = false, cutout = false, colours = [], specs, price, related, details, hero }: ProductDetailProps) {
   const [view, setView] = useState(0);
   const [colour, setColour] = useState(0);
-  const current = views[view];
+  // The first view follows the chosen colour when that colour has its own photo.
+  const current = view === 0 && colours[colour]?.image ? { ...views[0], image: colours[colour].image } : views[view];
 
   return (
     <>
@@ -77,7 +80,7 @@ export default function ProductDetail({ brand, name, word, views, isNew = false,
           <div className="relative mx-auto flex w-full max-w-[560px] items-center justify-center">
             <AnimatePresence mode="wait">
               <motion.div
-                key={view}
+                key={`${view}-${current?.image}`}
                 initial={{ opacity: 0, scale: 0.97 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 1.02 }}

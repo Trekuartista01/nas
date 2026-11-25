@@ -1,12 +1,12 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Rise from "@/components/motion/Rise";
-import { useParallaxScale } from "@/components/motion/useMotionScale";
+import { useMedia, useParallaxScale, useReducedMotionSafe } from "@/components/motion/useMotionScale";
 import LogoBacklight from "@/components/nas/LogoBacklight";
 import { NAS_HOME } from "@/data/nas-home";
-import { MOTION } from "@/lib/motion";
+import { MOTION, SPORT_VIDEO_PIN } from "@/lib/motion";
 
 /**
  * SPORT LINE as a short scroll story (red is the accent here, used more boldly than elsewhere):
@@ -14,8 +14,8 @@ import { MOTION } from "@/lib/motion";
  *  2. Lights behind the logo (components/nas/LogoBacklight.tsx): the wordmark large on black, the S
  *     turns red, the logo dims to a silhouette as a bike's lights switch on behind it, then the line. Pinned
  *     on ≥ 768px; phones play it once; reduced motion shows the end state.
- *  3. Labelled detail shots: one large + two smaller, sized so all three fit on one screen from 768px,
- *     light parallax in opposite directions.
+ *  3. Detail video (public/videos/sport-line.mp4), pinned full screen from 768px like The Range: it holds
+ *     for SPORT_VIDEO_PIN.holdVh of scrolling (lib/motion.ts) and the header goes transparent over it.
  * (The models block with "Explore Sport Line" was removed, Nov 2026.)
  */
 export default function SportLine() {
@@ -79,50 +79,66 @@ function RedS() {
   return <LogoBacklight caption={RED_S_LINE} />;
 }
 
-const SHOTS = [
-  { src: "/nas-images/web/sportline-logo-closeup.webp", label: "Sport Line graphics", num: "01" },
-  { src: "/nas-images/web/sportline-front.webp", label: "Front", num: "02" },
-  { src: "/nas-images/web/hero-ride-side.webp", label: "Tail light", num: "03" },
-];
+const DETAIL_VIDEO = "/videos/sport-line.mp4";
 
 /**
- * 3. One large + two smaller shots, each labelled, with light opposite parallax. From 768px the grid has
- * a fixed height (one screen minus the header and some air) and the photos fill it, so all three fit on
- * screen at once; phones stack them at their own aspect ratios.
+ * 3. Detail video (replaced the three labelled shots, Nov 2026). From 768px it pins like The Range: the
+ * block is one screen + SPORT_VIDEO_PIN.holdVh tall and the video sticks full screen (under the bar) while
+ * that extra distance is scrolled, easing from a slight zoom to 1. While it fills the screen the header
+ * goes transparent (`data-nav-clear` on <html>, read by Header). Phones / reduced motion: 16:9, no pin.
+ * Muted, looped, inline.
  */
 function Details() {
   const ref = useRef<HTMLDivElement>(null);
   const k = useParallaxScale();
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const up = useTransform(scrollYProgress, [0, 1], [`${6 * k}%`, `${-6 * k}%`]);
-  const down = useTransform(scrollYProgress, [0, 1], [`${-6 * k}%`, `${6 * k}%`]);
+  const reduce = useReducedMotionSafe();
+  const pin = useMedia("(min-width: 768px)") && !reduce;
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
+  const scale = useTransform(scrollYProgress, [0, 1], [1 + 0.08 * k, 1]);
+
+  // Header transparent while the video covers the whole screen (pinned stretch only).
+  useEffect(() => {
+    const el = ref.current;
+    if (!pin || !el) return;
+    const root = document.documentElement;
+    const update = () => {
+      const { top, bottom } = el.getBoundingClientRect();
+      const covering = top <= 1 && bottom >= window.innerHeight - 1;
+      if (covering) root.dataset.navClear = "";
+      else delete root.dataset.navClear;
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+      delete root.dataset.navClear;
+    };
+  }, [pin]);
 
   return (
-    <div ref={ref} className="container-moto pb-[clamp(70px,8vw,110px)]">
-      <div className="grid gap-4 md:h-[min(calc(100svh-180px),780px)] md:min-h-[460px] md:grid-cols-[1.6fr_1fr] md:grid-rows-[minmax(0,1fr)_minmax(0,1fr)]">
-        {SHOTS.map((s, i) => (
-          <Rise
-            key={s.src}
-            delay={i * 0.12}
-            duration={MOTION.image}
-            className={`md:min-h-0 md:[&>div]:h-full ${i === 0 ? "md:row-span-2" : ""}`}
-          >
-            <figure className="md:flex md:h-full md:flex-col">
-              <div className={`relative overflow-hidden bg-black md:aspect-auto md:min-h-0 md:flex-1 ${i === 0 ? "aspect-[4/3]" : "aspect-[16/10]"}`}>
-                <motion.div style={{ y: i === 1 ? down : up }} className="absolute inset-x-0 -inset-y-[8%]">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={s.src} alt="" loading="lazy" className="size-full object-cover" />
-                </motion.div>
-              </div>
-              <figcaption className="pt-4">
-                <span className="flex items-baseline gap-3 text-[13px] uppercase tracking-[0.16em]">
-                  <span className="font-bold text-red">{s.num}</span>
-                  <span className="text-light">{s.label}</span>
-                </span>
-              </figcaption>
-            </figure>
+    // The pinned block starts right under the logo section; the extra height is the hold.
+    <div className="container-moto pb-[clamp(70px,8vw,110px)] md:max-w-none md:px-0">
+      <div ref={ref} className="relative" style={pin ? { height: `calc(100svh + ${SPORT_VIDEO_PIN.holdVh}svh)` } : undefined}>
+        <div className={`overflow-hidden bg-black ${pin ? "sticky top-0 h-svh min-h-[460px]" : "relative aspect-video"}`}>
+          <Rise duration={MOTION.image} className="absolute inset-0">
+            <motion.div style={pin ? { scale } : undefined} className="absolute inset-0">
+              <video
+                src={DETAIL_VIDEO}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                aria-label="NAS Sport Line nga afër"
+                className="size-full object-cover"
+              />
+            </motion.div>
           </Rise>
-        ))}
+          {/* Soft shade at the top so the transparent header stays readable over the video. */}
+          {pin && <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/55 to-transparent" />}
+        </div>
       </div>
     </div>
   );

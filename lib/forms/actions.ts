@@ -106,14 +106,6 @@ async function handle(kind: FormKind, formData: FormData): Promise<FormState> {
   return { status: "success", message: SUCCESS[kind] };
 }
 
-export async function submitOffer(_prev: FormState, formData: FormData): Promise<FormState> {
-  return handle("offer", formData);
-}
-
-export async function submitTestRide(_prev: FormState, formData: FormData): Promise<FormState> {
-  return handle("testRide", formData);
-}
-
 export async function submitService(_prev: FormState, formData: FormData): Promise<FormState> {
   return handle("service", formData);
 }

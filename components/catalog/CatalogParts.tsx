@@ -31,13 +31,14 @@ export function CatalogHero({ title }: { title: string }) {
 /** Sidebar + results layout. */
 export function CatalogLayout({ filters, toolbar, children }: { filters: ReactNode; toolbar: ReactNode; children: ReactNode }) {
   return (
-    <section className="container-moto pb-28 pt-6">
+    <section className="container-moto pb-28 pt-[44px]">
       <div className="grid gap-10 lg:grid-cols-[373px_1fr] lg:gap-12">
         {/* Desktop: the filters stay in view while the grid scrolls (top clears the sticky header).
-            If they are taller than the screen they scroll on their own. */}
+            If they are taller than the screen they scroll on their own. The 72px top margin (the sort
+            row: 48px + 24px) puts the search box level with the first row of cards. */}
         <aside
           aria-label="Filtrat"
-          className="flex flex-col gap-10 lg:sticky lg:top-24 lg:max-h-[calc(100dvh-7rem)] lg:self-start lg:overflow-y-auto lg:overscroll-contain lg:pb-2 lg:pr-2 lg:[scrollbar-width:thin]"
+          className="flex flex-col gap-10 lg:sticky lg:mt-[72px] lg:top-24 lg:max-h-[calc(100dvh-7rem)] lg:self-start lg:overflow-y-auto lg:overscroll-contain lg:pb-2 lg:pr-2 lg:[scrollbar-width:thin]"
         >
           {filters}
         </aside>
@@ -48,7 +49,7 @@ export function CatalogLayout({ filters, toolbar, children }: { filters: ReactNo
             <div className="flex flex-wrap items-center justify-between gap-4 border-l-4 border-red bg-[#141414] px-6 py-4">
               <p className="text-[15px]">Nuk po e gjen modelin e duhur? Na trego si udhëton dhe të këshillojmë.</p>
               <Link
-                href="/kerko-oferte"
+                href="/kontakti"
                 className="border-b border-white pb-0.5 text-[15px] tracking-[0.02em] transition-colors hover:border-red hover:text-red"
               >
                 KËRKO OFERTË

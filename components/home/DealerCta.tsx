@@ -61,8 +61,8 @@ export default function DealerCta() {
               Bring NAS to your showroom. Tell us about your business and our team will get back to you with the range and partnership terms.
             </p>
             <div className="mt-9 flex flex-wrap gap-4">
-              {/* TODO(client): header CTA says "Kërko ofertë" (→ /kerko-oferte), this one "Become a dealer" (→ /kontakti).
-                  Decide one wording and action for both. */}
+              {/* TODO(client): header CTA says "Kërko ofertë", this one "Become a dealer"; both go to /kontakti.
+                  Decide one wording for both. */}
               <BlockButton href="/kontakti" marks={false}>
                 Become a dealer
               </BlockButton>

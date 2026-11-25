@@ -1,8 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { TbHeartFilled } from "react-icons/tb";
-import { useFavourite } from "@/lib/favourites";
 import { eur } from "@/lib/format";
 
 export interface CatalogCardProps {
@@ -18,14 +16,14 @@ export interface CatalogCardProps {
   cutout?: boolean;
 }
 
+/** 1px rectangular ring (outer box minus inner box, evenodd) for the chrome outline of SHIKO DETAJET. */
+const CHROME_OUTLINE =
+  "polygon(evenodd, 0 0, 100% 0, 100% 100%, 0 100%, 0 0, 1px 1px, 1px calc(100% - 1px), calc(100% - 1px) calc(100% - 1px), calc(100% - 1px) 1px, 1px 1px)";
+
 /** Compact grid card for /modelet and /aksesoret (design: NAS Modelet / Aksesoret Page.png). */
 export default function CatalogCard({ href, brand, name, meta, price, image, isNew = false, cutout = false }: CatalogCardProps) {
-  // Saved in this browser; the card's page path is its id.
-  const [saved, toggleSaved] = useFavourite(href);
-
   return (
     // The whole card is one link: the name link stretches over the card (before:inset-0).
-    // The heart sits above that layer (z-10) so it still toggles on its own.
     <article className="group relative flex h-full flex-col border border-[#1a1a1a] bg-[#0b0b0b] p-2.5 transition-colors duration-500 ease-moto hover:border-[#3a3a3a]">
       <div className="relative aspect-[1.38/1] overflow-hidden bg-gradient-to-br from-[#2a2a2a] via-[#1a1a1a] to-[#111]">
         {image ? (
@@ -45,18 +43,6 @@ export default function CatalogCard({ href, brand, name, meta, price, image, isN
             E RE
           </span>
         )}
-        <button
-          type="button"
-          aria-label={saved ? `Hiq ${name} nga të preferuarat` : `Ruaj ${name} në të preferuarat`}
-          aria-pressed={saved}
-          onClick={toggleSaved}
-          className="absolute right-1 top-1 z-10 flex size-11 items-center justify-center text-red drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)] transition-transform hover:scale-110"
-        >
-          {/* Solid red heart as designed; saved state adds a white backing disc. */}
-          <span className={`flex size-8 items-center justify-center rounded-full transition-colors ${saved ? "bg-white" : ""}`}>
-            <TbHeartFilled size={22} aria-hidden />
-          </span>
-        </button>
       </div>
 
       <div className="flex flex-1 flex-col px-0.5 pt-4">
@@ -74,12 +60,12 @@ export default function CatalogCard({ href, brand, name, meta, price, image, isN
           <span className="text-[22px] font-bold">{eur(price)}</span>
           <span className="text-[10px] uppercase text-[#7a7a7a]">Çmim demo</span>
         </div>
-        {/* Visual call to action; the click goes to the card link above. */}
-        <span
-          aria-hidden
-          className="btn-sheen pointer-events-none mt-4 block bg-red py-3 text-center text-[11px] font-semibold tracking-[0.04em] text-white group-hover:after:animate-[sheen_0.7s_ease]"
-        >
-          SHIKO DETAJET
+        {/* Visual call to action; the click goes to the card link above. 1px chrome outline that turns
+            into a red fill on card hover. */}
+        <span aria-hidden className="pointer-events-none relative mt-4 block py-3 text-center text-[11px] font-semibold tracking-[0.04em] text-white">
+          <span className="absolute inset-0 bg-red opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+          <span style={{ clipPath: CHROME_OUTLINE }} className="chrome absolute inset-0 transition-opacity duration-300 group-hover:opacity-0" />
+          <span className="relative">SHIKO DETAJET</span>
         </span>
       </div>
     </article>

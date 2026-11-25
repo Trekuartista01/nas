@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
@@ -20,9 +21,9 @@ const NAV = [
   { href: "/kontakti", label: "CONTACT" },
 ];
 
-// TODO(client): this says "Kërko ofertë" (→ /kerko-oferte) while the homepage dealer section says "Become a dealer"
-// (→ /kontakti). Decide one wording and action for both CTAs.
-const CTA = { href: "/kerko-oferte", label: "Kërko ofertë" };
+// TODO(client): this says "Kërko ofertë" while the homepage dealer section says "Become a dealer"; both go to
+// /kontakti. Decide one wording for both CTAs.
+const CTA = { href: "/kontakti", label: "Kërko ofertë" };
 
 /**
  * Desktop links with the current page underlined. The URL isn't known while prerendering pages
@@ -67,10 +68,30 @@ export default function Header() {
     };
   }, []);
 
+  // Full-screen mobile menu: lock the page behind it, close with Escape or when the screen grows to desktop.
+  useEffect(() => {
+    if (!open) return;
+    const html = document.documentElement;
+    const prev = html.style.overflow;
+    html.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const onWide = () => mq.matches && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    mq.addEventListener("change", onWide);
+    return () => {
+      html.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+      mq.removeEventListener("change", onWide);
+    };
+  }, [open]);
+
   return (
+    // Also transparent while a full-screen pinned video sets `data-nav-clear` on <html> (Sport Line), unless the menu is open.
     <header
       data-solid={solid || open}
-      className="sticky top-0 z-50 border-b border-line-3 bg-[rgba(12,12,12,.85)] backdrop-blur-md transition-[background-color,border-color,backdrop-filter] duration-500 ease-nas [html:has([data-hero-under-nav])_&]:data-[solid=false]:border-transparent [html:has([data-hero-under-nav])_&]:data-[solid=false]:bg-transparent [html:has([data-hero-under-nav])_&]:data-[solid=false]:backdrop-blur-none"
+      data-open={open}
+      className="sticky top-0 z-50 border-b border-line-3 bg-[rgba(12,12,12,.85)] backdrop-blur-md transition-[background-color,border-color,backdrop-filter] duration-500 ease-nas [html:has([data-hero-under-nav])_&]:data-[solid=false]:border-transparent [html:has([data-hero-under-nav])_&]:data-[solid=false]:bg-transparent [html:has([data-hero-under-nav])_&]:data-[solid=false]:backdrop-blur-none [html[data-nav-clear]_&]:data-[open=false]:border-transparent [html[data-nav-clear]_&]:data-[open=false]:bg-transparent [html[data-nav-clear]_&]:data-[open=false]:backdrop-blur-none"
     >
       <nav className="container-moto flex h-[76px] items-center gap-6 lg:h-20" aria-label="Navigimi kryesor">
         <Logo />
@@ -98,22 +119,48 @@ export default function Header() {
         </div>
       </nav>
 
-      {open && (
-        <ul id="mobile-nav" className="container-moto flex flex-col gap-1 border-t border-line pb-6 pt-2 lg:hidden">
-          {NAV.map((item) => (
-            <li key={item.href}>
-              <Link href={item.href} onClick={() => setOpen(false)} className="headline block py-3 text-2xl hover:text-red">
-                {item.label}
-              </Link>
-            </li>
-          ))}
-          <li className="pt-3">
-            <BlockButton href={CTA.href} marks={false} onClick={() => setOpen(false)}>
-              {CTA.label}
-            </BlockButton>
-          </li>
-        </ul>
-      )}
+      {/* Mobile menu: fills the screen under the bar (top-full: the header's backdrop-filter makes it the containing block). */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            id="mobile-nav"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="absolute inset-x-0 top-full h-[calc(100dvh-76px)] overflow-y-auto border-t border-line bg-ink lg:hidden"
+          >
+            {/* Links and CTA centred on the screen, both ways. */}
+            <div className="container-moto flex min-h-full flex-col items-center justify-center gap-12 py-10 text-center">
+              <ul className="flex flex-col items-center gap-2">
+                {NAV.map((item, i) => (
+                  <motion.li
+                    key={item.href}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.35,
+                      delay: 0.05 + i * 0.05,
+                      ease: [0.2, 0.8, 0.2, 1],
+                    }}
+                  >
+                    <Link
+                      href={item.href}
+                      onClick={() => setOpen(false)}
+                      className="block px-4 py-4 text-[28px] font-bold uppercase leading-none tracking-[0.02em] hover:text-red"
+                    >
+                      {item.label}
+                    </Link>
+                  </motion.li>
+                ))}
+              </ul>
+              <BlockButton href={CTA.href} marks={false} onClick={() => setOpen(false)}>
+                {CTA.label}
+              </BlockButton>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

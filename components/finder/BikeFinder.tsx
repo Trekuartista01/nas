@@ -317,7 +317,7 @@ export default function BikeFinder({ models, headingAs = "h2" }: { models: Model
                           <span className="text-[13px] text-muted">ose {eur(fromMonthly(top.price))}/muaj</span>
                         </div>
                         <div className="flex flex-wrap gap-x-5 gap-y-3">
-                          <SlashButton href={`/modelet/${top.slug}#test-ride`} size="sm">
+                          <SlashButton href="/kontakti" size="sm">
                             REZERVO TEST RIDE
                           </SlashButton>
                           <GhostButton href={`/financim?model=${top.slug}`}>

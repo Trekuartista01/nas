@@ -26,7 +26,7 @@ const base = { website: honeypot };
 /** A blank select must fail as "not chosen", not turn into 0. */
 const blankToUndefined = (v: unknown) => (v === "" || v == null ? undefined : v);
 
-/** /kerko-oferte: price offer for a model. */
+/** Price offer for a model (the /kerko-oferte form, removed Nov 2026; kept for old leads). */
 export const offerSchema = z.object({
   ...base,
   name,

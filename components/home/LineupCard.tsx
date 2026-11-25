@@ -1,9 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { TbHeartFilled } from "react-icons/tb";
 import type { Model } from "@/data/models";
-import { useFavourite } from "@/lib/favourites";
 import { eur } from "@/lib/format";
 
 /** Card outline: top-left and bottom-right corners cut at 45° (design: Frame 27756). */
@@ -16,14 +14,11 @@ const DETAILS_OUTLINE =
   "polygon(evenodd, 0 0, 100% 0, calc(100% - var(--h)) 100%, 0 100%, 0 0, 1px 1px, 1px calc(100% - 1px), calc(100% - var(--h) - 0.4px) calc(100% - 1px), calc(100% - 2.4px) 1px, 1px 1px)";
 
 /**
- * Homepage lineup card (design: Frame 27756). Black card with two cut corners, photo with the red
- * heart (saves to favourites, same as the catalog cards), brand, name, cc, price, and an outlined
- * VIEW DETAILS button. The whole card links to the model page.
+ * Homepage lineup card (design: Frame 27756). Black card with two cut corners, photo, brand, name,
+ * cc, price, and an outlined VIEW DETAILS button. The whole card links to the model page.
  */
-/** `favourite`: show the heart that saves to favourites (off on the homepage Range for now). */
-export default function LineupCard({ model: m, favourite = true }: { model: Model; favourite?: boolean }) {
+export default function LineupCard({ model: m }: { model: Model }) {
   const href = `/modelet/${m.slug}`;
-  const [saved, toggleSaved] = useFavourite(href);
   const name = `${m.brand} ${m.name}`;
 
   return (
@@ -37,20 +32,6 @@ export default function LineupCard({ model: m, favourite = true }: { model: Mode
           <img src={m.image} alt={name} className="size-full object-cover transition-transform duration-700 ease-moto group-hover:scale-[1.05]" />
         ) : (
           <span className="flex size-full items-center justify-center text-[11px] tracking-[0.14em] text-[#6f6f6f]">[FOTO · {m.name}]</span>
-        )}
-        {favourite && (
-          <button
-            type="button"
-            aria-label={saved ? `Hiq ${name} nga të preferuarat` : `Ruaj ${name} në të preferuarat`}
-            aria-pressed={saved}
-            onClick={toggleSaved}
-            className="absolute right-0 top-0 z-10 flex size-11 items-center justify-center text-red transition-transform hover:scale-110"
-          >
-            {/* Solid red heart as designed; saved state adds a white backing disc. */}
-            <span className={`flex size-7 items-center justify-center rounded-full transition-colors ${saved ? "bg-white" : ""}`}>
-              <TbHeartFilled size={22} aria-hidden />
-            </span>
-          </button>
         )}
       </div>
 

@@ -22,7 +22,6 @@ export const NAS_PAGES = {
       { title: "PERFORMANCE", text: "Engineered to feel as good as it looks." },
       { title: "LONGEVITY", text: "Built for long-term quality, not the season." },
     ],
-    closing: `${WEB}/hero-ride-side.webp`,
   },
   sportLine: {
     hero: `${WEB}/hero-ride-side.webp`,
@@ -33,6 +32,5 @@ export const NAS_PAGES = {
       { title: "THE SYMBOL", text: "The final symbol carries the energy of motion: speed, control and adrenaline." },
     ],
     /** Pedestal (222222222.png) + the front shot. */
-    gallery: [`${WEB}/sportline-pedestal.webp`, `${WEB}/sportline-front.webp`],
   },
 } as const;

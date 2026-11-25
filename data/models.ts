@@ -202,5 +202,13 @@ export function modelSpecSheet(m: Pick<Model, "slug" | "cc">): SpecGroup[] {
   ];
 }
 
-/** Real spec values per model slug, as they arrive (keys as in modelSpecs / modelSpecSheet). Empty = placeholders. */
+/** One spec value for a model (keys as in MODEL_SPECS), or `fallback` while it is missing. */
+export function modelSpecValue(slug: string, key: string, fallback: string): string {
+  return MODEL_SPECS[slug]?.[key] ?? fallback;
+}
+
+/**
+ * Real spec values per model slug, as they arrive (keys as in modelSpecs / modelSpecSheet). Empty = placeholders.
+ * The strip under the model page stage also reads `powerKw` ("29") and `weightKg` ("188"): plain numbers.
+ */
 const MODEL_SPECS: Record<string, Record<string, string>> = {};

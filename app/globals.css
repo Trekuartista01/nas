@@ -76,6 +76,28 @@
     transform: translateX(220%) skewX(-20deg);
   }
 }
+/* Contact hero spotlight starting up like a fluorescent tube (once). */
+@keyframes spot-flicker {
+  0% {
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  20% {
+    opacity: 0.25;
+  }
+  30% {
+    opacity: 1;
+  }
+  42% {
+    opacity: 0.45;
+  }
+  52%,
+  100% {
+    opacity: 1;
+  }
+}
 @keyframes bar-fill {
   from {
     transform: scaleX(0);

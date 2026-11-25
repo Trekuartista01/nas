@@ -13,8 +13,8 @@ import { MOTION } from "@/lib/motion";
 
 /**
  * SPORT LINE (design "NAS — Sport Line", Nov 2026): centred hero with the red-S logo, the idea,
- * "one letter, one signal", built from the wordmark, Iron / Light / Concrete, and a photo pair.
- * Copy is English, as in the design. (The "In the line" model cards were removed, Nov 2026.)
+ * "one letter, one signal", built from the wordmark, and Iron / Light / Concrete.
+ * Copy is English, as in the design. (The "In the line" model cards and the photo pair above the footer were removed, Nov 2026.)
  */
 export default function SportLinePage() {
   const P = NAS_PAGES.sportLine;
@@ -99,22 +99,6 @@ export default function SportLinePage() {
 
       {/* ───── Iron / Light / Concrete ───── */}
       <Materials />
-
-      {/* ───── Photo pair ───── */}
-      <section className="bg-ink">
-        <div className="container-moto py-[clamp(90px,10vw,150px)]">
-          <div className="grid items-start gap-4 md:grid-cols-[2fr_1fr]">
-            {P.gallery.map((src, i) => (
-              <Rise key={src} delay={i * 0.15} duration={MOTION.image}>
-                <div className={`overflow-hidden bg-black ${i === 0 ? "aspect-[880/640]" : "aspect-[432/312]"}`}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={src} alt="" loading="lazy" className="size-full object-cover transition-transform duration-[1.2s] ease-nas hover:scale-[1.04]" />
-                </div>
-              </Rise>
-            ))}
-          </div>
-        </div>
-      </section>
     </>
   );
 }

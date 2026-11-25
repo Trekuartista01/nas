@@ -109,3 +109,29 @@ export const SPORT_BACKLIGHT = {
   photo: false,
   photoSrc: "/nas-images/web/sportline-front.webp",
 } as const;
+
+/**
+ * Scroll stopper on the Sport Line detail video (components/motion/useScrollStop.ts), ≥ 768px without
+ * reduced motion. When the video comes in, the page glides so it fills the screen and holds; the next
+ * scroll gesture goes past it. Works scrolling down and back up.
+ */
+export const SCROLL_STOP = {
+  /** Start the stop once the video's leading edge is this far into the screen (share of its height). */
+  enter: 0.7,
+  /** Ignore the last few px (so an already-aligned video doesn't trigger again). */
+  edge: 4,
+  /** Glide into place, ms. */
+  snapMs: 700,
+  /** Minimum time the video stays put, ms. */
+  holdMs: 500,
+  /** Input must be quiet this long before the next gesture counts (swallows trackpad momentum), ms. */
+  quietMs: 220,
+  /** Wheel deltas below this don't count as "one more scroll". */
+  minDelta: 4,
+} as const;
+
+/** Sport Line detail video pin (≥ 768px, replaces the scroll stop above; SportLine.tsx). */
+export const SPORT_VIDEO_PIN = {
+  /** How long the video stays pinned full screen, in screen heights of scrolling (svh). */
+  holdVh: 100,
+} as const;

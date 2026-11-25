@@ -13,10 +13,14 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "64kb",
     },
   },
-  // /servisi was removed (Nov 2026): old links and bookmarks land on the models page,
-  // where each model has its own test-ride form. Temporary, in case the page comes back.
+  // /servisi was removed (Nov 2026): old links and bookmarks land on the models page.
+  // Temporary, in case the page comes back.
   async redirects() {
-    return [{ source: "/servisi", destination: "/modelet", permanent: false }];
+    return [
+      { source: "/servisi", destination: "/modelet", permanent: false },
+      // /kerko-oferte was removed (Nov 2026): offer requests go through the contact page.
+      { source: "/kerko-oferte", destination: "/kontakti", permanent: false },
+    ];
   },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];

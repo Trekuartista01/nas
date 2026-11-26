@@ -44,4 +44,6 @@ npm run lint
 3. **Domain**: add it under Project → Settings → Domains, then set `SITE_URL` to it and redeploy (sitemap, robots and share previews use it).
 4. **After the first deploy**, check `/`, `/modelet`, a model page and its brochure (`/modelet/<slug>/broshura.pdf`), `/admin/hyr` (log in), `/sitemap.xml` and `/robots.txt`. Turn on Vercel Firewall rate limiting for form posts (see `lib/forms/rate-limit.ts`).
 
+**Photos and videos** are served from Supabase Storage (mirrored from `public/`). After changing a file in `public/`, run `node scripts/upload-media.mjs` before deploying.
+
 Preview deployments (branch URLs on `*.vercel.app`) are kept out of search results by Vercel (`X-Robots-Tag: noindex`).

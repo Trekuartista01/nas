@@ -3,6 +3,7 @@
  * Feel: heavy and mechanical. Fast out, long ease into place; no bounce, no spin.
  * Tweak here; every homepage section reads these values.
  */
+import { siteMedia } from "@/lib/supabase/config";
 export const MOTION = {
   /** Default ease: fast out, long settle (≈ GSAP power3/expo.out). */
   ease: [0.2, 0.7, 0.1, 1] as [number, number, number, number],
@@ -107,7 +108,7 @@ export const SPORT_BACKLIGHT = {
   bloom: { tight: { blur: 8, opacity: 0.6 }, wide: { blur: 24, opacity: 0.25 } },
   /** Use the darkened Sport Line front photo behind the lights (the CSS-only version is the default). */
   photo: false,
-  photoSrc: "/nas-images/web/sportline-front.webp",
+  photoSrc: siteMedia("/nas-images/web/sportline-front.webp"),
 } as const;
 
 /**

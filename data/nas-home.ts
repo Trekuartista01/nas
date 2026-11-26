@@ -5,8 +5,9 @@
  * public/nas-images/web/ (made with sharp; re-run the conversion when an original changes).
  * TEMP: the lion is still a crop of the design PNG (public/images/nas-home/); no original was supplied.
  */
-const WEB = "/nas-images/web";
-const TEMP = "/images/nas-home";
+import { siteMedia } from "@/lib/supabase/config";
+const WEB = siteMedia("/nas-images/web");
+const TEMP = siteMedia("/images/nas-home");
 
 export const NAS_HOME = {
   lion: `${TEMP}/lion.png`,

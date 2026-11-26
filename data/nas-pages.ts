@@ -1,5 +1,6 @@
 /** Media and copy for the NAS Brand and Sport Line pages, in both languages ({ sq, en }). Photos: see data/nas-home.ts. */
-const WEB = "/nas-images/web";
+import { siteMedia } from "@/lib/supabase/config";
+const WEB = siteMedia("/nas-images/web");
 
 /** The Brand (/rreth-nesh) and Sport Line (/sport-line) pages (designs "NAS — The Brand", "NAS — Sport Line", Nov 2026). */
 export const NAS_PAGES = {

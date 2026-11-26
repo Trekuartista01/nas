@@ -5,6 +5,7 @@
  * Still to confirm with the client: exact cc, licence class and ALL prices (prices are DEMO).
  * "[MODELI] 50" stays a placeholder so the AM-licence path of the bike finder has a road scooter.
  */
+import { siteMedia } from "@/lib/supabase/config";
 import type { Copy } from "@/lib/i18n";
 import { buildIndex, normalize, type SearchIndex } from "@/lib/search";
 
@@ -34,7 +35,7 @@ export const TYPE_LABEL_EN: Record<VehicleType, string> = { sport: "SPORT", dirt
 
 export const LICENCE_RANK: Record<Licence, number> = { AM: 0, A1: 1, A2: 2, A: 3 };
 
-const img = (name: string) => `/images/nas-model-${name}.jpg`;
+const img = (name: string) => siteMedia(`/images/nas-model-${name}.jpg`);
 
 export const models: Model[] = [
   { slug: "nas-max-x-125", brand: "NAS", name: "MAX-X 125", type: "scooter", cc: 125, licence: "A1", price: 3290, isNew: true, image: img("nas-max-x-125") },

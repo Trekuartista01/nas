@@ -1,4 +1,5 @@
 /** Homepage content blocks. Future admin data (BannerManager etc.). */
+import { siteMedia } from "@/lib/supabase/config";
 import type { CategoryCardItem } from "@/components/ui/CategoryCards";
 import type { VehicleType } from "@/data/models";
 import { slugify } from "@/lib/format";
@@ -10,8 +11,8 @@ export interface HeroSlide {
 
 /** Shot cut points in /videos/hero.mp4 (ends at 10.05s). */
 export const heroVideo = {
-  src: "/videos/hero.mp4",
-  poster: "/videos/hero-poster.jpg",
+  src: siteMedia("/videos/hero.mp4"),
+  poster: siteMedia("/videos/hero-poster.jpg"),
   duration: 10.05,
   slides: [
     { start: 0, label: "Skuter në qytet" },
@@ -44,10 +45,10 @@ export const vehicleCategories: VehicleCategory[] = [
     count: "[XX] MODELE",
     description: "Naked, sport dhe touring — nga 125cc deri në [XXX]cc.",
     photoLabel: "[FOTO MOTOR]",
-    image: "/images/nas-cat-nas-sport.jpg",
+    image: siteMedia("/images/nas-cat-nas-sport.jpg"),
     type: "sport",
     word: "SPORT",
-    cutout: "/images/nas-cat-nas-sport-cutout.webp",
+    cutout: siteMedia("/images/nas-cat-nas-sport-cutout.webp"),
     href: "/modelet?kategoria=sport",
   },
   {
@@ -56,10 +57,10 @@ export const vehicleCategories: VehicleCategory[] = [
     count: "[XX] MODELE",
     description: "Enduro dhe motocross — për terren, shtigje dhe pista.",
     photoLabel: "[FOTO DIRT BIKE]",
-    image: "/images/nas-cat-nas-dirt.jpg",
+    image: siteMedia("/images/nas-cat-nas-dirt.jpg"),
     type: "dirt",
     word: "DIRT",
-    cutout: "/images/nas-cat-nas-dirt-cutout.webp",
+    cutout: siteMedia("/images/nas-cat-nas-dirt-cutout.webp"),
     href: "/modelet?kategoria=dirt",
   },
   {
@@ -68,11 +69,11 @@ export const vehicleCategories: VehicleCategory[] = [
     count: "[XX] MODELE",
     description: "Për qytetin: 50cc pa patentë A, maxi-skuterë deri në 350cc.",
     photoLabel: "[FOTO SKUTER]",
-    image: "/images/nas-model-nas-max-x-125.jpg",
+    image: siteMedia("/images/nas-model-nas-max-x-125.jpg"),
     href: "/modelet?kategoria=skuter",
     type: "scooter",
     word: "SKUTER",
-    cutout: "/images/nas-model-nas-max-x-125-cutout.webp",
+    cutout: siteMedia("/images/nas-model-nas-max-x-125-cutout.webp"),
   },
   // ATVs removed from the catalog (Nov 2026).
 ];
@@ -84,7 +85,7 @@ export const accessoryCategories: CategoryCardItem[] = [
     count: "[XX] PRODUKTE",
     description: "Full-face, modulare dhe open-face — të certifikuara.",
     photoLabel: "[FOTO KASKË]",
-    image: "/images/nas-acc-helmets.jpg",
+    image: siteMedia("/images/nas-acc-helmets.jpg"),
     href: "/aksesoret?kategoria=kaska",
   },
   {
@@ -93,7 +94,7 @@ export const accessoryCategories: CategoryCardItem[] = [
     count: "[XX] PRODUKTE",
     description: "Xhaketa, pantallona dhe kombinezone me mbrojtëse.",
     photoLabel: "[FOTO XHAKETË]",
-    image: "/images/nas-acc-apparel.jpg",
+    image: siteMedia("/images/nas-acc-apparel.jpg"),
     href: "/aksesoret?kategoria=veshje",
   },
   {
@@ -102,7 +103,7 @@ export const accessoryCategories: CategoryCardItem[] = [
     count: "[XX] PRODUKTE",
     description: "Dorëza dhe çizme për verë, dimër dhe terren.",
     photoLabel: "[FOTO DORËZA]",
-    image: "/images/nas-acc-gloves-boots.jpg",
+    image: siteMedia("/images/nas-acc-gloves-boots.jpg"),
     href: "/aksesoret?kategoria=doreza-cizme",
   },
   {
@@ -111,18 +112,18 @@ export const accessoryCategories: CategoryCardItem[] = [
     count: "[XX] PRODUKTE",
     description: "Top-case, çanta, kyçe, mbulesa dhe pjesë origjinale.",
     photoLabel: "[FOTO AKSESORË]",
-    image: "/images/nas-acc-parts.jpg",
+    image: siteMedia("/images/nas-acc-parts.jpg"),
     href: "/aksesoret?kategoria=pjese",
   },
 ];
 
 /** NAS World tiles — photos from the dealer Instagram, titles still placeholders. */
 export const worldTiles = {
-  feature: { tag: "EVENT · [DATA]", title: "RIDE-OUT: PEJË → RUGOVË", text: "Bashkohu me komunitetin. Regjistrimi falas.", image: "/images/nas-world-ride-out.jpg" },
+  feature: { tag: "EVENT · [DATA]", title: "RIDE-OUT: PEJË → RUGOVË", text: "Bashkohu me komunitetin. Regjistrimi falas.", image: siteMedia("/images/nas-world-ride-out.jpg") },
   small: [
-    { tag: "LAJME", title: "Unboxing: QJMOTOR mbërriti", image: "/images/nas-world-qj-unboxing.jpg" },
-    { tag: "MODEL I RI", title: "ZONTES 703 RR", image: "/images/nas-world-new-model.jpg" },
-    { tag: "KËSHILLA", title: "[Përgatit motorin për dimër]", image: "/images/nas-world-tips.jpg" },
+    { tag: "LAJME", title: "Unboxing: QJMOTOR mbërriti", image: siteMedia("/images/nas-world-qj-unboxing.jpg") },
+    { tag: "MODEL I RI", title: "ZONTES 703 RR", image: siteMedia("/images/nas-world-new-model.jpg") },
+    { tag: "KËSHILLA", title: "[Përgatit motorin për dimër]", image: siteMedia("/images/nas-world-tips.jpg") },
   ],
 };
 

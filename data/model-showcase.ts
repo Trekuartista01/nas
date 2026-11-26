@@ -6,6 +6,7 @@
  * Every field is optional. A model with no entry gets the plain photo with a soft fade,
  * no callouts, no swatches and no 360 control, so nothing on the page ever leads nowhere.
  */
+import { siteMedia } from "@/lib/supabase/config";
 
 export interface ShowcaseHotspot {
   /** Position on the cut-out image, in % of its width/height. */
@@ -40,7 +41,7 @@ const showcase: Record<string, ModelShowcase> = {
   "nas-max-x-125": {
     // TEMP cut-out made from the showroom photo (a second scooter behind it is still in the shot).
     // Replace with a studio cut-out from the client, then re-check the hotspot positions.
-    cutout: "/images/nas-model-nas-max-x-125-cutout.webp",
+    cutout: siteMedia("/images/nas-model-nas-max-x-125-cutout.webp"),
     aspect: 1345 / 1117,
     headlight: { x: 21, y: 44 },
     // Only features visible in the photo. Confirm wording with the client.
@@ -51,15 +52,15 @@ const showcase: Record<string, ModelShowcase> = {
       { x: 86, y: 74, label: "Motor 125 cc", side: "right" },
     ],
     colours: [
-      { name: "E zezë mat", hex: "#1b1c1e", image: "/images/nas-model-nas-max-x-125-cutout.webp" },
+      { name: "E zezë mat", hex: "#1b1c1e", image: siteMedia("/images/nas-model-nas-max-x-125-cutout.webp") },
       // Placeholders until the client confirms which colours are in stock (and sends the photos).
       { name: "[NGJYRA 2]", hex: "#5d6166" },
       { name: "[NGJYRA 3]", hex: "#d9d9d6" },
     ],
   },
   // Cut-out only (homepage lineup + model page stage). TEMP, made from the showroom photos.
-  "nas-max-x-200": { cutout: "/images/nas-model-nas-max-x-200-cutout.webp", aspect: 1200 / 904 },
-  "nas-sky-5-125": { cutout: "/images/nas-model-nas-sky-5-125-cutout.webp", aspect: 723 / 820 },
+  "nas-max-x-200": { cutout: siteMedia("/images/nas-model-nas-max-x-200-cutout.webp"), aspect: 1200 / 904 },
+  "nas-sky-5-125": { cutout: siteMedia("/images/nas-model-nas-sky-5-125-cutout.webp"), aspect: 723 / 820 },
 };
 
 export function getShowcase(slug: string): ModelShowcase | undefined {

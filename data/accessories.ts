@@ -5,6 +5,7 @@
  * brands, product names, specs and colours are bracketed or "--", prices are DEMO,
  * and every product reuses its category photo from the homepage "Gear up" cards.
  */
+import { siteMedia } from "@/lib/supabase/config";
 import { isPlaceholder } from "@/data/business";
 import { buildIndex, type SearchIndex } from "@/lib/search";
 
@@ -55,10 +56,10 @@ export const ACCESSORY_CATEGORY_WORD: Record<AccessoryCategory, string> = {
 };
 
 const photo: Record<AccessoryCategory, string> = {
-  kaska: "/images/nas-acc-helmets.jpg",
-  veshje: "/images/nas-acc-apparel.jpg",
-  "doreza-cizme": "/images/nas-acc-gloves-boots.jpg",
-  pjese: "/images/nas-acc-parts.jpg",
+  kaska: siteMedia("/images/nas-acc-helmets.jpg"),
+  veshje: siteMedia("/images/nas-acc-apparel.jpg"),
+  "doreza-cizme": siteMedia("/images/nas-acc-gloves-boots.jpg"),
+  pjese: siteMedia("/images/nas-acc-parts.jpg"),
 };
 
 const specsFor: Record<AccessoryCategory, AccessorySpec[]> = {
@@ -134,7 +135,7 @@ export const accessories: Accessory[] = [
   item("zontes-helmeta", "kaska", "HELMETA", "[XS–XXL]", 86, ["helmet-full-face", "brand-zontes"], {
     isNew: true,
     brand: "ZONTES",
-    image: "/images/nas-acc-zontes-helmeta.png",
+    image: siteMedia("/images/nas-acc-zontes-helmeta.png"),
     cutout: true,
   }),
   item("kaske-full-face", "kaska", "KASKË FULL-FACE", "[XS–XXL]", 189, ["helmet-full-face"], { isNew: true }),

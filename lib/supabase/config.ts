@@ -31,14 +31,32 @@ export const STORAGE_BUCKETS = {
 } as const;
 export type StorageBucket = (typeof STORAGE_BUCKETS)[keyof typeof STORAGE_BUCKETS];
 
+/** Folder the site's own photos and videos live in, in both buckets (scripts/upload-media.mjs). */
+const SITE_PREFIX = "site";
+
+/**
+ * URL of one of the site's own photos or videos, given its path in public/ ("/nas-images/web/x.webp").
+ * With Supabase configured it is served from Supabase Storage (uploaded by `node scripts/upload-media.mjs`):
+ * photos from the `media` bucket, videos from `videos`, both under site/. Without Supabase, or for
+ * anything that isn't a "/…" path, it is returned unchanged (public/ keeps the originals as the fallback).
+ * Not for files the buckets don't take (SVG): those stay plain "/…" paths.
+ */
+export function siteMedia(localPath: string): string {
+  const config = supabasePublicConfig();
+  if (!config || !localPath.startsWith("/")) return localPath;
+  const bucket: StorageBucket = /.(mp4|webm)$/i.test(localPath) ? "videos" : "media";
+  const encoded = localPath.split("/").map(encodeURIComponent).join("/");
+  return `${config.url}/storage/v1/object/public/${bucket}/${SITE_PREFIX}${encoded}`;
+}
+
 /**
  * Public URL for a stored file.
- * Paths starting with "/" are files in /public (the current photos, seeded as-is) and are returned unchanged.
- * Anything else is a path inside a Supabase Storage bucket.
+ * Paths starting with "/" are the site's own files (public/, mirrored to storage under site/: see siteMedia).
+ * Anything else is a path inside a Supabase Storage bucket (uploaded in the admin).
  */
 export function mediaUrl(path: string | null | undefined, bucket: StorageBucket = "media"): string | undefined {
   if (!path) return undefined;
-  if (path.startsWith("/")) return path;
+  if (path.startsWith("/")) return siteMedia(path);
   const config = supabasePublicConfig();
   if (!config) return undefined;
   const encoded = path.split("/").map(encodeURIComponent).join("/");

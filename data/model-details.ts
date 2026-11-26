@@ -5,6 +5,7 @@
  * Every field is optional. Anything missing shows a visible [PLACEHOLDER] in its place, so the
  * page keeps the design's shape until the client sends the real copy, photos and videos.
  */
+import { siteMedia } from "@/lib/supabase/config";
 
 import type { Copy } from "@/lib/i18n";
 
@@ -41,7 +42,7 @@ export interface ModelDetails {
 
 const details: Record<string, ModelDetails> = {};
 
-const DETAIL = "/detail-images/web";
+const DETAIL = siteMedia("/detail-images/web");
 
 /**
  * TEMP strips shown on every model until it has its own features (Nov 2026: the only detail photos we

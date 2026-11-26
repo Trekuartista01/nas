@@ -1,11 +1,12 @@
 "use client";
+import { siteMedia } from "@/lib/supabase/config";
 
 import { motion, useMotionValue, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { useMedia, useReducedMotionSafe } from "@/components/motion/useMotionScale";
 import { MOTION } from "@/lib/motion";
 
-const LION = "/nas-images/web/lion-emblem.png"; // transparent PNG, ink = opaque: used as the mask
+const LION = siteMedia("/nas-images/web/lion-emblem.png"); // transparent PNG, ink = opaque: used as the mask
 const MASK = {
   WebkitMaskImage: `url(${LION})`,
   maskImage: `url(${LION})`,

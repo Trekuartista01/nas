@@ -1,4 +1,5 @@
 "use client";
+import { siteMedia } from "@/lib/supabase/config";
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef } from "react";
@@ -81,7 +82,7 @@ function RedS() {
   return <LogoBacklight caption={RED_S_LINE} />;
 }
 
-const DETAIL_VIDEO = "/videos/sport-line.mp4";
+const DETAIL_VIDEO = siteMedia("/videos/sport-line.mp4");
 
 /**
  * 3. Detail video (replaced the three labelled shots, Nov 2026). From 768px it pins like The Range: the

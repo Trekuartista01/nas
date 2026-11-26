@@ -30,17 +30,19 @@ const COLUMNS: [number, number][] = [
   [276, 80],
 ];
 
-// Static `new URL(..., import.meta.url)` so the bundler ships the font files with the route.
-const FONTS = [
-  new URL("../app/fonts/PublicaSans-Regular.otf", import.meta.url),
-  new URL("../app/fonts/PublicaSans-Bold.otf", import.meta.url),
-  new URL("../app/fonts/PublicaSans-ExtraBold.otf", import.meta.url),
-];
+// One literal `readFile(new URL(..., import.meta.url))` per font, so the bundler ships exactly these three
+// files with the route. (Reading from a variable made it trace the whole project, public/ included, into the function.)
+const loadFonts = () =>
+  Promise.all([
+    readFile(new URL("../app/fonts/PublicaSans-Regular.otf", import.meta.url)),
+    readFile(new URL("../app/fonts/PublicaSans-Bold.otf", import.meta.url)),
+    readFile(new URL("../app/fonts/PublicaSans-ExtraBold.otf", import.meta.url)),
+  ]);
 
 export async function brochurePdf(m: Model): Promise<Uint8Array> {
   const doc = await PDFDocument.create();
   doc.registerFontkit(fontkit);
-  const [regular, bold, heavy] = await Promise.all(FONTS.map(async (f) => doc.embedFont(await readFile(f), { subset: true })));
+  const [regular, bold, heavy] = await Promise.all((await loadFonts()).map((bytes) => doc.embedFont(bytes, { subset: true })));
   const title = `${m.brand} ${m.name}`;
   doc.setTitle(`${title} · Technical Data`);
   doc.setAuthor(BUSINESS.name);
@@ -95,7 +97,7 @@ export async function brochurePdf(m: Model): Promise<Uint8Array> {
   // Footer: dealer and a red rule.
   const fy = M;
   page.drawRectangle({ x: M, y: fy + 18, width: 28, height: 3, color: RED });
-  const dealer = `${BUSINESS.name} · ${BUSINESS.street}, ${BUSINESS.city} · ${BUSINESS.phoneDisplay}`;
+  const dealer = `${BUSINESS.name} · ${BUSINESS.phoneDisplay}`;
   page.drawText(dealer, { x: M, y: fy + 4, size: 8, font: bold, color: INK });
 
   return doc.save();

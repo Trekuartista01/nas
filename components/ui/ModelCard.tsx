@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { TYPE_LABEL, type Model } from "@/data/models";
 import { eur } from "@/lib/format";
-import { fromMonthly } from "@/lib/finance";
 
 export default function ModelCard({ model }: { model: Model }) {
   return (
@@ -34,7 +33,6 @@ export default function ModelCard({ model }: { model: Model }) {
         </div>
         <div className="mt-auto flex items-baseline justify-between pt-2">
           <div className="text-[26px] font-extrabold">{eur(model.price)}</div>
-          <div className="text-xs text-muted">ose {eur(fromMonthly(model.price))}/muaj</div>
         </div>
         <Link
           href={`/modelet/${model.slug}`}

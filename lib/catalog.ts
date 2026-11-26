@@ -1,10 +1,12 @@
+import type { Copy } from "@/lib/i18n";
+
 /** Sorting shared by the catalog list pages (/modelet, /aksesoret). */
 export type CatalogSort = "newest" | "price-asc" | "price-desc";
 
-export const SORT_OPTIONS: { id: CatalogSort; label: string }[] = [
-  { id: "newest", label: "Më të rejat" },
-  { id: "price-asc", label: "Çmimi: nga më i ulëti" },
-  { id: "price-desc", label: "Çmimi: nga më i larti" },
+export const SORT_OPTIONS: { id: CatalogSort; label: Copy }[] = [
+  { id: "newest", label: { sq: "Më të rejat", en: "Newest" } },
+  { id: "price-asc", label: { sq: "Çmimi: nga më i ulëti", en: "Price: low to high" } },
+  { id: "price-desc", label: { sq: "Çmimi: nga më i larti", en: "Price: high to low" } },
 ];
 
 export function sortItems<T extends { price: number; isNew: boolean }>(list: T[], sort: CatalogSort): T[] {

@@ -3,11 +3,11 @@
 import { updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/admin/auth";
-import { dbError, deleteRow, fieldErrors, firstPublishedAt, INVALID, readFields, saveRow, setPublished, type ContentTable } from "@/lib/admin/crud";
+import { dbError, deleteRow, fieldErrors, INVALID, readFields, saveRow, setPublished, type ContentTable } from "@/lib/admin/crud";
 import { uuid } from "@/lib/admin/fields";
 import type { AdminFormState } from "@/lib/admin/form-state";
 import { ADMIN_PATHS } from "@/lib/admin/paths";
-import { accessorySchema, bannerSlidesSchema, brandSchema, heroVideoSchema, leadUpdateSchema, modelSchema, postSchema } from "@/lib/admin/schemas";
+import { bannerSlidesSchema, heroVideoSchema, leadUpdateSchema, modelSchema } from "@/lib/admin/schemas";
 import { CACHE_TAGS, type CacheTag } from "@/lib/data/catalog";
 
 /**
@@ -19,19 +19,11 @@ const BAD_ID: AdminFormState = { status: "error", message: "Element i panjohur."
 const validId = (id: unknown): id is string => uuid.safeParse(id).success;
 const optionalId = (id: unknown) => (id === undefined || id === null || id === "" ? undefined : id);
 
-const TABLE_TAG: Record<ContentTable, CacheTag> = {
-  models: CACHE_TAGS.models,
-  accessories: CACHE_TAGS.accessories,
-  brands: CACHE_TAGS.brands,
-  posts: CACHE_TAGS.posts,
-};
-const TABLE_LIST: Record<ContentTable, string> = {
-  models: ADMIN_PATHS.models,
-  accessories: ADMIN_PATHS.accessories,
-  brands: ADMIN_PATHS.brands,
-  posts: ADMIN_PATHS.posts,
-};
-const isTable = (t: unknown): t is ContentTable => typeof t === "string" && t in TABLE_TAG;
+// Accessories, brands and posts left the admin (Nov 2026): only models are edited here now.
+type AdminTable = Extract<ContentTable, "models">;
+const TABLE_TAG: Record<AdminTable, CacheTag> = { models: CACHE_TAGS.models };
+const TABLE_LIST: Record<AdminTable, string> = { models: ADMIN_PATHS.models };
+const isTable = (t: unknown): t is AdminTable => typeof t === "string" && Object.hasOwn(TABLE_TAG, t);
 
 // ─────────────────────────────────────────── save (create when id is undefined)
 
@@ -39,39 +31,6 @@ export async function saveModel(id: string | undefined, _prev: AdminFormState, f
   const rowId = optionalId(id);
   if (rowId !== undefined && !validId(rowId)) return BAD_ID;
   return saveRow({ table: "models", schema: modelSchema, formData, id: rowId, tag: CACHE_TAGS.models, editPath: (x) => `${ADMIN_PATHS.models}/${x}` });
-}
-
-export async function saveAccessory(id: string | undefined, _prev: AdminFormState, formData: FormData): Promise<AdminFormState> {
-  const rowId = optionalId(id);
-  if (rowId !== undefined && !validId(rowId)) return BAD_ID;
-  return saveRow({
-    table: "accessories",
-    schema: accessorySchema,
-    formData,
-    id: rowId,
-    tag: CACHE_TAGS.accessories,
-    editPath: (x) => `${ADMIN_PATHS.accessories}/${x}`,
-  });
-}
-
-export async function saveBrand(id: string | undefined, _prev: AdminFormState, formData: FormData): Promise<AdminFormState> {
-  const rowId = optionalId(id);
-  if (rowId !== undefined && !validId(rowId)) return BAD_ID;
-  return saveRow({ table: "brands", schema: brandSchema, formData, id: rowId, tag: CACHE_TAGS.brands, editPath: (x) => `${ADMIN_PATHS.brands}/${x}` });
-}
-
-export async function savePost(id: string | undefined, _prev: AdminFormState, formData: FormData): Promise<AdminFormState> {
-  const rowId = optionalId(id);
-  if (rowId !== undefined && !validId(rowId)) return BAD_ID;
-  return saveRow({
-    table: "posts",
-    schema: postSchema,
-    formData,
-    id: rowId,
-    tag: CACHE_TAGS.posts,
-    editPath: (x) => `${ADMIN_PATHS.posts}/${x}`,
-    prepare: (data, { admin, id: existing }) => (data.published ? firstPublishedAt(admin, existing) : {}),
-  });
 }
 
 // ─────────────────────────────────────────── delete + publish (shared by the lists)
@@ -115,27 +74,6 @@ export async function deleteLead(id: string): Promise<AdminFormState> {
   const { error } = await admin.db.from("leads").delete().eq("id", id);
   if (error) return dbError(error, "delete lead");
   redirect(ADMIN_PATHS.leads);
-}
-
-// ─────────────────────────────────────────── newsletter
-
-export async function setSubscribed(id: string, subscribed: boolean): Promise<AdminFormState> {
-  if (!validId(id) || typeof subscribed !== "boolean") return BAD_ID;
-  const admin = await requireAdmin();
-  const { error } = await admin.db
-    .from("newsletter_subscribers")
-    .update({ unsubscribed_at: subscribed ? null : new Date().toISOString() })
-    .eq("id", id);
-  if (error) return dbError(error, "subscriber");
-  return { status: "success", message: subscribed ? "U riaktivizua." : "U çregjistrua." };
-}
-
-export async function deleteSubscriber(id: string): Promise<AdminFormState> {
-  if (!validId(id)) return BAD_ID;
-  const admin = await requireAdmin();
-  const { error } = await admin.db.from("newsletter_subscribers").delete().eq("id", id);
-  if (error) return dbError(error, "delete subscriber");
-  return { status: "success", message: "U fshi." };
 }
 
 // ─────────────────────────────────────────── hero banner (video + cut points)

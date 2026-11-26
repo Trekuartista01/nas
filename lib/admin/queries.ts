@@ -3,21 +3,8 @@ import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/admin/auth";
 import { uuid } from "@/lib/admin/fields";
 import { LEAD_KINDS, LEAD_STATUSES } from "@/lib/admin/schemas";
-import {
-  ACCESSORY_COLUMNS,
-  MODEL_COLUMNS,
-  POST_COLUMNS,
-  type AccessoryRow,
-  type AuditRow,
-  type BannerSlideRow,
-  type BrandRow,
-  type HeroVideoRow,
-  type LeadRow,
-  type LeadStatus,
-  type ModelRow,
-  type PostRow,
-  type SubscriberRow,
-} from "@/lib/data/rows";
+import { inPublicCatalog } from "@/data/models";
+import { MODEL_COLUMNS, type AuditRow, type BannerSlideRow, type BrandRow, type HeroVideoRow, type LeadRow, type LeadStatus, type ModelRow } from "@/lib/data/rows";
 
 /**
  * Admin reads. Each starts with requireAdmin() and runs as the admin (Row Level Security),
@@ -43,17 +30,11 @@ export async function listModels(): Promise<ModelRow[]> {
   const { db } = await requireAdmin();
   const { data, error } = await db.from("models").select(MODEL_COLUMNS).order("sort").order("created_at");
   if (error) fail("models", error);
-  return data as ModelRow[];
+  // Only the NAS line (CATALOG_BRANDS, no ATVs), as on the site. The other brands stay in the database, hidden.
+  return (data as ModelRow[]).filter(inPublicCatalog);
 }
 export const getModelRow = (id: string) => byId<ModelRow>("models", MODEL_COLUMNS, id);
 
-export async function listAccessories(): Promise<AccessoryRow[]> {
-  const { db } = await requireAdmin();
-  const { data, error } = await db.from("accessories").select(ACCESSORY_COLUMNS).order("category").order("sort").order("created_at");
-  if (error) fail("accessories", error);
-  return data as AccessoryRow[];
-}
-export const getAccessoryRow = (id: string) => byId<AccessoryRow>("accessories", ACCESSORY_COLUMNS, id);
 
 const BRAND_COLUMNS = "id, name, logo_path, sort, published";
 export async function listBrands(): Promise<BrandRow[]> {
@@ -62,19 +43,7 @@ export async function listBrands(): Promise<BrandRow[]> {
   if (error) fail("brands", error);
   return data as BrandRow[];
 }
-export const getBrandRow = (id: string) => byId<BrandRow>("brands", BRAND_COLUMNS, id);
 
-export async function listPosts(): Promise<PostRow[]> {
-  const { db } = await requireAdmin();
-  const { data, error } = await db
-    .from("posts")
-    .select(POST_COLUMNS)
-    .order("published_at", { ascending: false, nullsFirst: true })
-    .order("updated_at", { ascending: false });
-  if (error) fail("posts", error);
-  return data as PostRow[];
-}
-export const getPostRow = (id: string) => byId<PostRow>("posts", POST_COLUMNS, id);
 
 export async function getBanner(): Promise<{ video: HeroVideoRow | null; slides: BannerSlideRow[] }> {
   const { db } = await requireAdmin();
@@ -123,35 +92,22 @@ export async function listLeads(filters: LeadFilters): Promise<{ rows: LeadRow[]
 }
 export const getLeadRow = (id: string) => byId<LeadRow>("leads", LEAD_COLUMNS, id);
 
-// ─────────────────────────────────────────── dashboard, newsletter, history
+// ─────────────────────────────────────────── dashboard, history
 
 export async function getDashboard() {
   const { db } = await requireAdmin();
   const head = { count: "exact" as const, head: true };
-  const [newLeads, models, accessories, posts, subscribers, latest] = await Promise.all([
+  const [newLeads, models, latest] = await Promise.all([
     db.from("leads").select("id", head).eq("status", "new"),
-    db.from("models").select("id", head),
-    db.from("accessories").select("id", head),
-    db.from("posts").select("id", head),
-    db.from("newsletter_subscribers").select("id", head).is("unsubscribed_at", null),
+    db.from("models").select("brand, type"),
     db.from("leads").select(LEAD_COLUMNS).order("created_at", { ascending: false }).limit(8),
   ]);
-  for (const r of [newLeads, models, accessories, posts, subscribers, latest]) if (r.error) fail("dashboard", r.error);
+  for (const r of [newLeads, models, latest]) if (r.error) fail("dashboard", r.error);
   return {
     newLeads: newLeads.count ?? 0,
-    models: models.count ?? 0,
-    accessories: accessories.count ?? 0,
-    posts: posts.count ?? 0,
-    subscribers: subscribers.count ?? 0,
+    models: ((models.data ?? []) as Pick<ModelRow, "brand" | "type">[]).filter(inPublicCatalog).length,
     latest: latest.data as LeadRow[],
   };
-}
-
-export async function listSubscribers(): Promise<SubscriberRow[]> {
-  const { db } = await requireAdmin();
-  const { data, error } = await db.from("newsletter_subscribers").select("id, email, created_at, unsubscribed_at").order("created_at", { ascending: false }).limit(5000);
-  if (error) fail("subscribers", error);
-  return data as SubscriberRow[];
 }
 
 export async function listHistory(): Promise<AuditRow[]> {

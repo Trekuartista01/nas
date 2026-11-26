@@ -7,6 +7,9 @@ import { useEffect, useState, Suspense } from "react";
 import { TbMenu2, TbX } from "react-icons/tb";
 import Logo from "@/components/ui/Logo";
 import { BlockButton } from "@/components/ui/Buttons";
+import T from "@/components/i18n/T";
+import LangToggle from "@/components/i18n/LangToggle";
+import { useT } from "@/components/i18n/lang";
 
 /**
  * Navigation as in the NAS designs (Nov 2026): logo, links in the middle, the offer CTA on the right.
@@ -15,15 +18,13 @@ import { BlockButton } from "@/components/ui/Buttons";
  * The search button that was here went with this design (components/layout/HeaderSearch.tsx is kept).
  */
 const NAV = [
-  { href: "/modelet", label: "MODELS" },
-  { href: "/sport-line", label: "SPORT LINE" },
-  { href: "/rreth-nesh", label: "THE BRAND" },
-  { href: "/kontakti", label: "CONTACT" },
+  { href: "/modelet", label: <T sq="MODELET" en="MODELS" /> },
+  { href: "/sport-line", label: <T sq="SPORT LINE" en="SPORT LINE" /> },
+  { href: "/rreth-nesh", label: <T sq="BRENDI" en="THE BRAND" /> },
 ];
 
-// TODO(client): this says "Kërko ofertë" while the homepage dealer section says "Become a dealer"; both go to
-// /kontakti. Decide one wording for both CTAs.
-const CTA = { href: "/kontakti", label: "Kërko ofertë" };
+// The contact page was removed (Nov 2026): the header CTA goes to the lineup. The SQ | EN switch sits next to it.
+const CTA = { href: "/modelet", label: <T sq="Shiko modelet" en="See the models" /> };
 
 /**
  * Desktop links with the current page underlined. The URL isn't known while prerendering pages
@@ -54,6 +55,7 @@ function LiveNavLinks() {
 }
 
 export default function Header() {
+  const t = useT();
   const [open, setOpen] = useState(false);
   // Past half a screen: solid background (only visible as a change over a hero, see HeroUnderNav).
   const [solid, setSolid] = useState(false);
@@ -93,7 +95,7 @@ export default function Header() {
       data-open={open}
       className="sticky top-0 z-50 border-b border-line-3 bg-[rgba(12,12,12,.85)] backdrop-blur-md transition-[background-color,border-color,backdrop-filter] duration-500 ease-nas [html:has([data-hero-under-nav])_&]:data-[solid=false]:border-transparent [html:has([data-hero-under-nav])_&]:data-[solid=false]:bg-transparent [html:has([data-hero-under-nav])_&]:data-[solid=false]:backdrop-blur-none [html[data-nav-clear]_&]:data-[open=false]:border-transparent [html[data-nav-clear]_&]:data-[open=false]:bg-transparent [html[data-nav-clear]_&]:data-[open=false]:backdrop-blur-none"
     >
-      <nav className="container-moto flex h-[76px] items-center gap-6 lg:h-20" aria-label="Navigimi kryesor">
+      <nav className="container-moto flex h-[76px] items-center gap-6 lg:h-20" aria-label={t("Navigimi kryesor", "Main navigation")}>
         <Logo />
 
         <Suspense fallback={<NavLinks pathname="" />}>
@@ -101,6 +103,7 @@ export default function Header() {
         </Suspense>
 
         <div className="ml-auto flex items-center gap-3 lg:ml-0">
+          <LangToggle />
           <span className="hidden sm:block">
             <BlockButton href={CTA.href} marks={false}>
               {CTA.label}
@@ -109,7 +112,7 @@ export default function Header() {
           <button
             type="button"
             className="flex size-11 items-center justify-center lg:hidden"
-            aria-label={open ? "Mbyll menunë" : "Hap menunë"}
+            aria-label={open ? t("Mbyll menunë", "Close menu") : t("Hap menunë", "Open menu")}
             aria-expanded={open}
             aria-controls="mobile-nav"
             onClick={() => setOpen((v) => !v)}

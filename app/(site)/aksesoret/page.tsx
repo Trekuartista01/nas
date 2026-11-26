@@ -8,7 +8,7 @@ import { pageMetadata } from "@/lib/site";
 export const metadata: Metadata = pageMetadata({
   title: "Aksesorët",
   description:
-    "Kaska, veshje, dorëza, çizme dhe pjesë për motorin tënd në NAS, Pejë. Filtro sipas llojit, markës dhe çmimit.",
+    "Kaska, veshje, dorëza, çizme dhe pjesë për motorin tënd në NAS. Filtro sipas llojit, markës dhe çmimit.",
   path: "/aksesoret",
 });
 

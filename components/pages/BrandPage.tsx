@@ -1,3 +1,4 @@
+import T from "@/components/i18n/T";
 import Lines from "@/components/motion/Lines";
 import Rise from "@/components/motion/Rise";
 import { SectionLine, WipeIn } from "@/components/motion/SectionIntro";
@@ -9,7 +10,7 @@ import { MOTION } from "@/lib/motion";
 
 /**
  * THE BRAND (design "NAS — The Brand", Nov 2026): hero, the idea, the lion (light section),
- * the vision cards and the four values. Copy is English, as in the design. (The closing call to action
+ * the vision cards and the four values. Headings are English only (the design's); the body text is in Albanian and English (<T>). (The closing call to action
  * over the tunnel photo was removed, Nov 2026.)
  */
 export default function BrandPage() {
@@ -26,22 +27,40 @@ export default function BrandPage() {
         <div className="container-moto relative flex w-full flex-wrap items-end justify-between gap-x-10 gap-y-8 pb-16 lg:pb-24">
           <div>
             <Rise onLoad delay={0.2}>
-              <Kicker>THE BRAND</Kicker>
+              <Kicker>
+                <T sq="BRENDI" en="THE BRAND" />
+              </Kicker>
             </Rise>
-            <Lines as="h1" onLoad delay={0.3} className="headline mt-5 text-[clamp(48px,7.6vw,140px)] leading-[0.92]" lines={headingLines(["BORN IN", "ENGLAND."])} />
+            <Lines as="h1" onLoad delay={0.3} className="headline mt-5 text-[clamp(48px,7.6vw,140px)] leading-[0.92]" lines={headingLines([
+                "BORN IN",
+                "ENGLAND.",
+              ])}
+            />
           </div>
           <Rise onLoad delay={0.8} className="max-w-[370px] pb-2">
             <p className="text-[17px] leading-[1.6] text-light">
-              A modern motorcycle brand with a premium position and a British identity, built to communicate trust, character and performance.
+              <T
+                sq="Një markë moderne motorësh me pozicion premium dhe identitet britanik, e ndërtuar për të përcjellë besim, karakter dhe performancë."
+                en="A modern motorcycle brand with a premium position and a British identity, built to communicate trust, character and performance."
+              />
             </p>
           </Rise>
         </div>
       </section>
 
       {/* ───── The idea ───── */}
-      <IdeaSection kicker="THE IDEA" lines={["PERCEPTION IS", "PART OF THE", "MACHINE."]}>
-        In motorcycles, how a brand is perceived matters as much as the product itself. Every part of the NAS identity was built to create a feeling of
-        strength, safety and long-term quality, and to work the same way on the bike, in communication, on merchandise and in the showroom.
+      <IdeaSection
+        kicker={<T sq="IDEJA" en="THE IDEA" />}
+        lines={[
+          "PERCEPTION IS",
+          "PART OF THE",
+          "MACHINE.",
+        ]}
+      >
+        <T
+          sq="Te motorët, mënyra si perceptohet një markë ka po aq rëndësi sa vetë produkti. Çdo pjesë e identitetit NAS u ndërtua për të krijuar ndjesinë e forcës, sigurisë dhe cilësisë afatgjatë, dhe për të funksionuar njësoj në motor, në komunikim, në merch dhe në showroom."
+          en="In motorcycles, how a brand is perceived matters as much as the product itself. Every part of the NAS identity was built to create a feeling of strength, safety and long-term quality, and to work the same way on the bike, in communication, on merchandise and in the showroom."
+        />
       </IdeaSection>
 
       {/* ───── The lion (light) ───── */}
@@ -50,16 +69,26 @@ export default function BrandPage() {
           <div className="container-moto grid items-center gap-12 py-[clamp(90px,10vw,150px)] md:grid-cols-2 md:gap-16">
             <Rise from="left" duration={MOTION.image} className="mx-auto w-[min(380px,70%)]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={P.lion} alt="NAS: emblema e luanit" width={760} height={922} className="h-auto w-full" />
+              <img src={P.lion} alt="NAS" width={760} height={922} className="h-auto w-full" />
             </Rise>
             <div>
               <Rise>
-                <Kicker>THE LION</Kicker>
+                <Kicker>
+                  <T sq="LUANI" en="THE LION" />
+                </Kicker>
               </Rise>
-              <Lines className="headline mt-5 text-[clamp(48px,5.6vw,96px)]" lines={headingLines(["LEAD.", "DON’T", "FOLLOW."])} />
+              <Lines className="headline mt-5 text-[clamp(48px,5.6vw,96px)]" lines={headingLines([
+                  "LEAD.",
+                  "DON’T",
+                  "FOLLOW.",
+                ])}
+              />
               <Rise delay={0.3} className="mt-8 max-w-[460px]">
                 <p className="text-[17px] leading-[1.65] text-[#444]">
-                  Inspired by the lion, NAS stands for courage, power and authority. A brand for those who lead, not those who follow.
+                  <T
+                    sq="E frymëzuar nga luani, NAS përfaqëson guximin, fuqinë dhe autoritetin. Një markë për ata që prijnë, jo për ata që ndjekin."
+                    en="Inspired by the lion, NAS stands for courage, power and authority. A brand for those who lead, not those who follow."
+                  />
                 </p>
               </Rise>
             </div>
@@ -70,7 +99,12 @@ export default function BrandPage() {
       {/* ───── The vision ───── */}
       <section className="bg-ink">
         <div className="container-moto py-[clamp(90px,10vw,150px)]">
-          <SectionHead lines={["THE", "VISION."]} />
+          <SectionHead
+            lines={[
+              "THE",
+              "VISION.",
+            ]}
+          />
           <div className="mt-14 grid gap-4 md:grid-cols-3">
             {P.vision.map((v, i) => (
               <Rise key={v.title} delay={i * MOTION.cardStagger} duration={MOTION.image}>
@@ -87,9 +121,13 @@ export default function BrandPage() {
                     {String(i + 1).padStart(2, "0")} / {String(P.vision.length).padStart(2, "0")}
                   </span>
                   <div className="relative">
-                    <h3 className="headline text-[clamp(32px,3vw,46px)]">{v.title}</h3>
+                    <h3 className="headline text-[clamp(32px,3vw,46px)]">
+                      {v.title}
+                    </h3>
                     <span aria-hidden className="mt-4 block h-[3px] w-14 bg-red transition-[width] duration-500 ease-nas group-hover:w-28" />
-                    <p className="mt-5 text-[16px] leading-[1.6] text-light">{v.text}</p>
+                    <p className="mt-5 text-[16px] leading-[1.6] text-light">
+                      <T {...v.text} />
+                    </p>
                   </div>
                 </article>
               </Rise>
@@ -103,8 +141,16 @@ export default function BrandPage() {
         <SectionLine />
         <div className="container-moto py-[clamp(90px,10vw,150px)]">
           <SectionHead
-            lines={["BUILT ON", "FOUR THINGS."]}
-            aside="A custom typeface on a controlled geometric system, where every line, angle and curve has a job."
+            lines={[
+              "BUILT ON",
+              "FOUR THINGS.",
+            ]}
+            aside={
+              <T
+                sq="Një shkronjë e krijuar posaçërisht mbi një sistem gjeometrik të kontrolluar, ku çdo vijë, kënd dhe kthesë ka një detyrë."
+                en="A custom typeface on a controlled geometric system, where every line, angle and curve has a job."
+              />
+            }
           />
           <div className="mt-14 grid sm:grid-cols-2 lg:grid-cols-4">
             {P.values.map((v, i) => (
@@ -114,7 +160,9 @@ export default function BrandPage() {
                     {v.title}
                     <span className="text-red">.</span>
                   </h3>
-                  <p className="mt-5 max-w-[260px] text-[16px] leading-[1.55] text-body">{v.text}</p>
+                  <p className="mt-5 max-w-[260px] text-[16px] leading-[1.55] text-body">
+                    <T {...v.text} />
+                  </p>
                 </div>
               </Rise>
             ))}

@@ -5,6 +5,8 @@ import { useState } from "react";
 import ChromeLion from "@/components/nas/ChromeLion";
 import { BlockButton, ChromeOutlineButton } from "@/components/ui/Buttons";
 import { BUSINESS } from "@/data/business";
+import T from "@/components/i18n/T";
+import { useT } from "@/components/i18n/lang";
 import { MOTION } from "@/lib/motion";
 
 const SLIDE = { duration: 0.9, ease: MOTION.ease };
@@ -21,10 +23,11 @@ const SLIDE = { duration: 0.9, ease: MOTION.ease };
  * Chrome is used only here and on the footer wordmark (see app/globals.css).
  */
 export default function DealerCta() {
+  const t = useT();
   const [shown, setShown] = useState(false);
 
   return (
-    <section id="dealer" aria-label="Become a dealer" className="relative scroll-mt-20 bg-panel-2">
+    <section id="dealer" aria-label={t("Bëhu dealer", "Become a dealer")} className="relative scroll-mt-20 bg-panel-2">
       <div className="container-moto grid items-center gap-12 py-[clamp(90px,10vw,140px)] lg:min-h-svh lg:grid-cols-[1.1fr_1fr] lg:gap-16">
         {/* Phones: lion first */}
         <div className="order-1 mx-auto w-[60%] max-w-[300px] lg:order-2 lg:w-[min(460px,80%)] lg:max-w-none">
@@ -41,7 +44,7 @@ export default function DealerCta() {
               LEAD.
             </motion.span>
             {["DON’T", "FOLLOW."].map((line, i) => (
-              <span key={line} className="-mb-[0.06em] block overflow-hidden pb-[0.06em]">
+              <span key={i} className="-mb-[0.06em] block overflow-hidden pb-[0.06em]">
                 <motion.span
                   data-anim
                   className="block text-red"
@@ -58,16 +61,20 @@ export default function DealerCta() {
             variants={{ hidden: { opacity: 0, y: MOTION.rise }, shown: { opacity: 1, y: 0, transition: { ...SLIDE, delay: 0.45 } } }}
           >
             <p className="mt-9 max-w-[460px] text-[17px] leading-[1.6] text-body">
-              Bring NAS to your showroom. Tell us about your business and our team will get back to you with the range and partnership terms.
+              <T
+                sq="Sill NAS në showroom-in tënd. Na trego për biznesin tënd dhe ekipi ynë të kthen përgjigje me gamën dhe kushtet e partneritetit."
+                en="Bring NAS to your showroom. Tell us about your business and our team will get back to you with the range and partnership terms."
+              />
             </p>
             <div className="mt-9 flex flex-wrap gap-4">
-              {/* TODO(client): header CTA says "Kërko ofertë", this one "Become a dealer"; both go to /kontakti.
-                  Decide one wording for both. */}
-              <BlockButton href="/kontakti" marks={false}>
-                Become a dealer
+              {/* TODO(client): the contact page was removed (Nov 2026); this goes to the lineup until there is a dealer page. */}
+              <BlockButton href="/modelet" marks={false}>
+                <T sq="Bëhu dealer" en="Become a dealer" />
               </BlockButton>
               {/* TODO(client): confirm the secondary action: "Call 044 155 662" (now) or "Find a showroom". */}
-              <ChromeOutlineButton href={`tel:${BUSINESS.phone}`}>Call {BUSINESS.phoneDisplay}</ChromeOutlineButton>
+              <ChromeOutlineButton href={`tel:${BUSINESS.phone}`}>
+                <T sq="Telefono" en="Call" /> {BUSINESS.phoneDisplay}
+              </ChromeOutlineButton>
             </div>
           </motion.div>
         </motion.div>

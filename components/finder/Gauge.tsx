@@ -1,6 +1,8 @@
 "use client";
 
 import { motion, useSpring, useTransform } from "framer-motion";
+import T from "@/components/i18n/T";
+import { useT } from "@/components/i18n/lang";
 import { useEffect } from "react";
 
 const CX = 150;
@@ -39,6 +41,7 @@ const RED_ARC = `M${r2(CX + R * Math.cos(RED_START))} ${r2(CY - R * Math.sin(RED
  * Needle and arc are driven by ONE spring so they always point at the same spot.
  */
 export default function Gauge({ value, max }: { value: number; max: number }) {
+  const t = useT();
   const target = max ? value / max : 0;
   const ticks = makeTicks(Math.max(1, max));
   const p = useSpring(target, { stiffness: 140, damping: 24, mass: 0.8 }); // critically damped-ish: no wobble
@@ -50,7 +53,7 @@ export default function Gauge({ value, max }: { value: number; max: number }) {
 
   return (
     <div className="mx-auto w-full max-w-[380px]">
-      <svg viewBox="0 0 300 166" className="block w-full" role="img" aria-label={`${value} nga ${max} modele të përshtaten`}>
+      <svg viewBox="0 0 300 166" className="block w-full" role="img" aria-label={t(`${value} nga ${max} modele të përshtaten`, `${value} of ${max} models fit`)}>
         <path d={ARC} fill="none" stroke="#1f1f1f" strokeWidth={16} />
         <path d={RED_ARC} fill="none" stroke="var(--color-red)" strokeOpacity={0.35} strokeWidth={16} />
         <motion.path
@@ -78,7 +81,7 @@ export default function Gauge({ value, max }: { value: number; max: number }) {
           {value}
           <span className="text-lg text-[#6f6f6f]">/{max}</span>
         </div>
-        <div className="mt-1.5 text-[11px] tracking-[0.2em] text-faint">MODELE PËR TY</div>
+        <div className="mt-1.5 text-[11px] tracking-[0.2em] text-faint"><T sq="MODELE PËR TY" en="MODELS FOR YOU" /></div>
       </div>
     </div>
   );

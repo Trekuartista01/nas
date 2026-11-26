@@ -5,6 +5,7 @@ import { useRef } from "react";
 import Rise from "@/components/motion/Rise";
 import { useParallaxScale } from "@/components/motion/useMotionScale";
 import type { ModelFeature } from "@/data/model-details";
+import { useT } from "@/components/i18n/lang";
 
 /**
  * Feature strips on a model page, stacked like the homepage Lifestyle / Speed / Freedom panels
@@ -17,6 +18,7 @@ import type { ModelFeature } from "@/data/model-details";
  * `progress × (n - 1) - i` is 0 → 1 while panel i is being covered by panel i + 1.
  */
 export default function ModelFeatures({ features }: { features: ModelFeature[] }) {
+  const t = useT();
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
   const k = useParallaxScale();
@@ -24,7 +26,7 @@ export default function ModelFeatures({ features }: { features: ModelFeature[] }
   if (features.length === 0) return null;
 
   return (
-    <div ref={ref} aria-label="Veçoritë" role="region" className="relative bg-ink">
+    <div ref={ref} aria-label={t("Veçoritë", "Features")} role="region" className="relative bg-ink">
       {features.map((f, i) => (
         <Panel key={f.title} feature={f} index={i} count={features.length} progress={scrollYProgress} pin={pin} k={k} />
       ))}
@@ -92,7 +94,9 @@ function Panel({
             <span className="text-[13px] font-bold tracking-[0.2em] text-red">{num}</span>
           </Rise>
           <Rise delay={0.1}>
-            <h3 className="max-w-[760px] text-[clamp(22px,2.4vw,38px)] font-extrabold uppercase leading-[1.1] tracking-[-0.01em]">{f.title}</h3>
+            <h3 className="max-w-[760px] text-[clamp(22px,2.4vw,38px)] font-extrabold uppercase leading-[1.1] tracking-[-0.01em]">
+              {f.title}
+            </h3>
           </Rise>
         </div>
 

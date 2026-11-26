@@ -18,8 +18,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: "/servisi", destination: "/modelet", permanent: false },
-      // /kerko-oferte was removed (Nov 2026): offer requests go through the contact page.
-      { source: "/kerko-oferte", destination: "/kontakti", permanent: false },
+      // /kerko-oferte and /kontakti were removed (Nov 2026): both land on the models page.
+      { source: "/kerko-oferte", destination: "/modelet", permanent: false },
+      { source: "/kontakti", destination: "/modelet", permanent: false },
+      // /financim was removed (Nov 2026).
+      { source: "/financim", destination: "/modelet", permanent: false },
     ];
   },
   async headers() {

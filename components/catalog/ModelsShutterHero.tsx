@@ -6,6 +6,7 @@ import { LineupReveal } from "@/components/catalog/LineupReveal";
 import { useIsMobile, useReducedMotionSafe } from "@/components/motion/useMotionScale";
 
 interface ModelsShutterHeroProps {
+  /** Sprayed on the door and the page h1 (a heading: English only). */
   title?: string;
   /** The lineup the door opens onto (the catalog filters + grid). */
   children: ReactNode;
@@ -34,7 +35,7 @@ const RAIL = 26;
  * The header stays clear while the door moves (`data-nav-clear` on <html>, as on the Sport Line video).
  * Reduced motion: no door, just the lineup. The slats are aria-hidden; the real <h1> is visually hidden.
  */
-export default function ModelsShutterHero({ title = "MODELET", children, slats = 16, mobileSlats = 10, duration = 1, delay = 0.15 }: ModelsShutterHeroProps) {
+export default function ModelsShutterHero({ title = "MODELS", children, slats = 16, mobileSlats = 10, duration = 1, delay = 0.15 }: ModelsShutterHeroProps) {
   const reduce = useReducedMotionSafe();
   const mobile = useIsMobile();
   const n = mobile ? mobileSlats : slats;
@@ -91,7 +92,9 @@ export default function ModelsShutterHero({ title = "MODELET", children, slats =
 
   return (
     <>
-      <h1 className="sr-only">{title}</h1>
+      <h1 className="sr-only">
+        {title}
+      </h1>
       <LineupReveal.Provider value={opened}>{children}</LineupReveal.Provider>
       {!reduce && (
         <motion.div style={{ visibility }} className="pointer-events-none fixed inset-0 z-40">
@@ -194,7 +197,9 @@ function Paint({ title, filterId }: { title: string; filterId: string }) {
     <div className="absolute inset-0">
       <div className="absolute inset-x-0 top-[46%] flex -translate-y-1/2 justify-center">
         {/* Overspray halo. */}
-        <span className={`${word} absolute text-[#ECE8E1] opacity-10 blur-[6px]`}>{title}</span>
+        <span className={`${word} absolute text-[#ECE8E1] opacity-10 blur-[6px]`}>
+          {title}
+        </span>
         <span className={`${word} relative text-[#ECE8E1]`} style={{ filter: `url(#${filterId})` }}>
           {title}
         </span>

@@ -10,7 +10,7 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
-import { useEffect, useId, useRef, type CSSProperties } from "react";
+import { useEffect, useId, useRef, type CSSProperties, type ReactNode } from "react";
 import { useInView } from "react-intersection-observer";
 import { useMedia, useReducedMotionSafe } from "@/components/motion/useMotionScale";
 import { LogoMark } from "@/components/ui/Logo";
@@ -30,14 +30,14 @@ import { MOTION, SPORT_BACKLIGHT as B } from "@/lib/motion";
  * Timeline points, flash timings, colours and sizes: SPORT_BACKLIGHT in lib/motion.ts; shapes: FACE below.
  * Only opacity and transform are animated; blurred bloom copies are small and blurred once.
  */
-export default function LogoBacklight({ caption }: { caption: string }) {
+export default function LogoBacklight({ caption }: { caption: ReactNode }) {
   const reduce = useReducedMotionSafe();
   const wide = useMedia("(min-width: 768px)");
   if (wide && !reduce) return <Pinned caption={caption} />;
   return <Unpinned caption={caption} still={reduce} small={!wide} />;
 }
 
-function Pinned({ caption }: { caption: string }) {
+function Pinned({ caption }: { caption: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
   const p = useSpring(scrollYProgress, MOTION.scrub);
@@ -50,7 +50,7 @@ function Pinned({ caption }: { caption: string }) {
   );
 }
 
-function Unpinned({ caption, still, small }: { caption: string; still: boolean; small: boolean }) {
+function Unpinned({ caption, still, small }: { caption: ReactNode; still: boolean; small: boolean }) {
   const p = useMotionValue(still ? 1 : 0);
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.5 });
   useEffect(() => {
@@ -214,7 +214,7 @@ function useLights(p: MotionValue<number>, still: boolean, small: boolean) {
   return { drl, eyes, bloomTight, bloomWide, wash, dim, alive };
 }
 
-function Stage({ p, caption, small, still }: { p: MotionValue<number>; caption: string; small: boolean; still: boolean }) {
+function Stage({ p, caption, small, still }: { p: MotionValue<number>; caption: ReactNode; small: boolean; still: boolean }) {
   const L = useLights(p, still, small);
 
   // 0–20%: settle.

@@ -18,7 +18,7 @@ export default function SingleBrandPage({ brand, models }: { brand: Brand; model
         <Reveal className="max-w-[720px] space-y-4 text-[17px] leading-relaxed text-muted-2">
           {/* The brand story is not written yet: keep the placeholder visible until the client sends it. */}
           <p>[HISTORIA E BRENDIT · {brand.name}]</p>
-          <p>Në NAS, Pejë: shitje, test ride, financim me këste dhe pjesë origjinale.</p>
+          <p>Në NAS: shitje, test ride dhe pjesë origjinale.</p>
         </Reveal>
       </section>
       <section className="border-t border-[#1c1c1c] bg-surface">

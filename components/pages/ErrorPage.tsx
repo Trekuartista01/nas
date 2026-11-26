@@ -20,7 +20,7 @@ export default function ErrorPage({ error, retry }: { error: unknown; retry: () 
     <StatusScreen
       word="GABIM"
       eyebrow="GABIM I PAPRITUR"
-      lines={["DIÇKA", "SHKOI KEQ"]}
+      lines={["SOMETHING", "WENT WRONG"]}
       text={
         <>
           <p>Faqja nuk u ngarkua si duhet. Provo përsëri, dhe nëse problemi vazhdon, na kontakto.</p>

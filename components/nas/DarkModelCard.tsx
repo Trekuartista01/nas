@@ -2,9 +2,17 @@ import Link from "next/link";
 import { TbArrowRight } from "react-icons/tb";
 import type { Model, VehicleType } from "@/data/models";
 import { eur } from "@/lib/format";
+import type { ReactNode } from "react";
+import T from "@/components/i18n/T";
+import type { Copy } from "@/lib/i18n";
 
 /** Card tag per vehicle type (NAS designs' wording). */
-export const CATEGORY_TAG: Record<VehicleType, string> = { scooter: "SCOOTER", sport: "SPORT LINE", dirt: "OFF-ROAD", atv: "OFF-ROAD" };
+export const CATEGORY_TAG: Record<VehicleType, Copy> = {
+  scooter: { sq: "SKUTER", en: "SCOOTER" },
+  sport: { sq: "SPORT LINE", en: "SPORT LINE" },
+  dirt: { sq: "OFF-ROAD", en: "OFF-ROAD" },
+  atv: { sq: "OFF-ROAD", en: "OFF-ROAD" },
+};
 
 /** Cut-corner shape (the earlier lineup card): top-left and bottom-right corners cut at 45°. */
 const CARD_CUT = "polygon(55px 0, 100% 0, 100% calc(100% - 66px), calc(100% - 65px) 100%, 0 100%, 0 55px)";
@@ -71,7 +79,9 @@ export default function DarkModelCard({
         <div aria-hidden className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,.55),transparent_28%,transparent_70%,rgba(22,22,22,.9))]" />
         <div className={`absolute flex justify-between text-[13px] tracking-[0.14em] ${cut ? "left-14 right-5 top-5" : "inset-x-6 top-6"}`}>
           <span className={accent ? "font-bold text-red" : "text-light"}>{String(index + 1).padStart(2, "0")}</span>
-          <span className="text-light">{CATEGORY_TAG[m.type]}</span>
+          <span className="text-light">
+            <T {...CATEGORY_TAG[m.type]} />
+          </span>
         </div>
       </div>
 
@@ -85,7 +95,9 @@ export default function DarkModelCard({
               className="absolute -bottom-3.5 left-0 h-[3px] w-14 max-w-full bg-red transition-[width] duration-500 ease-nas group-hover:w-full group-focus-visible:w-full"
             />
           </h3>
-          <p className="mt-7 text-[14px] text-body">From {eur(m.price)}</p>
+          <p className="mt-7 text-[14px] text-body">
+            <T sq="Nga" en="From" /> {eur(m.price)}
+          </p>
         </div>
         <ArrowBox />
       </div>
@@ -94,7 +106,16 @@ export default function DarkModelCard({
 }
 
 /** Closing card of a model row: "See all models" with the arrow box, to the catalog. */
-export function SeeAllCard({ className = "", label = "See all models", cut = false }: { className?: string; label?: string; cut?: boolean }) {
+export function SeeAllCard({
+  className = "",
+  /** Heading font: English in both languages. */
+  label = "See all models",
+  cut = false,
+}: {
+  className?: string;
+  label?: ReactNode;
+  cut?: boolean;
+}) {
   return (
     <Link
       href="/modelet"

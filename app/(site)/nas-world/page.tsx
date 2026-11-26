@@ -6,7 +6,7 @@ import { pageMetadata } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata({
   title: "NAS World",
-  description: "Evente, lajme, modele të reja dhe këshilla nga NAS në Pejë.",
+  description: "Evente, lajme, modele të reja dhe këshilla nga NAS.",
   path: "/nas-world",
 });
 

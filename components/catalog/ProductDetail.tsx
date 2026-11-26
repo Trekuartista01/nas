@@ -5,16 +5,19 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useState, type ReactNode } from "react";
 import Reveal from "@/components/ui/Reveal";
 import { eur } from "@/lib/format";
+import T from "@/components/i18n/T";
+import { useLang, useT } from "@/components/i18n/lang";
+import { labelNode, labelText, type Label } from "@/components/i18n/label";
 
 export interface ProductView {
-  label: string;
+  label: Label;
   image?: string;
 }
 
 export interface ProductSpec {
   value: string;
   unit?: string;
-  label: string;
+  label: Label;
 }
 
 export interface ProductColour {
@@ -48,15 +51,15 @@ interface ProductDetailProps {
   related: RelatedProduct[];
   /** Extra sections between the specs strip and the related row (models: the SPECS section). */
   details?: ReactNode;
-  /** Replaces the stage + name/specs sections (models use ModelShowcase). */
-  hero?: ReactNode;
 }
 
 /**
  * Product detail layout (design: NAS Aksesoret Detail Page.png).
  * Built generic so /modelet/[slug] can reuse it with bike views and specs.
  */
-export default function ProductDetail({ brand, name, word, views, isNew = false, cutout = false, colours = [], specs, price, related, details, hero }: ProductDetailProps) {
+export default function ProductDetail({ brand, name, word, views, isNew = false, cutout = false, colours = [], specs, price, related, details }: ProductDetailProps) {
+  const lang = useLang();
+  const t = useT();
   const [view, setView] = useState(0);
   const [colour, setColour] = useState(0);
   // The first view follows the chosen colour when that colour has its own photo.
@@ -64,7 +67,7 @@ export default function ProductDetail({ brand, name, word, views, isNew = false,
 
   return (
     <>
-      {hero ?? (
+      {(
       <>
       {/* ───── Stage ───── */}
       <section className="relative overflow-hidden">
@@ -89,10 +92,10 @@ export default function ProductDetail({ brand, name, word, views, isNew = false,
               >
                 {current?.image ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={current.image} alt={`${brand} ${name}, pamja ${current.label.toLowerCase()}`} className={`size-full ${cutout ? "object-contain" : "object-cover"}`} />
+                  <img src={current.image} alt={`${brand} ${name}, ${t("pamja", "view")} ${labelText(current.label, lang).toLowerCase()}`} className={`size-full ${cutout ? "object-contain" : "object-cover"}`} />
                 ) : (
                   <span className="flex size-full items-center justify-center text-xs tracking-[0.14em] text-[#6f6f6f]">
-                    [FOTO · {name} · {current?.label}]
+                    [FOTO · {name} · {current ? labelText(current.label, lang) : ""}]
                   </span>
                 )}
               </motion.div>
@@ -103,12 +106,12 @@ export default function ProductDetail({ brand, name, word, views, isNew = false,
           {views.length > 1 && (
             <div
               role="tablist"
-              aria-label="Pamjet e produktit"
+              aria-label={t("Pamjet e produktit", "Product views")}
               className="mt-6 flex flex-wrap gap-2 lg:absolute lg:left-14 lg:top-[190px] lg:mt-0 lg:flex-col lg:gap-3"
             >
               {views.map((v, i) => (
                 <button
-                  key={v.label}
+                  key={i}
                   type="button"
                   role="tab"
                   aria-selected={i === view}
@@ -117,7 +120,7 @@ export default function ProductDetail({ brand, name, word, views, isNew = false,
                     i === view ? "border-red bg-red text-white" : "border-[#3a3a3a] bg-ink/60 text-white hover:border-white"
                   }`}
                 >
-                  {v.label}
+                  {labelNode(v.label)}
                 </button>
               ))}
             </div>
@@ -125,10 +128,12 @@ export default function ProductDetail({ brand, name, word, views, isNew = false,
 
           {isNew && (
             <span className="absolute right-4 top-[150px] bg-red px-3 py-1 text-[11px] font-semibold sm:right-6 lg:right-14 lg:top-[190px]">
-              E RE
+              <T sq="E RE" en="NEW" />
             </span>
           )}
-          <span className="absolute bottom-6 right-4 hidden text-[15px] text-muted sm:right-6 sm:block lg:right-14">360 pamje</span>
+          <span className="absolute bottom-6 right-4 hidden text-[15px] text-muted sm:right-6 sm:block lg:right-14">
+            <T sq="360 pamje" en="360 view" />
+          </span>
         </div>
       </section>
 
@@ -145,9 +150,9 @@ export default function ProductDetail({ brand, name, word, views, isNew = false,
           {colours.length > 0 && (
             <div>
               <p className="mb-3 text-[13px] text-muted">
-                Ngjyra: <span className="text-white/90">{colours[colour].name}</span>
+                <T sq="Ngjyra" en="Colour" />: <span className="text-white/90">{colours[colour].name}</span>
               </p>
-              <div role="radiogroup" aria-label="Ngjyra" className="flex gap-7">
+              <div role="radiogroup" aria-label={t("Ngjyra", "Colour")} className="flex gap-7">
                 {colours.map((c, i) => (
                   <button
                     key={c.name}
@@ -170,7 +175,7 @@ export default function ProductDetail({ brand, name, word, views, isNew = false,
         <Reveal delay={0.1} className="mt-10 grid grid-cols-2 border border-line md:grid-cols-[repeat(4,1fr)_1.05fr]">
           {specs.map((s, i) => (
             <div
-              key={s.label}
+              key={i}
               className={`flex flex-col justify-center gap-1 border-line px-6 py-5 lg:px-8 ${i % 2 === 0 ? "border-r" : "md:border-r"} ${
                 i < 2 ? "border-b md:border-b-0" : ""
               }`}
@@ -179,12 +184,11 @@ export default function ProductDetail({ brand, name, word, views, isNew = false,
                 <span className="text-[clamp(26px,2.6vw,40px)] font-bold leading-none">{s.value}</span>
                 {s.unit && <span className="text-lg font-semibold text-muted">{s.unit}</span>}
               </div>
-              <span className="text-[11px] uppercase text-muted">{s.label}</span>
+              <span className="text-[11px] uppercase text-muted">{labelNode(s.label)}</span>
             </div>
           ))}
           <div className="col-span-2 flex flex-col items-center justify-center bg-red py-6 md:col-span-1">
             <span className="text-[clamp(34px,3.4vw,48px)] font-bold leading-none">{eur(price)}</span>
-            <span className="mt-1.5 text-[10px] uppercase text-white/75">Çmim demo</span>
           </div>
         </Reveal>
       </section>

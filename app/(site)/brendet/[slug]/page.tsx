@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: PageProps<"/brendet/[slug]">)
   if (!brand) return {};
   return pageMetadata({
     title: brand.name,
-    description: `${brand.name} në NAS, Pejë: modelet, test ride dhe financim me këste.`,
+    description: `${brand.name} në NAS: modelet dhe test ride.`,
     path: `/brendet/${brandSlug(brand.name)}`,
   });
 }

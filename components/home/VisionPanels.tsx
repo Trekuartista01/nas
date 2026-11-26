@@ -7,6 +7,8 @@ import Rise from "@/components/motion/Rise";
 import { useParallaxScale } from "@/components/motion/useMotionScale";
 import { NAS_HOME } from "@/data/nas-home";
 import { MOTION } from "@/lib/motion";
+import T from "@/components/i18n/T";
+import type { Copy } from "@/lib/i18n";
 
 /**
  * Lifestyle / Speed / Freedom: full-screen panels that pin and stack. Each panel is sticky, so
@@ -50,7 +52,7 @@ function Panel({
   pin: boolean;
   k: number;
   title: string;
-  text: string;
+  text: Copy;
   image: string;
 }) {
   const last = index === count - 1;
@@ -66,7 +68,7 @@ function Panel({
   const num = `${String(index + 1).padStart(2, "0")} / ${String(count).padStart(2, "0")}`;
 
   return (
-    <section aria-label={title} className={`relative h-svh min-h-[560px] overflow-hidden border-t border-line ${pin ? "sticky top-0" : ""}`}>
+    <section className={`relative h-svh min-h-[560px] overflow-hidden border-t border-line ${pin ? "sticky top-0" : ""}`}>
       <motion.div style={{ scale }} className="absolute inset-0 bg-ink will-change-transform">
         <motion.div aria-hidden style={{ y: imageY }} className="absolute inset-x-0 -inset-y-[12%]">
           {/* Intro: the photo settles from 1.15 → 1 as the panel arrives. */}
@@ -94,7 +96,9 @@ function Panel({
           <div>
             <Lines as="h2" className="headline text-[clamp(52px,7.4vw,120px)]" lines={[title]} />
             <Rise delay={0.15} className="mt-6 max-w-[460px]">
-              <p className="text-[clamp(16px,1.3vw,19px)] leading-[1.6] text-light">{text}</p>
+              <p className="text-[clamp(16px,1.3vw,19px)] leading-[1.6] text-light">
+                <T {...text} />
+              </p>
             </Rise>
           </div>
         </div>

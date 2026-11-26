@@ -159,7 +159,7 @@ export function getAccessory(slug: string): Accessory | undefined {
 export function accessoryDescription(a: Accessory): string {
   const label = ACCESSORY_CATEGORY_LABEL[a.category];
   const name = isPlaceholder(a.brand) ? a.name : `${a.brand} ${a.name}`;
-  return `${name} në NAS, Pejë. ${label} për motoristë: shiko ngjyrat, specifikat dhe çmimin.`;
+  return `${name} në NAS. ${label} për motoristë: shiko ngjyrat, specifikat dhe çmimin.`;
 }
 
 export function relatedAccessories(a: Accessory, all: Accessory[], count = 3): Accessory[] {

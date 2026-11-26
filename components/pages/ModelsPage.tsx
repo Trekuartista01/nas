@@ -1,5 +1,6 @@
 "use client";
 
+import T from "@/components/i18n/T";
 import { useMemo, useState } from "react";
 import CatalogCard from "@/components/catalog/CatalogCard";
 import ModelsShutterHero from "@/components/catalog/ModelsShutterHero";
@@ -23,13 +24,13 @@ type TypeFilter = "all" | "motore" | "skuter";
 type LicenceFilter = "all" | Licence;
 
 const TYPE_OPTIONS: Option<TypeFilter>[] = [
-  { id: "all", label: "Të gjitha" },
-  { id: "motore", label: "Motorë" },
-  { id: "skuter", label: "Skuterë" },
+  { id: "all", label: { sq: "Të gjitha", en: "All" } },
+  { id: "motore", label: { sq: "Motorë", en: "Motorcycles" } },
+  { id: "skuter", label: { sq: "Skuterë", en: "Scooters" } },
 ];
 
 const LICENCE_OPTIONS: Option<LicenceFilter>[] = [
-  { id: "all", label: "Të gjitha" },
+  { id: "all", label: { sq: "Të gjitha", en: "All" } },
   { id: "AM", label: "AM" },
   { id: "A1", label: "A1" },
   { id: "A2", label: "A2" },
@@ -101,16 +102,16 @@ export default function ModelsPage({
   };
 
   return (
-    <ModelsShutterHero title="MODELET">
+    <ModelsShutterHero title="MODELS">
       <CatalogLayout
         filters={
           <>
-            <SearchField value={query} onChange={setQuery} label="Kërko modelin" />
-            <FilterGroup title="LLOJI">
-              <ChipGrid options={TYPE_OPTIONS} value={type} onChange={setType} label="Lloji" />
+            <SearchField value={query} onChange={setQuery} label={{ sq: "Kërko modelin", en: "Search the models" }} />
+            <FilterGroup title={<T sq="LLOJI" en="TYPE" />}>
+              <ChipGrid options={TYPE_OPTIONS} value={type} onChange={setType} label={{ sq: "Lloji", en: "Type" }} />
             </FilterGroup>
-            <FilterGroup title="PATENTA">
-              <ChipGrid options={LICENCE_OPTIONS} value={licence} onChange={setLicence} label="Patenta" />
+            <FilterGroup title={<T sq="PATENTA" en="LICENCE" />}>
+              <ChipGrid options={LICENCE_OPTIONS} value={licence} onChange={setLicence} label={{ sq: "Patenta", en: "Licence" }} />
             </FilterGroup>
             <PriceRange value={maxPrice} max={PRICE_MAX} onChange={setMaxPrice} />
             <ClearFilters onClick={clearFilters} />
@@ -118,7 +119,7 @@ export default function ModelsPage({
         }
         toolbar={
           <>
-            <ResultCount count={shown.length} noun="modele" />
+            <ResultCount count={shown.length} noun={{ sq: "modele", en: "models" }} />
             <SortSelect options={SORT_OPTIONS} value={sort} onChange={setSort} />
           </>
         }
@@ -126,7 +127,7 @@ export default function ModelsPage({
         <CatalogGrid
           items={shown}
           getKey={(m) => m.slug}
-          emptyTitle="ASNJË MODEL"
+          emptyTitle={<T sq="ASNJË MODEL" en="NO MODELS" />}
           onClear={clearFilters}
           render={(m) => (
             <CatalogCard

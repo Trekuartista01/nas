@@ -6,6 +6,7 @@ import Lines from "@/components/motion/Lines";
 import Rise from "@/components/motion/Rise";
 import { useParallaxScale } from "@/components/motion/useMotionScale";
 import { BlockButton } from "@/components/ui/Buttons";
+import T from "@/components/i18n/T";
 import { MOTION } from "@/lib/motion";
 import type { HeroVideo } from "@/lib/data/catalog";
 
@@ -67,10 +68,14 @@ export default function HomeHero({ heroVideo }: { heroVideo: HeroVideo }) {
         <div className="max-w-[340px] pb-1">
           <Rise onLoad delay={0.75}>
             <p className="text-[17px] leading-[1.6] text-body">
-              Built for the road. A modern motorcycle brand with British roots, engineered for those who lead, not follow.
+              <T
+                sq="Ndërtuar për rrugën. Një markë moderne motorësh me rrënjë britanike, e projektuar për ata që prijnë, jo për ata që ndjekin."
+                en="Built for the road. A modern motorcycle brand with British roots, engineered for those who lead, not follow."
+              />
             </p>
           </Rise>
           <Rise onLoad delay={0.9} className="mt-7">
+            {/* English in both languages (client, Nov 2026), like the headings. */}
             <BlockButton href="#range">Explore the range</BlockButton>
           </Rise>
         </div>

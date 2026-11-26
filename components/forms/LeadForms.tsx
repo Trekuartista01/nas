@@ -1,50 +1,14 @@
 "use client";
 
-import { ConsentField, ContactFields, LeadForm, SelectField, TextArea, TextField, type SelectOption } from "@/components/forms/FormParts";
-import { DEPOSIT_STEPS, TERM_OPTIONS } from "@/lib/finance";
+import { ConsentField, LeadForm, TextArea, TextField } from "@/components/forms/FormParts";
 import { motion } from "framer-motion";
-import { submitContact, submitDealer, submitFinance } from "@/lib/forms/actions";
+import { submitContact, submitDealer } from "@/lib/forms/actions";
 import { MOTION } from "@/lib/motion";
 
 /**
  * The site lead forms (the service, offer and test-ride forms were removed; their schemas stay for old leads in Admin → Kërkesat). Each lands in Admin → Kërkesat (and in the shop's inbox once email is set up).
  * Fields match the server schemas in lib/forms/schemas.ts.
- * `models`: the published models ({ value: slug, label }), loaded on the server.
- * `model`: preselect one (e.g. coming from a model page).
  */
-
-interface ModelProps {
-  models: SelectOption[];
-  model?: string;
-}
-
-/** Only preselect a model that is actually in the list. */
-const pick = (models: SelectOption[], slug?: string) => (slug && models.some((m) => m.value === slug) ? slug : undefined);
-
-export function FinanceForm({ models, model }: ModelProps) {
-  return (
-    <LeadForm action={submitFinance} label="Apliko për financim" submitLabel="APLIKO">
-      <ContactFields emailRequired />
-      <SelectField name="model" label="Modeli" options={models} defaultValue={pick(models, model)} required wide />
-      <SelectField
-        name="deposit"
-        label="Kapari"
-        required
-        defaultValue="20"
-        options={DEPOSIT_STEPS.map((d) => ({ value: String(d), label: `${d}%` }))}
-      />
-      <SelectField
-        name="months"
-        label="Afati"
-        required
-        defaultValue="24"
-        options={TERM_OPTIONS.map((m) => ({ value: String(m), label: `${m} muaj` }))}
-      />
-      <TextArea name="message" label="Mesazhi" rows={3} />
-      <ConsentField />
-    </LeadForm>
-  );
-}
 
 export function ContactForm() {
   return (

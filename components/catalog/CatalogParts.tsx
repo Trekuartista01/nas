@@ -7,8 +7,13 @@ import { LINEUP_EASE, useLineupReveal } from "@/components/catalog/LineupReveal"
 import { TbSearch } from "react-icons/tb";
 import Reveal from "@/components/ui/Reveal";
 import { eur } from "@/lib/format";
+import { BUSINESS } from "@/data/business";
+import T from "@/components/i18n/T";
+import { useLang, useT } from "@/components/i18n/lang";
+import { labelNode as node, labelText as str, type Label } from "@/components/i18n/label";
 
 /* Shared building blocks for the catalog list pages (/modelet, /aksesoret). */
+
 
 /** Page title with the giant outlined word behind it. */
 export function CatalogHero({ title }: { title: string }) {
@@ -59,6 +64,7 @@ function Entrance({ order, from = "below", className, children }: { order: numbe
 
 /** Sidebar + results layout. */
 export function CatalogLayout({ filters, toolbar, children }: { filters: ReactNode; toolbar: ReactNode; children: ReactNode }) {
+  const t = useT();
   return (
     <section className="container-moto pb-28 pt-[44px]">
       <div className="grid gap-10 lg:grid-cols-[373px_1fr] lg:gap-12">
@@ -66,7 +72,7 @@ export function CatalogLayout({ filters, toolbar, children }: { filters: ReactNo
             If they are taller than the screen they scroll on their own. The 72px top margin (the sort
             row: 48px + 24px) puts the search box level with the first row of cards. */}
         <aside
-          aria-label="Filtrat"
+          aria-label={t("Filtrat", "Filters")}
           className="flex flex-col gap-10 lg:sticky lg:mt-[72px] lg:top-24 lg:max-h-[calc(100dvh-7rem)] lg:self-start lg:overflow-y-auto lg:overscroll-contain lg:pb-2 lg:pr-2 lg:[scrollbar-width:thin]"
         >
           {pieces(filters).map((piece, i) => (
@@ -82,12 +88,17 @@ export function CatalogLayout({ filters, toolbar, children }: { filters: ReactNo
           {children}
           <Reveal className="mt-16 lg:mt-[100px]">
             <div className="flex flex-wrap items-center justify-between gap-4 border-l-4 border-red bg-[#141414] px-6 py-4">
-              <p className="text-[15px]">Nuk po e gjen modelin e duhur? Na trego si udhëton dhe të këshillojmë.</p>
+              <p className="text-[15px]">
+                <T
+                  sq="Nuk po e gjen modelin e duhur? Na trego si udhëton dhe të këshillojmë."
+                  en="Can't find the right model? Tell us how you ride and we'll help you choose."
+                />
+              </p>
               <Link
-                href="/kontakti"
+                href={`tel:${BUSINESS.phone}`}
                 className="border-b border-white pb-0.5 text-[15px] tracking-[0.02em] transition-colors hover:border-red hover:text-red"
               >
-                KËRKO OFERTË
+                <T sq="NA TELEFONO" en="CALL US" />
               </Link>
             </div>
           </Reveal>
@@ -97,15 +108,16 @@ export function CatalogLayout({ filters, toolbar, children }: { filters: ReactNo
   );
 }
 
-export function SearchField({ value, onChange, label }: { value: string; onChange: (v: string) => void; label: string }) {
+export function SearchField({ value, onChange, label }: { value: string; onChange: (v: string) => void; label: Label }) {
+  const t = useT();
   return (
     <label className="relative block">
-      <span className="sr-only">{label}</span>
+      <span className="sr-only">{node(label)}</span>
       <input
         type="search"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder="Kërko"
+        placeholder={t("Kërko", "Search")}
         className="h-12 w-full border border-line-2 bg-transparent pl-6 pr-12 text-[15px] text-white placeholder:text-muted focus:border-[#555] focus:outline-none"
       />
       <TbSearch size={20} aria-hidden className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2" />
@@ -113,7 +125,7 @@ export function SearchField({ value, onChange, label }: { value: string; onChang
   );
 }
 
-export function FilterGroup({ title, children }: { title: string; children: ReactNode }) {
+export function FilterGroup({ title, children }: { title: ReactNode; children: ReactNode }) {
   return (
     <fieldset>
       <legend className="mb-4 text-[15px]">{title}</legend>
@@ -124,7 +136,7 @@ export function FilterGroup({ title, children }: { title: string; children: Reac
 
 export interface Option<T extends string> {
   id: T;
-  label: string;
+  label: Label;
 }
 
 export function ChipGrid<T extends string>({
@@ -136,10 +148,11 @@ export function ChipGrid<T extends string>({
   options: Option<T>[];
   value: T;
   onChange: (v: T) => void;
-  label: string;
+  label: Label;
 }) {
+  const lang = useLang();
   return (
-    <div role="radiogroup" aria-label={label} className="grid grid-cols-3 gap-2.5">
+    <div role="radiogroup" aria-label={str(label, lang)} className="grid grid-cols-3 gap-2.5">
       {options.map((o) => {
         const active = o.id === value;
         return (
@@ -153,7 +166,7 @@ export function ChipGrid<T extends string>({
               active ? "border-red bg-red text-white" : "border-line-2 text-white hover:border-[#555]"
             }`}
           >
-            {o.label}
+            {node(o.label)}
           </button>
         );
       })}
@@ -171,22 +184,23 @@ export function InlineSelect<T extends string>({
   options: Option<T>[];
   value: T;
   onChange: (v: T) => void;
-  label: string;
+  label: Label;
 }) {
+  const lang = useLang();
   const current = options.find((o) => o.id === value)?.label ?? "";
   return (
     <div className="relative flex h-12 items-center gap-2.5 border border-line-2 pl-7 text-[15px] focus-within:border-[#555]">
-      <span aria-hidden>{current}</span>
+      <span aria-hidden>{node(current)}</span>
       <Caret />
       <select
         value={value}
         onChange={(e) => onChange(e.target.value as T)}
-        aria-label={label}
+        aria-label={str(label, lang)}
         className="absolute inset-0 cursor-pointer appearance-none bg-ink opacity-0"
       >
         {options.map((o) => (
           <option key={o.id} value={o.id}>
-            {o.label}
+            {str(o.label, lang)}
           </option>
         ))}
       </select>
@@ -211,7 +225,9 @@ export function PriceRange({ value, max, onChange, step = 100 }: { value: number
   return (
     <div>
       <div className="flex items-baseline justify-between text-[15px]">
-        <span id="price-label">ÇMIMI DERI NË</span>
+        <span id="price-label">
+          <T sq="ÇMIMI DERI NË" en="PRICE UP TO" />
+        </span>
         <span>{eur(value)}</span>
       </div>
       <div className="relative mt-3 h-6 outline-offset-4 outline-red has-[:focus-visible]:outline-2">
@@ -245,16 +261,17 @@ export function ClearFilters({ onClick }: { onClick: () => void }) {
       onClick={onClick}
       className="self-start border-b border-white pb-0.5 text-[15px] transition-colors hover:border-red hover:text-red"
     >
-      Pastro filtrat
+      <T sq="Pastro filtrat" en="Clear filters" />
     </button>
   );
 }
 
 export function SortSelect<T extends string>({ options, value, onChange }: { options: Option<T>[]; value: T; onChange: (v: T) => void }) {
+  const lang = useLang();
   return (
     <div className="flex items-center gap-4">
       <label htmlFor="sort" className="text-[15px] text-[#6a6a6a]">
-        Rendit sipas
+        <T sq="Rendit sipas" en="Sort by" />
       </label>
       <div className="relative">
         <select
@@ -265,7 +282,7 @@ export function SortSelect<T extends string>({ options, value, onChange }: { opt
         >
           {options.map((o) => (
             <option key={o.id} value={o.id}>
-              {o.label}
+              {str(o.label, lang)}
             </option>
           ))}
         </select>
@@ -275,10 +292,10 @@ export function SortSelect<T extends string>({ options, value, onChange }: { opt
   );
 }
 
-export function ResultCount({ count, noun }: { count: number; noun: string }) {
+export function ResultCount({ count, noun }: { count: number; noun: Label }) {
   return (
     <p className="text-[13px] text-muted lg:hidden" aria-live="polite">
-      {count} {noun}
+      {count} {node(noun)}
     </p>
   );
 }
@@ -294,7 +311,7 @@ export function CatalogGrid<T>({
   items: T[];
   getKey: (item: T) => string;
   render: (item: T) => ReactNode;
-  emptyTitle: string;
+  emptyTitle: ReactNode;
   onClear: () => void;
 }) {
   // Behind the /modelet shutter: the cards wait for the door, then rise in one after another.
@@ -307,7 +324,9 @@ export function CatalogGrid<T>({
           {emptyTitle}
           <span className="text-red">.</span>
         </p>
-        <p className="text-muted">Asgjë nuk përputhet me filtrat e zgjedhur.</p>
+        <p className="text-muted">
+          <T sq="Asgjë nuk përputhet me filtrat e zgjedhur." en="Nothing matches the selected filters." />
+        </p>
         <ClearFilters onClick={onClear} />
       </div>
     );

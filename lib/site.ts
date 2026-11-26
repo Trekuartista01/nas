@@ -25,18 +25,16 @@ export const STATIC_PAGES: { path: string; priority: number }[] = [
   { path: "/", priority: 1 },
   { path: "/modelet", priority: 0.9 },
   { path: "/aksesoret", priority: 0.8 },
-  { path: "/financim", priority: 0.8 },
   { path: "/gjej-motorin", priority: 0.7 },
   { path: "/nas-world", priority: 0.6 },
-  { path: "/kontakti", priority: 0.7 },
   { path: "/rreth-nesh", priority: 0.6 },
   { path: "/sport-line", priority: 0.7 },
 ];
 
 export const SITE_NAME = "NAS";
-export const SITE_TITLE = "NAS — Motorë dhe skuterë në Pejë";
+export const SITE_TITLE = "NAS — Motorë dhe skuterë";
 export const SITE_DESCRIPTION =
-  "NAS, Pejë: motorë dhe skuterë NAS. Test ride falas, financim me këste dhe pjesë origjinale.";
+  "NAS: motorë dhe skuterë NAS. Test ride falas dhe pjesë origjinale.";
 
 /** Link-preview defaults (home page and layout). */
 export const OPEN_GRAPH_DEFAULTS = {

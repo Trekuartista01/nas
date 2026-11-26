@@ -22,14 +22,11 @@ async function Dashboard() {
   const stats = [
     { label: "Kërkesa të reja", value: d.newLeads, href: `${ADMIN_PATHS.leads}?statusi=new`, highlight: d.newLeads > 0 },
     { label: "Modele", value: d.models, href: ADMIN_PATHS.models },
-    { label: "Aksesorë", value: d.accessories, href: ADMIN_PATHS.accessories },
-    { label: "Postime", value: d.posts, href: ADMIN_PATHS.posts },
-    { label: "Abonentë aktivë", value: d.subscribers, href: ADMIN_PATHS.subscribers },
   ];
   return (
     <>
       <PageHeader title="Paneli" description="Kërkesat e fundit dhe gjendja e katalogut." />
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-2">
         {stats.map((s) => (
           <Link key={s.label} href={s.href} className="border border-line bg-panel p-4 transition-colors hover:border-line-2 hover:bg-surface">
             <p className={`text-3xl font-bold tabular-nums ${s.highlight ? "text-highlight" : ""}`}>{s.value}</p>
@@ -40,7 +37,7 @@ async function Dashboard() {
 
       <Panel title="Kërkesat e fundit" className="mt-6">
         {d.latest.length === 0 ? (
-          <EmptyState title="Asnjë kërkesë ende">Kërkesat nga format e faqes (ofertë, test ride, servis, financim, kontakt) shfaqen këtu.</EmptyState>
+          <EmptyState title="Asnjë kërkesë ende">Kërkesat nga format e faqes (dealer) shfaqen këtu.</EmptyState>
         ) : (
           <ul className="-my-2 divide-y divide-line">
             {d.latest.map((lead) => (

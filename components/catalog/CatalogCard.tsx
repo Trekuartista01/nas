@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { eur } from "@/lib/format";
+import T from "@/components/i18n/T";
 
 export interface CatalogCardProps {
   href: string;
@@ -40,7 +41,7 @@ export default function CatalogCard({ href, brand, name, meta, price, image, isN
         )}
         {isNew && (
           <span className="absolute left-2.5 top-2.5 bg-highlight px-2 py-1 text-[10px] font-black tracking-[0.12em] text-ink">
-            E RE
+            <T sq="E RE" en="NEW" />
           </span>
         )}
       </div>
@@ -58,14 +59,15 @@ export default function CatalogCard({ href, brand, name, meta, price, image, isN
         <div className="mt-2 text-[11px] text-[#7a7a7a]">{meta}</div>
         <div className="mt-auto flex items-baseline justify-between pt-4">
           <span className="text-[22px] font-bold">{eur(price)}</span>
-          <span className="text-[10px] uppercase text-[#7a7a7a]">Çmim demo</span>
         </div>
         {/* Visual call to action; the click goes to the card link above. 1px chrome outline that turns
             into a red fill on card hover. */}
         <span aria-hidden className="pointer-events-none relative mt-4 block py-3 text-center text-[11px] font-semibold tracking-[0.04em] text-white">
           <span className="absolute inset-0 bg-red opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           <span style={{ clipPath: CHROME_OUTLINE }} className="chrome absolute inset-0 transition-opacity duration-300 group-hover:opacity-0" />
-          <span className="relative">SHIKO DETAJET</span>
+          <span className="relative">
+            <T sq="SHIKO DETAJET" en="SEE DETAILS" />
+          </span>
         </span>
       </div>
     </article>

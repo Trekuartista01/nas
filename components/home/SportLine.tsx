@@ -6,6 +6,7 @@ import Rise from "@/components/motion/Rise";
 import { useMedia, useParallaxScale, useReducedMotionSafe } from "@/components/motion/useMotionScale";
 import LogoBacklight from "@/components/nas/LogoBacklight";
 import { NAS_HOME } from "@/data/nas-home";
+import T from "@/components/i18n/T";
 import { MOTION, SPORT_VIDEO_PIN } from "@/lib/motion";
 
 /**
@@ -50,7 +51,7 @@ function Intro() {
         <motion.img
           data-anim
           src={NAS_HOME.sportLine.pedestal}
-          alt="NAS Sport Line në piedestal"
+          alt="NAS Sport Line"
           className="size-full object-cover object-[52%_62%] md:object-[50%_60%]"
           variants={{ hidden: { scale: 1.15 }, shown: { scale: 1, transition: { duration: MOTION.wipeDuration, ease: MOTION.ease } } }}
         />
@@ -65,13 +66,14 @@ function Intro() {
             shown: { opacity: 1, y: 0, transition: { duration: MOTION.text, ease: MOTION.ease, delay: 0.5 } },
           }}
         >
-          THE PERFORMANCE LINE
+          <T sq="LINJA E PERFORMANCËS" en="THE PERFORMANCE LINE" />
         </motion.p>
       </div>
     </motion.div>
   );
 }
 
+/** Big caption under the logo: a heading, so English in both languages. */
 const RED_S_LINE = "In the Sport Line, red is the signal of performance.";
 
 /** 2. Lights behind the logo: the S turns red, the wordmark dims and a bike's lights switch on behind it. */
@@ -131,7 +133,7 @@ function Details() {
                 loop
                 playsInline
                 preload="metadata"
-                aria-label="NAS Sport Line nga afër"
+                aria-label="NAS Sport Line"
                 className="size-full object-cover"
               />
             </motion.div>

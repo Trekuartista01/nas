@@ -4,11 +4,7 @@ export const ADMIN_PATHS = {
   login: "/admin/hyr",
   leads: "/admin/kerkesat",
   models: "/admin/modelet",
-  accessories: "/admin/aksesoret",
-  brands: "/admin/brendet",
-  posts: "/admin/postimet",
   banner: "/admin/banneri",
-  subscribers: "/admin/abonentet",
   history: "/admin/historiku",
 } as const;
 

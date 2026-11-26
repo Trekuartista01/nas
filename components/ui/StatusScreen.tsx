@@ -4,9 +4,9 @@ interface StatusScreenProps {
   /** Giant outlined word behind the headline ("404", "GABIM"). */
   word: string;
   /** Small red label above the headline. */
-  eyebrow: string;
+  eyebrow: ReactNode;
   /** Headline lines; a red full stop is added after the last one. */
-  lines: string[];
+  lines: ReactNode[];
   text: ReactNode;
   actions: ReactNode;
 }
@@ -28,7 +28,7 @@ export default function StatusScreen({ word, eyebrow, lines, text, actions }: St
         <p className="text-xs font-semibold tracking-[0.18em] text-red">{eyebrow}</p>
         <h1 className="headline mt-4 text-[clamp(36px,6vw,76px)] leading-[0.95]">
           {lines.map((line, i) => (
-            <span key={line} className="block">
+            <span key={i} className="block">
               {line}
               {i === lines.length - 1 && <span className="text-red">.</span>}
             </span>

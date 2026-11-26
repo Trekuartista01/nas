@@ -9,13 +9,16 @@ import DarkModelCard, { SeeAllCard } from "@/components/nas/DarkModelCard";
 import { BlockButton } from "@/components/ui/Buttons";
 import type { Model, VehicleType } from "@/data/models";
 import { MOTION } from "@/lib/motion";
+import T from "@/components/i18n/T";
+import { useT } from "@/components/i18n/lang";
+import type { ReactNode } from "react";
 
 type Cat = "all" | "scooter" | "sport" | "offroad";
 
 /** Tabs and the vehicle types in each (category = the model's `type`). */
-const TABS: { id: Cat; label: string; types: VehicleType[] }[] = [
-  { id: "all", label: "All", types: ["scooter", "sport", "dirt", "atv"] },
-  { id: "scooter", label: "Scooters", types: ["scooter"] },
+const TABS: { id: Cat; label: ReactNode; types: VehicleType[] }[] = [
+  { id: "all", label: <T sq="Të gjitha" en="All" />, types: ["scooter", "sport", "dirt", "atv"] },
+  { id: "scooter", label: <T sq="Skuterë" en="Scooters" />, types: ["scooter"] },
   { id: "sport", label: "Sport Line", types: ["sport"] },
   { id: "offroad", label: "Off-road", types: ["dirt", "atv"] },
 ];
@@ -34,6 +37,7 @@ const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayout
  * Switching tabs fades the cards out and in and returns the row to its start.
  */
 export default function Range({ models }: { models: Model[] }) {
+  const t = useT();
   const [cat, setCat] = useState<Cat>("all");
   const pinnable = usePinnable();
   const desktop = useMedia("(min-width: 1024px)");
@@ -94,13 +98,13 @@ export default function Range({ models }: { models: Model[] }) {
   const grid = desktop && !pinnable; // reduced motion on desktop
   const cardSize = grid
     ? "aspect-[520/620] w-full"
-    : "h-[min(620px,calc(100svh-260px))] w-[min(520px,36vw)] shrink-0 max-lg:aspect-[4/5] max-lg:h-auto max-lg:w-[85%] max-lg:snap-start";
+    : "h-[min(620px,calc(100svh-260px))] w-[min(520px,36vw)] shrink-0 max-lg:aspect-[4/5] max-lg:h-auto max-lg:w-[85%] max-lg:snap-start md:max-lg:w-[46%]";
 
   return (
     <section
       ref={section}
       id="range"
-      aria-label="The Range"
+      aria-label={t("Gama", "The Range")}
       className="relative scroll-mt-20 bg-ink"
       style={pinnable ? { height: `calc(100svh + ${distance}px)` } : undefined}
     >
@@ -118,25 +122,27 @@ export default function Range({ models }: { models: Model[] }) {
               ]}
             />
             <Rise delay={0.2} className="mt-6 max-w-[360px]">
-              <p className="text-[17px] leading-[1.6] text-body">From the city to beyond the borders. Choose your NAS.</p>
+              <p className="text-[17px] leading-[1.6] text-body">
+                <T sq="Nga qyteti deri përtej kufijve. Zgjidh NAS-in tënd." en="From the city to beyond the borders. Choose your NAS." />
+              </p>
               <BlockButton href="/modelet" marks={false} className="mt-7">
-                See the models
+                <T sq="Shiko modelet" en="See the models" />
               </BlockButton>
             </Rise>
 
             <Rise delay={0.3} className="mt-9">
-              <div role="group" aria-label="Filtro modelet" className="flex flex-wrap gap-2">
-                {TABS.map((t) => (
+              <div role="group" aria-label={t("Filtro modelet", "Filter the models")} className="flex flex-wrap gap-2">
+                {TABS.map((tab) => (
                   <button
-                    key={t.id}
+                    key={tab.id}
                     type="button"
-                    aria-pressed={t.id === cat}
-                    onClick={() => pick(t.id)}
+                    aria-pressed={tab.id === cat}
+                    onClick={() => pick(tab.id)}
                     className={`h-10 cursor-pointer border px-4 text-[14px] transition-colors duration-300 ${
-                      t.id === cat ? "border-red bg-red text-white" : "border-line-3 text-light hover:border-[#555]"
+                      tab.id === cat ? "border-red bg-red text-white" : "border-line-3 text-light hover:border-[#555]"
                     }`}
                   >
-                    {t.label}
+                    {tab.label}
                   </button>
                 ))}
               </div>
@@ -187,7 +193,10 @@ export default function Range({ models }: { models: Model[] }) {
                   </motion.div>
                 ))}
                 <div data-card className={`flex ${cardSize}`}>
-                  <SeeAllCard cut className="size-full" label={n ? "See all models" : "Coming soon. See all models"} />
+                  <SeeAllCard cut className="size-full" label={
+                      n ? "See all models" : "Coming soon. See all models"
+                    }
+                  />
                 </div>
               </motion.div>
             </AnimatePresence>

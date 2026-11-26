@@ -5,6 +5,7 @@
  * Still to confirm with the client: exact cc, licence class and ALL prices (prices are DEMO).
  * "[MODELI] 50" stays a placeholder so the AM-licence path of the bike finder has a road scooter.
  */
+import type { Copy } from "@/lib/i18n";
 import { buildIndex, normalize, type SearchIndex } from "@/lib/search";
 
 export type VehicleType = "sport" | "dirt" | "scooter" | "atv";
@@ -28,6 +29,8 @@ export const TYPE_LABEL: Record<VehicleType, string> = {
   scooter: "SKUTER",
   atv: "ATV",
 };
+/** English labels for the language switch (TYPE_LABEL stays the Albanian one, also used by search). */
+export const TYPE_LABEL_EN: Record<VehicleType, string> = { sport: "SPORT", dirt: "DIRT", scooter: "SCOOTER", atv: "ATV" };
 
 export const LICENCE_RANK: Record<Licence, number> = { AM: 0, A1: 1, A2: 2, A: 3 };
 
@@ -96,43 +99,56 @@ export interface SpecGroup {
   rows: SpecRow[];
 }
 
+/** The SPECS section rows on the page, in both languages (the brochure PDF keeps SpecGroup, English). */
+export interface PageSpecRow {
+  label: Copy;
+  sub?: Copy;
+  value: string;
+}
+export interface PageSpecGroup {
+  /** Card heading: English only. */
+  title: string;
+  rows: PageSpecRow[];
+}
+
 /**
  * SPECS section (design: Frame 27764 — model detail page). Same three groups for every model.
  * Only the displacement is known (from cc); every other value stays a visible [XX] placeholder
  * until the client sends the spec sheets. Fill real values per model in MODEL_SPECS below.
  */
-export function modelSpecs(m: Pick<Model, "slug" | "cc">): SpecGroup[] {
+export function modelSpecs(m: Pick<Model, "slug" | "cc">): PageSpecGroup[] {
   const v = (key: string, fallback: string) => MODEL_SPECS[m.slug]?.[key] ?? fallback;
+  const frontRear = { sq: "para / prapa", en: "front / rear" };
   return [
     {
-      title: "MOTORI",
+      title: "ENGINE",
       rows: [
-        { label: "DISPLACEMENT", value: v("displacement", `${m.cc} CC`) },
-        { label: "MAX POWER", value: v("maxPower", "[XX] KW @ [X,XXX] RPM") },
-        { label: "MAX TORQUE", value: v("maxTorque", "[XX] NM @ [X,XXX] RPM") },
-        { label: "COOLING", value: v("cooling", "[XX]") },
-        { label: "GEARS", value: v("gears", "[XX]") },
-        { label: "CONSUMPTION", value: v("consumption", "[X.X] L/100 KM") },
+        { label: { sq: "KUBIKAZHI", en: "DISPLACEMENT" }, value: v("displacement", `${m.cc} CC`) },
+        { label: { sq: "FUQIA MAKS.", en: "MAX POWER" }, value: v("maxPower", "[XX] KW @ [X,XXX] RPM") },
+        { label: { sq: "ÇIFTI MAKS.", en: "MAX TORQUE" }, value: v("maxTorque", "[XX] NM @ [X,XXX] RPM") },
+        { label: { sq: "FTOHJA", en: "COOLING" }, value: v("cooling", "[XX]") },
+        { label: { sq: "MARSHAT", en: "GEARS" }, value: v("gears", "[XX]") },
+        { label: { sq: "KONSUMI", en: "CONSUMPTION" }, value: v("consumption", "[X.X] L/100 KM") },
       ],
     },
     {
       title: "DIMENSIONS & WEIGHT",
       rows: [
-        { label: "LENGTH", value: v("length", "[XXXX] mm") },
-        { label: "SEAT LENGTH", value: v("seatLength", "[XXX] mm") },
-        { label: "GROUND CLEARANCE", value: v("groundClearance", "[XXX] mm") },
-        { label: "KERB WEIGHT", value: v("kerbWeight", "[XXX] kg") },
-        { label: "FUEL TANK", value: v("fuelTank", "[XX] L") },
+        { label: { sq: "GJATËSIA", en: "LENGTH" }, value: v("length", "[XXXX] mm") },
+        { label: { sq: "GJATËSIA E ULËSES", en: "SEAT LENGTH" }, value: v("seatLength", "[XXX] mm") },
+        { label: { sq: "LARTËSIA NGA TOKA", en: "GROUND CLEARANCE" }, value: v("groundClearance", "[XXX] mm") },
+        { label: { sq: "PESHA BOSH", en: "KERB WEIGHT" }, value: v("kerbWeight", "[XXX] kg") },
+        { label: { sq: "DEPOZITA", en: "FUEL TANK" }, value: v("fuelTank", "[XX] L") },
       ],
     },
     {
       title: "CHASSIS & BRAKES",
       rows: [
-        { label: "FRAME", value: v("frame", "[XX]") },
-        { label: "TYRES,", sub: "front / rear", value: v("tyres", "[XX] / [XX]") },
-        { label: "DISCS,", sub: "front / rear", value: v("discs", "[XXX] / [XXX] mm") },
-        { label: "ABS", value: v("abs", "[XX]") },
-        { label: "LIGHTING", value: v("lighting", "[XX]") },
+        { label: { sq: "KORNIZA", en: "FRAME" }, value: v("frame", "[XX]") },
+        { label: { sq: "GOMAT,", en: "TYRES," }, sub: frontRear, value: v("tyres", "[XX] / [XX]") },
+        { label: { sq: "DISQET,", en: "DISCS," }, sub: frontRear, value: v("discs", "[XXX] / [XXX] mm") },
+        { label: { sq: "ABS", en: "ABS" }, value: v("abs", "[XX]") },
+        { label: { sq: "NDRIÇIMI", en: "LIGHTING" }, value: v("lighting", "[XX]") },
       ],
     },
   ];

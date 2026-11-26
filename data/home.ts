@@ -120,7 +120,7 @@ export const accessoryCategories: CategoryCardItem[] = [
 export const worldTiles = {
   feature: { tag: "EVENT · [DATA]", title: "RIDE-OUT: PEJË → RUGOVË", text: "Bashkohu me komunitetin. Regjistrimi falas.", image: "/images/nas-world-ride-out.jpg" },
   small: [
-    { tag: "LAJME", title: "Unboxing: QJMOTOR mbërriti në Pejë", image: "/images/nas-world-qj-unboxing.jpg" },
+    { tag: "LAJME", title: "Unboxing: QJMOTOR mbërriti", image: "/images/nas-world-qj-unboxing.jpg" },
     { tag: "MODEL I RI", title: "ZONTES 703 RR", image: "/images/nas-world-new-model.jpg" },
     { tag: "KËSHILLA", title: "[Përgatit motorin për dimër]", image: "/images/nas-world-tips.jpg" },
   ],

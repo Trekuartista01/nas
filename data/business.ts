@@ -5,9 +5,10 @@
  */
 export const BUSINESS = {
   name: "NAS",
-  street: "Konferenca e Bujanit",
-  city: "Pejë",
-  postalCode: "30000",
+  /** [ADRESA]: the earlier Pejë address was wrong (Nov 2026). Null = no address on the site or in structured data. */
+  street: null as string | null,
+  city: null as string | null,
+  postalCode: null as string | null,
   /** ISO code used for Kosovo. */
   country: "XK",
   phone: "+38344155662",
@@ -16,9 +17,8 @@ export const BUSINESS = {
   email: null as string | null,
   /** TODO(client): confirm WhatsApp is on this number (assumed the shop phone, Nov 2026). Digits for wa.me. */
   whatsapp: "38344155662",
-  mapsUrl: "https://maps.app.goo.gl/5tpdRcF7HA4sv7718",
-  /** What the embedded map searches for (the address; the Google listing still carries the old shop name). */
-  mapsQuery: "Konferenca e Bujanit, Pejë",
+  /** Google Maps link: null until the real address is confirmed (the old listing was the Pejë shop). */
+  mapsUrl: null as string | null,
   /** Still the old shop account; swap for the NAS account when the client sends it. */
   instagram: "https://www.instagram.com/moto.shpati/",
   /** [FACEBOOK URL] — not confirmed yet. */

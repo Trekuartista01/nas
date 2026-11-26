@@ -3,14 +3,14 @@ import { ModelIntro, ModelRelated } from "@/components/catalog/ModelStory";
 import ProductDetail from "@/components/catalog/ProductDetail";
 import SpecsSection from "@/components/catalog/SpecsSection";
 import JsonLd from "@/components/seo/JsonLd";
-import { DEFAULT_FEATURES, DEFAULT_MEDIA, getModelDetails, MODEL_VIEWS } from "@/data/model-details";
+import { DEFAULT_FEATURES, DEFAULT_MEDIA, getModelDetails, MODEL_VIEW_LABEL, MODEL_VIEWS } from "@/data/model-details";
 import { getShowcase } from "@/data/model-showcase";
 import { modelSpecs, modelSpecValue, TYPE_LABEL, type Model } from "@/data/models";
 import { productSchema } from "@/lib/structured-data";
 
 /** One-line description for search results, link previews and structured data. */
 export function modelDescription(m: Model): string {
-  return `${m.brand} ${m.name}: ${TYPE_LABEL[m.type].toLowerCase()} ${m.cc} cc, patenta ${m.licence}. Test ride dhe financim me këste në NAS, Pejë.`;
+  return `${m.brand} ${m.name}: ${TYPE_LABEL[m.type].toLowerCase()} ${m.cc} cc, patenta ${m.licence}. Në NAS.`;
 }
 
 /** Same type first, then the rest. */
@@ -23,7 +23,7 @@ function related(m: Model, all: Model[], count = 3): Model[] {
  * /modelet/[slug] (design: Frame 27764, Nov 2026). Stage with the view tabs, name + colours, the
  * specs strip with the price, the tagline and the big media block, SPECS, the feature strips and
  * "You may also like" with the homepage Range cards (ProductDetail + ModelStory + ModelFeatures). Per-model copy and media: data/model-details.ts;
- * cut-out and colours: data/model-showcase.ts. The earlier ModelShowcase hero is unused, kept.
+ * cut-out and colours: data/model-showcase.ts. (The earlier ModelShowcase hero was removed with the financing, Nov 2026.)
  * `all`: every published model (related row), loaded on the server.
  */
 export default function SingleModelPage({ model: m, all }: { model: Model; all: Model[] }) {
@@ -48,15 +48,15 @@ export default function SingleModelPage({ model: m, all }: { model: Model; all: 
         brand={m.brand}
         name={m.name}
         word={`${m.brand} ${m.name}`}
-        views={MODEL_VIEWS.map((label) => ({ label, image: label === "ANASH" ? side : d.views?.[label] }))}
+        views={MODEL_VIEWS.map((key) => ({ label: MODEL_VIEW_LABEL[key], image: key === "ANASH" ? side : d.views?.[key] }))}
         cutout={!d.views?.ANASH && Boolean(show?.cutout)}
         colours={show?.colours}
         isNew={m.isNew}
         specs={[
-          { value: String(m.cc), unit: "cc", label: "Motori" },
-          { value: modelSpecValue(m.slug, "powerKw", "--"), unit: "kW", label: "Fuqia" },
-          { value: m.licence, label: "Patenta" },
-          { value: modelSpecValue(m.slug, "weightKg", "--"), unit: "kg", label: "Pesha" },
+          { value: String(m.cc), unit: "cc", label: { sq: "Motori", en: "Engine" } },
+          { value: modelSpecValue(m.slug, "powerKw", "--"), unit: "kW", label: { sq: "Fuqia", en: "Power" } },
+          { value: m.licence, label: { sq: "Patenta", en: "Licence" } },
+          { value: modelSpecValue(m.slug, "weightKg", "--"), unit: "kg", label: { sq: "Pesha", en: "Weight" } },
         ]}
         price={m.price}
         related={[]}

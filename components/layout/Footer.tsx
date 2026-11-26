@@ -1,59 +1,74 @@
 import { BUSINESS } from "@/data/business";
 import Link from "next/link";
-import NewsletterForm from "@/components/layout/NewsletterForm";
+import type { ReactNode } from "react";
+import T from "@/components/i18n/T";
 import FooterReveal from "@/components/layout/FooterReveal";
 import MaskRise from "@/components/motion/MaskRise";
 import Rise from "@/components/motion/Rise";
 import { LogoMark } from "@/components/ui/Logo";
 
-const COLUMNS = [
+/**
+ * Footer links = the pages the site has now (Nov 2026): the NAS lineup, the bike finder, Sport Line and
+ * The Brand. No newsletter, accessories, financing or contact page any more; the last column is the shop
+ * phone (the address waits for the client: the old Pejë one was wrong). Copy in both languages (<T>).
+ */
+const COLUMNS: { key: string; title: ReactNode; links: { href: string; label: ReactNode; external?: boolean }[] }[] = [
   {
-    title: "MODELET",
+    key: "models",
+    title: <T sq="MODELET" en="MODELS" />,
     links: [
-      { href: "/modelet?kategoria=sport", label: "Sport bikes" },
-      { href: "/modelet?kategoria=dirt", label: "Dirt bikes" },
-      { href: "/modelet?kategoria=skuter", label: "Skuterë" },
-      { href: "/modelet?te-rejat=1", label: "Të rejat" },
+      { href: "/modelet", label: <T sq="Të gjitha modelet" en="All models" /> },
+      { href: "/modelet?kategoria=skuter", label: <T sq="Skuterë" en="Scooters" /> },
+      { href: "/modelet?kategoria=motore", label: <T sq="Motorë" en="Motorcycles" /> },
     ],
   },
   {
-    title: "SHËRBIME",
+    key: "services",
+    title: <T sq="SHËRBIME" en="SERVICES" />,
+    links: [{ href: "/gjej-motorin", label: <T sq="Gjej motorin tënd" en="Find your bike" /> }],
+  },
+  {
+    key: "nas",
+    title: "NAS",
     links: [
-      { href: "/aksesoret?kategoria=pjese", label: "Pjesë rezervë" },
-      { href: "/financim", label: "Blej me këste" },
-      { href: "/modelet", label: "Test ride" },
+      { href: "/rreth-nesh", label: <T sq="Brendi" en="The Brand" /> },
+      { href: "/sport-line", label: "Sport Line" },
     ],
   },
   {
-    title: "KOMPANIA",
-    links: [
-      { href: "/rreth-nesh", label: "Rreth nesh" },
-      { href: "/nas-world", label: "NAS World" },
-      { href: "/nas-world?lloji=lajme", label: "Lajme" },
-      { href: "/kontakti", label: "Kontakti" },
-    ],
+    key: "showroom",
+    title: <T sq="NA TELEFONO" en="CALL US" />,
+    links: [{ href: `tel:${BUSINESS.phone}`, label: BUSINESS.phoneDisplay, external: true }],
   },
 ];
 
 export default function Footer() {
   return (
     <FooterReveal id="kontakt" className="overflow-hidden border-t border-line bg-ink">
-      <div className="container-moto grid grid-cols-2 gap-10 pt-20 text-sm md:grid-cols-5">
+      <div className="container-moto grid grid-cols-2 gap-10 pt-20 text-sm md:grid-cols-4">
         {COLUMNS.map((col, i) => (
-          <Rise key={col.title} delay={i * 0.08}>
+          <Rise key={col.key} delay={i * 0.08}>
             <div className="flex flex-col gap-3">
               <div className="mb-1.5 text-xs tracking-[0.14em] text-faint">{col.title}</div>
-              {col.links.map((l) => (
-                <Link key={l.label} href={l.href} className="hover:text-red">
-                  {l.label}
-                </Link>
-              ))}
+              {col.links.map((l) =>
+                l.external ? (
+                  <a
+                    key={l.href}
+                    href={l.href}
+                    {...(l.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
+                    className="hover:text-red"
+                  >
+                    {l.label}
+                  </a>
+                ) : (
+                  <Link key={l.href} href={l.href} className="hover:text-red">
+                    {l.label}
+                  </Link>
+                ),
+              )}
             </div>
           </Rise>
         ))}
-        <Rise delay={0.24} className="col-span-2">
-          <NewsletterForm />
-        </Rise>
       </div>
 
       {/* Giant logo, fitted to the container width; rises from a mask as the footer comes in. */}
@@ -73,8 +88,9 @@ export default function Footer() {
       </div>
 
       <div className="container-moto flex flex-wrap justify-between gap-4 border-t border-line py-7 text-xs text-faint">
-        <span>© 2026 NAS · Pejë, Kosovë</span>
-        <span className="flex gap-4">
+        <span>© 2026 NAS</span>
+        {/* pr: keeps the links clear of the fixed back-to-top button at the bottom right. */}
+        <span className="flex gap-4 pr-16">
           <a href={BUSINESS.instagram} target="_blank" rel="noreferrer" className="hover:text-white">
             Instagram
           </a>

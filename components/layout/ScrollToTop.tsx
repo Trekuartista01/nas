@@ -3,8 +3,10 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { TbArrowUp } from "react-icons/tb";
+import { useT } from "@/components/i18n/lang";
 
 export default function ScrollToTop() {
+  const t = useT();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -19,7 +21,7 @@ export default function ScrollToTop() {
       {visible && (
         <motion.button
           type="button"
-          aria-label="Kthehu në fillim"
+          aria-label={t("Kthehu në fillim", "Back to top")}
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

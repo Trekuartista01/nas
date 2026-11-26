@@ -1,4 +1,5 @@
 import Link from "next/link";
+import T from "@/components/i18n/T";
 
 /**
  * The logo mark (from nas-logo.svg), cropped to the artwork and drawn in currentColor.
@@ -46,7 +47,10 @@ export function LogoMark({
 /** Header logo, links home. */
 export default function Logo() {
   return (
-    <Link href="/" aria-label="NAS — faqja kryesore" className="flex shrink-0 items-center text-white transition-opacity hover:opacity-80">
+    <Link href="/" className="flex shrink-0 items-center text-white transition-opacity hover:opacity-80">
+      <span className="sr-only">
+        <T sq="NAS — faqja kryesore" en="NAS — home" />
+      </span>
       <LogoMark className="h-7 w-auto sm:h-8" />
     </Link>
   );

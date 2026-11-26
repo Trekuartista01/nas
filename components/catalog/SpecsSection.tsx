@@ -1,6 +1,7 @@
 import { FiDownload } from "react-icons/fi";
 import Reveal from "@/components/ui/Reveal";
-import type { SpecGroup } from "@/data/models";
+import type { PageSpecGroup } from "@/data/models";
+import T from "@/components/i18n/T";
 
 /**
  * SPECS on a model page (design: Frame 27764). Big italic title with an outlined echo behind it,
@@ -8,7 +9,7 @@ import type { SpecGroup } from "@/data/models";
  * `sheetUrl`: the spec brochure PDF (/modelet/[slug]/broshura.pdf), downloaded from the button
  * on the right of the title. Left out = no button.
  */
-export default function SpecsSection({ groups, sheetUrl }: { groups: SpecGroup[]; sheetUrl?: string }) {
+export default function SpecsSection({ groups, sheetUrl }: { groups: PageSpecGroup[]; sheetUrl?: string }) {
   return (
     <section aria-labelledby="specs-title" className="bg-ink">
       <div className="container-moto py-20 lg:py-28">
@@ -29,7 +30,7 @@ export default function SpecsSection({ groups, sheetUrl }: { groups: SpecGroup[]
               className="inline-flex min-h-11 items-center gap-2.5 bg-red px-4 text-[13px] font-medium uppercase tracking-[0.02em] text-white transition-colors hover:bg-[#c00500] hover:text-white"
             >
               <FiDownload aria-hidden className="size-4" />
-              Download the brochure
+              <T sq="Shkarko broshurën" en="Download the brochure" />
             </a>
           )}
         </Reveal>
@@ -38,13 +39,19 @@ export default function SpecsSection({ groups, sheetUrl }: { groups: SpecGroup[]
           {groups.map((group, i) => (
             <Reveal key={group.title} delay={i * 0.08} className="flex flex-col bg-[#161616]">
               <TopBar />
-              <h3 className="border-b border-[#222] px-4 py-6 text-[20px] font-extrabold uppercase leading-tight sm:text-[22px]">{group.title}</h3>
+              <h3 className="border-b border-[#222] px-4 py-6 text-[20px] font-extrabold uppercase leading-tight sm:text-[22px]">
+                {group.title}
+              </h3>
               <dl className="flex flex-col px-4 py-3">
                 {group.rows.map((row) => (
-                  <div key={row.label} className="grid min-h-16 grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] items-center gap-4 py-2">
+                  <div key={row.label.en} className="grid min-h-16 grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] items-center gap-4 py-2">
                     <dt className="text-[14px] font-bold uppercase leading-snug sm:text-[15px]">
-                      {row.label}
-                      {row.sub && <span className="block font-bold normal-case">{row.sub}</span>}
+                      <T {...row.label} />
+                      {row.sub && (
+                        <span className="block font-bold normal-case">
+                          <T {...row.sub} />
+                        </span>
+                      )}
                     </dt>
                     <dd className="text-[14px] leading-snug text-[#dcdcdc] sm:text-[15px]">{row.value}</dd>
                   </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import T from "@/components/i18n/T";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import Rise from "@/components/motion/Rise";
@@ -42,11 +43,15 @@ export default function Materials() {
 
             <div className="absolute inset-x-[clamp(24px,3.4vw,48px)] bottom-[clamp(40px,4.2vw,60px)]">
               <Rise mask delay={i * MOTION.lineStagger}>
-                <h3 className="headline whitespace-nowrap text-[clamp(40px,3.8vw,60px)]">{m.title}</h3>
+                <h3 className="headline whitespace-nowrap text-[clamp(40px,3.8vw,60px)]">
+                  {m.title}
+                </h3>
               </Rise>
               <div aria-hidden className="mt-3 h-[3px] w-full origin-left scale-x-[0.18] bg-red transition-transform duration-700 ease-moto group-hover:scale-x-100" />
               <Rise delay={0.2 + i * MOTION.lineStagger} className="mt-4">
-                <p className="text-[13px] uppercase tracking-[0.12em] text-body">{m.tags}</p>
+                <p className="text-[13px] uppercase tracking-[0.12em] text-body">
+                  <T {...m.tags} />
+                </p>
               </Rise>
             </div>
           </div>

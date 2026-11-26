@@ -5,7 +5,7 @@ import { join } from "node:path";
 // Preview image when a link is shared (WhatsApp, Facebook, Viber...). Inherited by every page
 // that doesn't set its own. Uses next/og's built-in font: Archivo is only available as .woff2,
 // which the image generator can't read. Replace with a designed image + real logo when ready.
-export const alt = "NAS — motorë dhe skuterë në Pejë";
+export const alt = "NAS — motorë dhe skuterë";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -28,7 +28,7 @@ export default function OpengraphImage() {
             </div>
           </div>
           <div style={{ marginTop: 28, fontSize: 34, color: "#d4d4d4" }}>Motorë · Skuterë</div>
-          <div style={{ fontSize: 26, color: "#9a9a9a" }}>NAS · QJMOTOR — Pejë, Kosovë</div>
+          <div style={{ fontSize: 26, color: "#9a9a9a" }}>NAS · QJMOTOR</div>
         </div>
       </div>
     ),

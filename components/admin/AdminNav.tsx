@@ -10,12 +10,8 @@ const LINKS: { href: string; label: string; group?: string }[] = [
   { href: ADMIN_PATHS.home, label: "Paneli" },
   { href: ADMIN_PATHS.leads, label: "Kërkesat" },
   { href: ADMIN_PATHS.models, label: "Modelet", group: "Katalogu" },
-  { href: ADMIN_PATHS.accessories, label: "Aksesorët" },
-  { href: ADMIN_PATHS.brands, label: "Brendet" },
-  { href: ADMIN_PATHS.posts, label: "Postimet", group: "Përmbajtja" },
-  { href: ADMIN_PATHS.banner, label: "Banneri (video)" },
-  { href: ADMIN_PATHS.subscribers, label: "Abonentët", group: "Tjera" },
-  { href: ADMIN_PATHS.history, label: "Historiku" },
+  { href: ADMIN_PATHS.banner, label: "Banneri (video)", group: "Përmbajtja" },
+  { href: ADMIN_PATHS.history, label: "Historiku", group: "Tjera" },
 ];
 
 function isActive(pathname: string, href: string) {

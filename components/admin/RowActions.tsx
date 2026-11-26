@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { deleteContent, deleteLead, deleteSubscriber, setLeadStatus, setSubscribed, togglePublished } from "@/lib/admin/actions";
+import { deleteContent, deleteLead, setLeadStatus, togglePublished } from "@/lib/admin/actions";
 import type { ContentTable } from "@/lib/admin/crud";
 import type { AdminFormState } from "@/lib/admin/form-state";
 import { LEAD_STATUS_LABEL } from "@/lib/admin/format";
@@ -118,35 +118,3 @@ export function LeadStatusSelect({ id, status }: { id: string; status: string })
   );
 }
 
-export function SubscriberActions({ id, subscribed }: { id: string; subscribed: boolean }) {
-  const { pending, error, run } = useRowAction();
-  return (
-    <span className="inline-flex flex-wrap items-center justify-end gap-2">
-      <button type="button" disabled={pending} onClick={() => run(() => setSubscribed(id, !subscribed))} className={buttonClass.small}>
-        {subscribed ? "Çregjistro" : "Riaktivizo"}
-      </button>
-      <SubscriberDelete id={id} />
-      <InlineError error={error} />
-    </span>
-  );
-}
-
-function SubscriberDelete({ id }: { id: string }) {
-  const { pending, error, run } = useRowAction();
-  const [asking, setAsking] = useState(false);
-  return asking ? (
-    <span className="inline-flex items-center gap-1">
-      <button type="button" disabled={pending} onClick={() => run(() => deleteSubscriber(id))} className={buttonClass.small}>
-        {pending ? "…" : "Po, fshije"}
-      </button>
-      <button type="button" onClick={() => setAsking(false)} className={buttonClass.small}>
-        Anulo
-      </button>
-      <InlineError error={error} />
-    </span>
-  ) : (
-    <button type="button" onClick={() => setAsking(true)} className={`${buttonClass.small} text-[#ff5a52]`}>
-      Fshi
-    </button>
-  );
-}

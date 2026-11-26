@@ -110,10 +110,6 @@ export async function submitService(_prev: FormState, formData: FormData): Promi
   return handle("service", formData);
 }
 
-export async function submitFinance(_prev: FormState, formData: FormData): Promise<FormState> {
-  return handle("finance", formData);
-}
-
 export async function submitContact(_prev: FormState, formData: FormData): Promise<FormState> {
   return handle("contact", formData);
 }

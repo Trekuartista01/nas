@@ -8,7 +8,7 @@ import { pageMetadata } from "@/lib/site";
 export const metadata: Metadata = pageMetadata({
   title: "Modelet",
   description:
-    "Të gjitha modelet në NAS, Pejë: motorë dhe skuterë. Filtro sipas llojit, patentës dhe çmimit.",
+    "Të gjitha modelet në NAS: motorë dhe skuterë. Filtro sipas llojit, patentës dhe çmimit.",
   path: "/modelet",
 });
 

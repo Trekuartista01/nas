@@ -37,7 +37,7 @@ insert into public.accessories (slug, brand, name, category, price, is_new, imag
 insert into public.accessories (slug, brand, name, category, price, is_new, image_path, cutout, meta, tags, specs, colours, sort, published) values ('mbulese-motori', '[MARKA]', 'MBULESË MOTORI', 'pjese', 35, false, '/images/nas-acc-parts.jpg', false, '[MADHËSIA]', array['cover']::text[], '[{"value":"--","unit":"L","label":"VËLLIMI"},{"value":"--","unit":"kg","label":"PESHA"},{"value":"[MODELET]","label":"PËRSHTATET"},{"value":"--","label":"MATERIALI"}]'::jsonb, '[]'::jsonb, 120, true) on conflict (slug) do nothing;
 
 -- Hero video + shots (only if no banner has been saved yet)
-insert into public.hero_video (id, video_path, poster_path, duration) values (1, '/videos/hero.mp4', '/videos/hero-poster.jpg', 10.05) on conflict (id) do nothing;
+insert into public.hero_video (id, video_path, poster_path, duration) values (1, '/videos/hero-video.mp4', '/videos/hero-poster.jpg', 10) on conflict (id) do nothing;
 insert into public.banner_slides (start_seconds, label, sort)
 select * from (values
   (0, 'Skuter në qytet', 0),

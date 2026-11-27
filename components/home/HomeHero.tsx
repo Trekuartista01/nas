@@ -32,7 +32,7 @@ export default function HomeHero({ heroVideo }: { heroVideo: HeroVideo }) {
       className="relative -mt-[76px] flex h-svh max-h-[1080px] min-h-[640px] items-end overflow-hidden bg-ink lg:-mt-20"
     >
       <motion.div aria-hidden style={{ y: imageY }} className="absolute inset-0">
-        {/* Hero video (Admin → Banneri; falls back to public/videos/hero.mp4). Muted, looping, inline. */}
+        {/* Hero video (Admin → Banneri; falls back to public/videos/hero-video.mp4). Muted, looping, inline. */}
         <motion.video
           data-anim
           src={heroVideo.src}

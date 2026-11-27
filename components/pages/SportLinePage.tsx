@@ -60,6 +60,7 @@ export default function SportLinePage() {
 
       {/* ───── The idea ───── */}
       <IdeaSection
+        id="ideja"
         kicker={<T sq="IDEJA" en="THE IDEA" />}
         lines={[
           "CONTROL.",
@@ -74,7 +75,7 @@ export default function SportLinePage() {
       </IdeaSection>
 
       {/* ───── The red S ───── */}
-      <section className="bg-ink">
+      <section id="s-e-kuqe" className="scroll-mt-20 bg-ink">
         <div className="container-moto grid items-center gap-12 pb-[clamp(90px,10vw,150px)] md:grid-cols-[1.15fr_1fr] md:gap-16">
           <Rise duration={MOTION.image}>
             <div className="flex aspect-[732/520] items-center justify-center bg-light">
@@ -105,7 +106,7 @@ export default function SportLinePage() {
       </section>
 
       {/* ───── Built from the wordmark ───── */}
-      <section className="bg-surface-3">
+      <section id="specifikat" className="scroll-mt-20 bg-surface-3">
         <SectionLine />
         <div className="container-moto py-[clamp(90px,10vw,150px)]">
           <SectionHead

@@ -136,3 +136,29 @@ export const SPORT_VIDEO_PIN = {
   /** How long the video stays pinned full screen, in screen heights of scrolling (svh). */
   holdVh: 100,
 } as const;
+
+/**
+ * Sport Line logo → red S → flash → video (components/nas/LogoFlashVideo.tsx; replaced the "lights behind
+ * the logo", Nov 2026). ≥ 768px without reduced motion: one sticky full-screen scene; scroll progress only
+ * picks the step, each step then plays at a fixed speed (one wheel notch / swipe past a point is enough),
+ * scrolling back reverses it.
+ */
+export const SPORT_FLASH = {
+  /** Scroll while pinned, in screen heights (the wrapper is this + 1 screen tall). */
+  pinScreens: 1.1,
+  /** Trigger points on the pinned progress (0 → 1): the S turns red, then the flash into the video. */
+  steps: { red: 0.12, video: 0.38 },
+  /** S white → red, and the caption rising in, seconds. */
+  redDuration: 0.45,
+  /** The logo punching toward the camera as it goes: scale and duration (s). */
+  punch: { scale: 1.25, duration: 0.18 },
+  /** White flash over the scene: peak opacity, time to the peak and total (s). */
+  flash: { opacity: 0.9, peak: 0.12, total: 0.26 },
+  /** Video coming in at the flash peak: start scale → 1 over this many seconds. */
+  videoIn: { scale: 1.08, duration: 0.9 },
+  /** Going back from the video to the logo, seconds. */
+  back: 0.25,
+  /** Phones: the S turns red when the logo is in view, then the flash this many seconds later. */
+  mobileDelay: 0.8,
+  colors: { bg: "#0C0C0C", red: "#EA2028", redCore: "#FF4A4A", white: "#FFFFFF" },
+} as const;

@@ -9,11 +9,11 @@ export interface HeroSlide {
   label: string;
 }
 
-/** Shot cut points in /videos/hero.mp4 (ends at 10.05s). */
+/** Hero video (Nov 2026: hero-video.mp4, 10s; the old hero.mp4 is kept). Shot cut points: the old Banner only, the NAS hero ignores them. */
 export const heroVideo = {
-  src: siteMedia("/videos/hero.mp4"),
+  src: siteMedia("/videos/hero-video.mp4"),
   poster: siteMedia("/videos/hero-poster.jpg"),
-  duration: 10.05,
+  duration: 10,
   slides: [
     { start: 0, label: "Skuter në qytet" },
     { start: 2.875, label: "Adventure në rrugë" },

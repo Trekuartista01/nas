@@ -34,9 +34,9 @@ export function headingLines(lines: (string | Copy)[]): ReactNode[] {
  * "THE IDEA" block (NAS Brand / Sport Line designs): label on the left, big heading and body on
  * the right two-thirds. Heading lines rise from their masks, then the body.
  */
-export function IdeaSection({ kicker, lines, children }: { kicker: ReactNode; lines: (string | Copy)[]; children: ReactNode }) {
+export function IdeaSection({ id, kicker, lines, children }: { id?: string; kicker: ReactNode; lines: (string | Copy)[]; children: ReactNode }) {
   return (
-    <section className="bg-ink">
+    <section id={id} className="scroll-mt-20 bg-ink">
       <div className="container-moto grid gap-8 py-[clamp(90px,10vw,160px)] lg:grid-cols-[1fr_2fr]">
         <Rise>
           <Kicker className="lg:pt-4">{kicker}</Kicker>

@@ -10,26 +10,26 @@ export const NAS_PAGES = {
     lion: `${WEB}/lion-emblem.png`,
     vision: [
       {
-        title: "LIFESTYLE",
+        title: "ORIGIN",
         text: {
-          sq: "NAS nuk është vetëm transport, por shoqërues i mënyrës si jeton. Elegancë, rehati dhe siguri në çdo udhëtim.",
-          en: "NAS is not just transport but a companion to the way you live. Elegance, comfort and confidence on every journey.",
+          sq: "Lindur nga pasioni për ngasjen dhe projektuar për rrugët që njohim.",
+          en: "Built from a passion for riding and designed for the streets we know.",
         },
         image: `${WEB}/lifestyle-tank.webp`,
       },
       {
-        title: "SPEED",
+        title: "CRAFT",
         text: {
-          sq: "Shpejtësi, saktësi dhe adrenalinë, për ata që ndjekin emocionin e pastër të rrugës.",
-          en: "Speed, precision and adrenaline, for those who chase the pure emotion of the road.",
+          sq: "Çdo detaj është projektuar me qëllim, nga korniza deri te përfundimi.",
+          en: "Every detail is engineered with purpose, from frame to finish.",
         },
         image: `${WEB}/hero-ride-side.webp`,
       },
       {
-        title: "FREEDOM",
+        title: "COMMUNITY",
         text: {
-          sq: "Për ata që nuk ndalen kurrë. Forcë, qëndrueshmëri dhe liria për të eksploruar përtej kufijve.",
-          en: "For those who never stop. Strength, durability and the freedom to explore beyond borders.",
+          sq: "Më shumë se një markë: një grup motoristësh në rritje që ndajnë rrugën.",
+          en: "More than a brand, a growing crew of riders who share the road.",
         },
         image: `${WEB}/concrete-helmet-light.webp`,
       },

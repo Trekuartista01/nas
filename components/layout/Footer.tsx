@@ -1,106 +1,124 @@
-import { BUSINESS } from "@/data/business";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import T from "@/components/i18n/T";
 import FooterReveal from "@/components/layout/FooterReveal";
 import MaskRise from "@/components/motion/MaskRise";
 import Rise from "@/components/motion/Rise";
+import ChromeLion from "@/components/nas/ChromeLion";
 import { LogoMark } from "@/components/ui/Logo";
+import { BUSINESS } from "@/data/business";
 
 /**
- * Footer links = the pages the site has now (Nov 2026): the NAS lineup, the bike finder, Sport Line and
- * The Brand. No newsletter, accessories, financing or contact page any more; the last column is the shop
- * phone (the address waits for the client: the old Pejë one was wrong). Copy in both languages (<T>).
+ * Footer (design "Nas footer.png", Nov 2026): the chrome lion on the left, four link columns (Modelet,
+ * Sport line, Brendi, Kontakti; the column head is a link too), then the big NAS wordmark with
+ * "MOTORCYCLE / BORN IN ENGLAND" under it and the social links bottom right.
+ * Kontakti: the address and email are not confirmed yet (BUSINESS.mapsUrl / email are null), so those two
+ * entries show as plain text without a link until they are filled in.
  */
-const COLUMNS: { key: string; title: ReactNode; links: { href: string; label: ReactNode; external?: boolean }[] }[] = [
+type Item = { label: ReactNode; href: string | null };
+const COLUMNS: { key: string; head: Item; links: Item[] }[] = [
   {
     key: "models",
-    title: <T sq="MODELET" en="MODELS" />,
+    head: { label: <T sq="Modelet" en="Models" />, href: "/modelet" },
     links: [
-      { href: "/modelet", label: <T sq="Të gjitha modelet" en="All models" /> },
-      { href: "/modelet?kategoria=skuter", label: <T sq="Skuterë" en="Scooters" /> },
-      { href: "/modelet?kategoria=motore", label: <T sq="Motorë" en="Motorcycles" /> },
+      { label: <T sq="Motorë" en="Motorcycles" />, href: "/modelet?kategoria=motore" },
+      { label: <T sq="Skuterë" en="Scooters" />, href: "/modelet?kategoria=skuter" },
+      // The catalog is sorted newest first by default.
+      { label: <T sq="Të rejat" en="New arrivals" />, href: "/modelet" },
     ],
   },
   {
-    key: "services",
-    title: <T sq="SHËRBIME" en="SERVICES" />,
-    links: [{ href: "/gjej-motorin", label: <T sq="Gjej motorin tënd" en="Find your bike" /> }],
-  },
-  {
-    key: "nas",
-    title: "NAS",
+    key: "sport",
+    head: { label: "Sport line", href: "/sport-line" },
     links: [
-      { href: "/rreth-nesh", label: <T sq="Brendi" en="The Brand" /> },
-      { href: "/sport-line", label: "Sport Line" },
+      { label: "The idea", href: "/sport-line#ideja" },
+      { label: "The Red S", href: "/sport-line#s-e-kuqe" },
+      { label: "Specifics", href: "/sport-line#specifikat" },
     ],
   },
   {
-    key: "showroom",
-    title: <T sq="NA TELEFONO" en="CALL US" />,
-    links: [{ href: `tel:${BUSINESS.phone}`, label: BUSINESS.phoneDisplay, external: true }],
+    key: "brand",
+    head: { label: <T sq="Brendi" en="The Brand" />, href: "/rreth-nesh" },
+    links: [
+      { label: "The Lion", href: "/rreth-nesh#luani" },
+      { label: "The vision", href: "/rreth-nesh#vizioni" },
+      { label: "Trust", href: "/rreth-nesh#vlerat" },
+    ],
+  },
+  {
+    key: "contact",
+    head: { label: <T sq="Kontakti" en="Contact" />, href: null },
+    links: [
+      { label: <T sq="Adresa" en="Address" />, href: BUSINESS.mapsUrl },
+      { label: <T sq="Numri kontaktues" en="Phone number" />, href: `tel:${BUSINESS.phone}` },
+      { label: "Email", href: BUSINESS.email ? `mailto:${BUSINESS.email}` : null },
+    ],
   },
 ];
 
+const SOCIAL = [
+  { label: "Instagram", href: BUSINESS.instagram },
+  { label: "Facebook", href: BUSINESS.facebook ?? "[FACEBOOK URL]" },
+  { label: "Tiktok", href: "[TIKTOK URL]" },
+];
+
+function FooterLink({ item, className = "" }: { item: Item; className?: string }) {
+  if (!item.href) return <span className={className}>{item.label}</span>;
+  const cls = `${className} transition-colors hover:text-red`;
+  if (item.href.startsWith("/")) {
+    return (
+      <Link href={item.href} className={cls}>
+        {item.label}
+      </Link>
+    );
+  }
+  const external = item.href.startsWith("http");
+  return (
+    <a href={item.href} {...(external ? { target: "_blank", rel: "noreferrer" } : {})} className={cls}>
+      {item.label}
+    </a>
+  );
+}
+
 export default function Footer() {
   return (
-    <FooterReveal id="kontakt" className="overflow-hidden border-t border-line bg-ink">
-      <div className="container-moto grid grid-cols-2 gap-10 pt-20 text-sm md:grid-cols-4">
-        {COLUMNS.map((col, i) => (
-          <Rise key={col.key} delay={i * 0.08}>
-            <div className="flex flex-col gap-3">
-              <div className="mb-1.5 text-xs tracking-[0.14em] text-faint">{col.title}</div>
-              {col.links.map((l) =>
-                l.external ? (
-                  <a
-                    key={l.href}
-                    href={l.href}
-                    {...(l.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
-                    className="hover:text-red"
-                  >
-                    {l.label}
-                  </a>
-                ) : (
-                  <Link key={l.href} href={l.href} className="hover:text-red">
-                    {l.label}
-                  </Link>
-                ),
-              )}
-            </div>
-          </Rise>
-        ))}
+    <FooterReveal id="kontakt" className="overflow-hidden bg-black text-[#f2f2f2]">
+      <div className="container-moto grid gap-12 pt-[clamp(64px,8vw,112px)] lg:grid-cols-[minmax(0,1.15fr)_minmax(0,4fr)]">
+        <Rise>
+          <ChromeLion className="w-[clamp(96px,9vw,128px)]" />
+        </Rise>
+        <div className="grid grid-cols-2 gap-x-8 gap-y-10 md:grid-cols-4">
+          {COLUMNS.map((col, i) => (
+            <Rise key={col.key} delay={i * 0.08}>
+              <div className="flex flex-col items-start gap-[14px] text-[clamp(15px,1.2vw,18px)] leading-tight">
+                <FooterLink item={col.head} className="mb-1.5" />
+                {col.links.map((l, j) => (
+                  <FooterLink key={j} item={l} />
+                ))}
+              </div>
+            </Rise>
+          ))}
+        </div>
       </div>
 
-      {/* Giant logo, fitted to the container width; rises from a mask as the footer comes in. */}
-      <div aria-hidden className="container-moto mt-20 pb-8">
-        <MaskRise>
-          <div className="relative">
-            <LogoMark className="block h-auto w-full text-white" />
-            {/* Chrome copy of the letters (the ® stays white), faded in with the footer reveal (--footer-reveal from
-                FooterReveal); one glint when the footer settles at the bottom. */}
-            <div
-              className="chrome absolute inset-0 [mask-image:url(/nas-images/nas-wordmark-letters.svg)] [mask-repeat:no-repeat] [mask-size:100%_100%] [opacity:var(--footer-reveal,0)]"
-            >
-              <div className="glint absolute inset-0 in-data-[settled=true]:animate-[glint-sweep_1.2s_cubic-bezier(.7,0,.2,1)_0.15s_both]" />
-            </div>
+      <div className="container-moto flex flex-wrap items-end justify-between gap-x-10 gap-y-8 pb-10 pt-[clamp(80px,10vw,140px)]">
+        {/* Big wordmark; rises from a mask as the footer comes in. */}
+        <MaskRise className="w-full max-w-[640px] md:w-[46%]">
+          <div className="text-[#e3e3e3]">
+            <LogoMark bare title="NAS" className="block h-auto w-full" />
+            <p className="mt-[clamp(14px,1.6vw,24px)] text-[clamp(17px,1.85vw,27px)] font-extrabold uppercase leading-[1] tracking-[-0.01em]">
+              Motorcycle
+              <br />
+              Born in England
+            </p>
           </div>
         </MaskRise>
-      </div>
-
-      <div className="container-moto flex flex-wrap justify-between gap-4 border-t border-line py-7 text-xs text-faint">
-        <span>© 2026 NAS</span>
         {/* pr: keeps the links clear of the fixed back-to-top button at the bottom right. */}
-        <span className="flex gap-4 pr-16">
-          <a href={BUSINESS.instagram} target="_blank" rel="noreferrer" className="hover:text-white">
-            Instagram
-          </a>
-          <a href="[FACEBOOK URL]" className="hover:text-white">
-            Facebook
-          </a>
-          <a href="[TIKTOK URL]" className="hover:text-white">
-            TikTok
-          </a>
-        </span>
+        <div className="flex gap-5 pb-1 text-[clamp(15px,1.2vw,18px)] md:pr-16">
+          {SOCIAL.map((s) => (
+            <FooterLink key={s.label} item={s} />
+          ))}
+        </div>
       </div>
     </FooterReveal>
   );

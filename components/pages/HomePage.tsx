@@ -1,6 +1,7 @@
 import DealerCta from "@/components/home/DealerCta";
 import HomeHero from "@/components/home/HomeHero";
 import Range from "@/components/home/Range";
+import SportLineIntro from "@/components/home/SportLineIntro";
 import SportLine from "@/components/home/SportLine";
 import Statement from "@/components/home/Statement";
 import VisionPanels from "@/components/home/VisionPanels";
@@ -21,6 +22,7 @@ export default async function HomePage() {
       <Statement />
       <VisionPanels />
       <Range models={models} />
+      <SportLineIntro />
       <SportLine />
       <DealerCta />
     </>

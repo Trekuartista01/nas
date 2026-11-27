@@ -305,3 +305,270 @@ input[type="range"].price-range::-moz-range-thumb {
     background-position: 0% 0, 0% 0;
   }
 }
+
+/* ───────────────── Sport Line intro, "diagonal opens" (components/home/SportIntro.tsx) ─────────────────
+   Base = the still version (reduced motion, or no scroll-driven animations and no script): no pin, full
+   image, final block shown. Pinned + animated where animation-timeline is supported (CSS only, view-timeline
+   --sl on the pinned section, --sl-length tall), or through --sl-w / --sl-t / --sl-f set by the component's script (.sl-js).
+   Only clip-path, scale/translate and opacity animate. Brand colours from the Sport Line brief. */
+.sl {
+  --sl-black: #060606;
+  --sl-silver: #e3e3e3;
+  --sl-signal: #ea0000;
+  --sl-margin: 1rem;
+  /* Pinned section height: the stage is 100vh, so the animation takes (this − 100vh) of scrolling. Was 300vh. */
+  --sl-length: 200vh;
+  /* Focal point of the night shot; the phone value keeps the headlights inside the narrow window. */
+  --sl-pos: 50% 50%;
+  position: relative;
+  background: var(--sl-black);
+  @media (width >= 40rem) {
+    --sl-margin: 1.5rem;
+  }
+  @media (width >= 64rem) {
+    --sl-margin: 3.5rem;
+  }
+  @media (width <= 760px) {
+    --sl-margin: 20px;
+    --sl-pos: 40% 50%;
+  }
+}
+.sl-stage {
+  position: relative;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+  background: var(--sl-black);
+}
+.sl-window {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+.sl-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--sl-pos);
+}
+.sl-sliver {
+  position: absolute;
+  inset: 0;
+  display: none;
+  background: var(--sl-signal);
+}
+.sl-scrim {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 62%;
+  background: linear-gradient(to top, rgb(6 6 6 / 0.92), rgb(6 6 6 / 0));
+}
+.sl-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sl-signal);
+}
+.sl-stack,
+.sl-title {
+  font-weight: 800;
+  line-height: 0.84;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #fff;
+}
+.sl-stack {
+  position: absolute;
+  top: 50%;
+  right: calc(max(0px, (100% - 120rem) / 2) + var(--sl-margin));
+  display: none;
+  translate: 0 -50%;
+  transform-origin: right center;
+  text-align: right;
+  font-size: clamp(84px, 11.6vw, 168px);
+}
+.sl-outline {
+  color: transparent;
+  -webkit-text-stroke: 2px #fff;
+}
+.sl-red {
+  color: var(--sl-signal);
+}
+.sl-final {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  padding-bottom: clamp(28px, 6vh, 64px);
+}
+.sl-title {
+  font-size: clamp(64px, 10.4vw, 150px);
+}
+.sl-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 40px;
+  margin-top: clamp(20px, 3vw, 36px);
+  padding-top: 16px;
+  border-top: 1px solid rgb(227 227 227 / 0.2);
+  @media (width <= 760px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+.sl-copy {
+  max-width: 44ch;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--sl-silver);
+}
+.sl-link {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: #fff;
+  &:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 4px;
+  }
+}
+.sl-arrow {
+  color: var(--sl-signal);
+  transition: translate 0.3s var(--ease-nas);
+  .sl-link:hover &,
+  .sl-link:focus-visible & {
+    translate: 6px 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Script fallback: pinned layout. */
+  .sl.sl-js {
+    height: var(--sl-length);
+  }
+  .sl-js .sl-stage {
+    position: sticky;
+    top: 0;
+  }
+  .sl-js :is(.sl-sliver, .sl-stack) {
+    display: block;
+  }
+  .sl-js :is(.sl-window, .sl-sliver, .sl-stack, .sl-final, .sl-scrim) {
+    will-change: clip-path, opacity, scale, translate;
+  }
+
+  /* Native scroll-driven animations. */
+  @supports (animation-timeline: --sl) {
+    .sl {
+      view-timeline-name: --sl;
+      height: var(--sl-length);
+    }
+    .sl-stage {
+      position: sticky;
+      top: 0;
+    }
+    .sl-sliver,
+    .sl-stack {
+      display: block;
+    }
+    .sl-window,
+    .sl-sliver {
+      will-change: clip-path;
+      animation: sl-window linear both;
+      animation-timeline: --sl;
+      animation-range: contain 0% contain 80%;
+    }
+    .sl-sliver {
+      animation-name: sl-sliver;
+    }
+    .sl-stack {
+      will-change: scale, opacity;
+      animation: sl-stack linear both;
+      animation-timeline: --sl;
+      animation-range: contain 0% contain 70%;
+    }
+    .sl-final,
+    .sl-scrim {
+      will-change: opacity, translate;
+      animation: sl-rise linear both;
+      animation-timeline: --sl;
+      animation-range: contain 72% contain 96%;
+    }
+  }
+
+  /* Script fallback: the same values from --sl-w (0→1 over contain 0–80%), --sl-t (0–70%), --sl-f (72–96%). */
+  .sl-js .sl-window {
+    clip-path: polygon(
+      calc(31% - 31% * var(--sl-w, 0)) 0,
+      calc(43% + 65% * var(--sl-w, 0)) 0,
+      calc(37% + 63% * var(--sl-w, 0)) 100%,
+      calc(25% - 33% * var(--sl-w, 0)) 100%
+    );
+  }
+  .sl-js .sl-sliver {
+    clip-path: polygon(
+      calc(43% + 65% * var(--sl-w, 0)) 0,
+      calc(43.5% + 65% * var(--sl-w, 0)) 0,
+      calc(37.5% + 63% * var(--sl-w, 0)) 100%,
+      calc(37% + 63% * var(--sl-w, 0)) 100%
+    );
+  }
+  .sl-js .sl-stack {
+    scale: calc(1 + 0.22 * var(--sl-t, 0));
+    opacity: clamp(0, (1 - var(--sl-t, 0)) * 5, 1);
+  }
+  .sl-js :is(.sl-final, .sl-scrim) {
+    opacity: var(--sl-f, 0);
+    translate: 0 calc(32px * (1 - var(--sl-f, 0)));
+  }
+}
+
+@keyframes sl-window {
+  from {
+    clip-path: polygon(31% 0, 43% 0, 37% 100%, 25% 100%);
+  }
+  to {
+    clip-path: polygon(0 0, 108% 0, 100% 100%, -8% 100%);
+  }
+}
+@keyframes sl-sliver {
+  from {
+    clip-path: polygon(43% 0, 43.5% 0, 37.5% 100%, 37% 100%);
+  }
+  to {
+    clip-path: polygon(108% 0, 108.5% 0, 100.5% 100%, 100% 100%);
+  }
+}
+/* Scale 1 → 1.22 across the range; fully visible until 80%, then fades out. */
+@keyframes sl-stack {
+  from {
+    scale: 1;
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  to {
+    scale: 1.22;
+    opacity: 0;
+  }
+}
+@keyframes sl-rise {
+  from {
+    opacity: 0;
+    translate: 0 32px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+

@@ -64,7 +64,7 @@ export default function BrandPage() {
       </IdeaSection>
 
       {/* ───── The lion (light) ───── */}
-      <section className="bg-ink text-ink">
+      <section id="luani" className="scroll-mt-20 bg-ink text-ink">
         <WipeIn layerClassName="bg-light">
           <div className="container-moto grid items-center gap-12 py-[clamp(90px,10vw,150px)] md:grid-cols-2 md:gap-16">
             <Rise from="left" duration={MOTION.image} className="mx-auto w-[min(380px,70%)]">
@@ -97,7 +97,7 @@ export default function BrandPage() {
       </section>
 
       {/* ───── The vision ───── */}
-      <section className="bg-ink">
+      <section id="vizioni" className="scroll-mt-20 bg-ink">
         <div className="container-moto py-[clamp(90px,10vw,150px)]">
           <SectionHead
             lines={[
@@ -137,7 +137,7 @@ export default function BrandPage() {
       </section>
 
       {/* ───── Built on four things ───── */}
-      <section className="bg-surface-3">
+      <section id="vlerat" className="scroll-mt-20 bg-surface-3">
         <SectionLine />
         <div className="container-moto py-[clamp(90px,10vw,150px)]">
           <SectionHead
